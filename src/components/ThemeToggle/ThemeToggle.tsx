@@ -26,7 +26,7 @@ export function ThemeToggle() {
 
   return (
     <button onClick={toggleTheme} className={styles.button} title="Toggle theme">
-      {isDark ? '🌞' : '🌙'}
+      {isDark ? '🌙' : '🌞'}
     </button>
   );
 }
