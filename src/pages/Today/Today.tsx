@@ -3,6 +3,9 @@ import { Checkbox } from '../../components/Checkbox/Checkbox';
 import { TextInput } from '../../components/TextInput/TextInput';
 import { SelectInput } from '../../components/SelectInput/SelectInput';
 import selectTemplates from '../../data/select_options.json';
+import { Button } from '../../components/Button/Button';
+import { Modal } from '../../components/Modal/Modal';
+import { AddTaskModal } from '../../components/AddTaskModal/AddTaskModal';
 
 export default function Today() {
   const [done, setDone] = useState(false);
@@ -12,8 +15,13 @@ export default function Today() {
     ...opt,
     color: `var(--select-color-${i + 1})`,
   }));
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <div>
+      <Button onClick={() => setModalOpen(true)} variant="secondary">
+        Добавить задачу +
+      </Button>
+      <AddTaskModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
       <SelectInput
         id="11"
         label="Категория"

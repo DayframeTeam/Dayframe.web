@@ -7,13 +7,13 @@ export type Option = {
   priority: number;
 };
 
-type Props = {
+type Props = Readonly<{
   id: string;
   label: string;
   options: Option[];
   value: string;
   onChange: (value: string) => void;
-};
+}>;
 
 export function SelectInput({ id, label, options, value, onChange }: Props) {
   const [open, setOpen] = useState(false);

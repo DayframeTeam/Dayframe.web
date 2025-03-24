@@ -1,0 +1,28 @@
+.button {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.primary {
+  background: var(--accent-muted);
+  color: var(--text-on-accent);
+
+  &:hover {
+    background: var(--accent);
+  }
+}
+
+.secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+
+  &:hover {
+    background: var(--bg-tertiary);
+  }
+}

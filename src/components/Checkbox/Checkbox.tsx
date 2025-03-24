@@ -2,11 +2,11 @@
 import styles from './Checkbox.module.scss';
 import { useId } from 'react';
 
-type Props = {
+type Props = Readonly<{
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
-};
+}>;
 
 export function Checkbox({ checked, onChange, label }: Props) {
   const id = useId();

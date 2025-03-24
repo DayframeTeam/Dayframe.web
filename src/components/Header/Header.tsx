@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import styles from './Header.module.scss';
 
-type HeaderProps = {
+type HeaderProps = Readonly<{
   left?: ReactNode;
   center?: ReactNode;
   right?: ReactNode;
-};
+}>;
 
 export function Header({ left, center, right }: HeaderProps) {
   return (
