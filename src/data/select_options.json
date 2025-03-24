@@ -1,19 +1,14 @@
 {
   "category": [
     {
-      "label": "Необязательная",
+      "label": "необязательная",
       "value": "optional",
       "priority": 1
     },
     {
-      "label": "Обязательная",
+      "label": "обязательная",
       "value": "required",
       "priority": 4
-    },
-    {
-      "label": "Раз в неделю",
-      "value": "weekly",
-      "priority": 2
     }
   ],
   "status": [

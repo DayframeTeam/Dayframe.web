@@ -1,64 +1,62 @@
 import { useState } from 'react';
-import { Modal } from '../../components/Modal/Modal';
-import { TextInput } from '../../components/TextInput/TextInput';
-import { SelectInput, Option } from '../../components/SelectInput/SelectInput';
-import { Button } from '../../components/Button/Button';
+import { Modal } from '../Modal/Modal';
+import { TextInput } from '../TextInput/TextInput';
+import { SelectInput, Option } from '../SelectInput/SelectInput';
+import { Button } from '../Button/Button';
 import selectTemplates from '../../data/select_options.json';
-import { Task } from '../../types/task';
+import type { Plan } from '../../types/dbTypes';
 import { useDispatch } from 'react-redux';
-import { addTask } from '../../features/tasks/tasksSlice';
+import { addPlan } from '../../features/plans/plansThunks';
+import { AppDispatch } from '../../store';
 
-export function AddTaskModal({
-  isOpen,
-  onClose,
-}: Readonly<{ isOpen: boolean; onClose: () => void }>) {
+type AddPlanModalProps = Readonly<{
+  repeat_rule: Plan['repeat_rule'];
+  isOpen: boolean;
+  onClose: () => void;
+}>;
+
+export function AddPlanModal({ repeat_rule, isOpen, onClose }: AddPlanModalProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState('');
   const [priority, setPriority] = useState('');
-  const [startTime, setStartTime] = useState('');
   const [category, setCategory] = useState('');
   const [exp, setExp] = useState('');
   const [description, setDescription] = useState('');
-  const dispatch = useDispatch();
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      alert('Введите название задачи');
+      alert('Введите название плана');
       return;
     }
 
-    const task: Task = {
+    const plan: Omit<Plan, 'id' | 'created_at' | 'user_id'> & { user_id: number } = {
       title,
       duration: duration || undefined,
-      priority: priority as Task['priority'],
-      startTime: startTime || undefined,
-      category: category as Task['category'],
-      exp: exp ? (parseInt(exp) as Task['exp']) : undefined,
+      category: category as Plan['category'],
+      priority: priority as Plan['priority'],
+      exp: exp ? parseInt(exp) : undefined,
       description: description || undefined,
-      status: 'planned',
+      is_active: true,
+      repeat_rule,
+      user_id: 1, // временно статичный
     };
 
-    dispatch(addTask(task));
+    dispatch(addPlan(plan));
     onClose();
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2>Добавить задачу</h2>
+      <h2>Добавить план</h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-        <TextInput id="task-title" label="Название задачи *" value={title} onChange={setTitle} />
+        <TextInput id="plan-title" label="Название плана *" value={title} onChange={setTitle} />
         <TextInput
-          id="task-duration"
+          id="plan-duration"
           label="Длительность (чч:мм)"
           value={duration}
           onChange={setDuration}
-        />
-        <TextInput
-          id="task-start"
-          label="Время начала (чч:мм)"
-          value={startTime}
-          onChange={setStartTime}
         />
 
         <SelectInput

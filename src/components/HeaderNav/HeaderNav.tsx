@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 const navItems = [
   { label: 'Сегодня', to: '/today' },
-  { label: 'Шаблоны', to: '/templates' },
+  { label: 'Планы', to: '/plans' },
   { label: 'Календарь', to: '/calendar' },
 ];
 

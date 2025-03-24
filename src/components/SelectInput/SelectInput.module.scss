@@ -19,9 +19,9 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   min-height: 2.4rem;
   user-select: none;
-  justify-content: space-between;
 
   &:focus-within,
   &:hover {
@@ -32,19 +32,21 @@
     content: '▼';
     font-size: 0.7rem;
     color: var(--text-muted);
-    margin-left: 0.5rem;
+    margin-left: auto; // 👈 чтобы стрелка ушла вправо
   }
 }
 
-.badge {
-  display: inline-flex;
+.value {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-on-accent);
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
 }
 
 .dropdown {

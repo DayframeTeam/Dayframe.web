@@ -2,7 +2,7 @@
 import styles from './PageContainer.module.scss';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Today from '../../pages/Today/Today.tsx';
-import Templates from '../../pages/Templates/Templates.tsx';
+import Plans from '../../pages/Plans/Plans.tsx';
 import Calendar from '../../pages/Calendar/Calendar.tsx';
 
 export function PageContainer() {
@@ -11,7 +11,7 @@ export function PageContainer() {
       <Routes>
         <Route path="/" element={<Navigate to="/today" />} />
         <Route path="/today" element={<Today />} />
-        <Route path="/templates" element={<Templates />} />
+        <Route path="/plans" element={<Plans />} />
         <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </div>

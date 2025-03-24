@@ -1,3 +1,5 @@
+import CalendarPage from '../../components/Calendar/Calendar';
+
 export default function Calendar() {
-  return <div>📆 Календарь</div>;
+  return <CalendarPage />;
 }

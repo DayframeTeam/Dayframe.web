@@ -4,7 +4,6 @@ import { TextInput } from '../../components/TextInput/TextInput';
 import { SelectInput } from '../../components/SelectInput/SelectInput';
 import selectTemplates from '../../data/select_options.json';
 import { Button } from '../../components/Button/Button';
-import { Modal } from '../../components/Modal/Modal';
 import { AddTaskModal } from '../../components/AddTaskModal/AddTaskModal';
 
 export default function Today() {

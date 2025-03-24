@@ -1,0 +1,97 @@
+.section {
+  border-top: 1px solid var(--accent-muted);
+  border-bottom: 1px solid var(--accent-muted);
+  border-radius: 0.75rem;
+  margin-top: 2rem;
+  padding: 1rem 1rem 1rem;
+  position: relative;
+}
+
+.heading {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--bg-primary);
+  padding: 0 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent-muted);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.addButton {
+  width: 24px;
+  height: 24px;
+  margin-left: 0.75rem;
+  color: var(--text-on-accent);
+  background-color: var(--accent-muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: var(--accent);
+    color: var(--text-on-accent);
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.title {
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  margin-right: 0.75rem;
+  cursor: default;
+}
+
+.meta {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.metaspans {
+  color: var(--accent-muted);
+}
+
+.note {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}

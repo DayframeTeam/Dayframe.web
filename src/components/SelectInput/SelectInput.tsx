@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Badge } from '../Badge/Badge'; // путь проверь
 import styles from './SelectInput.module.scss';
 
 export type Option = {
@@ -17,7 +18,6 @@ type Props = Readonly<{
 
 export function SelectInput({ id, label, options, value, onChange }: Props) {
   const [open, setOpen] = useState(false);
-
   const selected = options.find((opt) => opt.value === value);
 
   return (
@@ -34,17 +34,9 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
         onBlur={() => setOpen(false)}
       >
         <span className={styles.value}>
-          {selected ? (
-            <span
-              className={styles.badge}
-              style={{ backgroundColor: `var(--select-color-${selected.priority})` }}
-            >
-              {selected.label}
-            </span>
-          ) : (
-            'Выбери...'
-          )}
+          {selected ? <Badge label={selected.label} priority={selected.priority} /> : 'Выбери...'}
         </span>
+
         {open && (
           <ul className={styles.dropdown}>
             {options.map((opt) => (
@@ -55,14 +47,7 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
                   setOpen(false);
                 }}
               >
-                <span
-                  className={styles.badge}
-                  style={{
-                    backgroundColor: `var(--select-color-${opt.priority})`,
-                  }}
-                >
-                  {opt.label}
-                </span>
+                <Badge label={opt.label} priority={opt.priority} />
               </li>
             ))}
           </ul>
