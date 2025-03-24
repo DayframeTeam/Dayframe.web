@@ -1,22 +1,24 @@
 import styles from './HeaderNav.module.scss';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-const navItems = ['Сегодня', 'Шаблоны', 'Календарь'];
+const navItems = [
+  { label: 'Сегодня', to: '/today' },
+  { label: 'Шаблоны', to: '/templates' },
+  { label: 'Календарь', to: '/calendar' },
+];
 
 export function HeaderNav() {
-  const [active, setActive] = useState('Сегодня');
-
   return (
     <nav className={styles.nav}>
       {navItems.map((item) => (
-        <button
-          key={item}
-          className={clsx(styles.item, active === item && styles.active)}
-          onClick={() => setActive(item)}
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) => clsx(styles.item, isActive && styles.active)}
         >
-          {item}
-        </button>
+          {item.label}
+        </NavLink>
       ))}
     </nav>
   );

@@ -1,0 +1,70 @@
+{
+  "category": [
+    {
+      "label": "Необязательная",
+      "value": "optional",
+      "priority": 1
+    },
+    {
+      "label": "Обязательная",
+      "value": "required",
+      "priority": 4
+    },
+    {
+      "label": "Раз в неделю",
+      "value": "weekly",
+      "priority": 2
+    }
+  ],
+  "status": [
+    {
+      "label": "запланировано",
+      "value": "planned",
+      "priority": 1
+    },
+    {
+      "label": "сделано",
+      "value": "done",
+      "priority": 4
+    }
+  ],
+  "priority": [
+    {
+      "label": "низкий",
+      "value": "low",
+      "priority": 1
+    },
+    {
+      "label": "средний",
+      "value": "medium",
+      "priority": 2
+    },
+    {
+      "label": "высокий",
+      "value": "high",
+      "priority": 4
+    }
+  ],
+  "exp": [
+    {
+      "label": "1",
+      "value": "1",
+      "priority": 1
+    },
+    {
+      "label": "5",
+      "value": "5",
+      "priority": 2
+    },
+    {
+      "label": "10",
+      "value": "10",
+      "priority": 3
+    },
+    {
+      "label": "50",
+      "value": "50",
+      "priority": 4
+    }
+  ]
+}
