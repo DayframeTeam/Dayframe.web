@@ -46,7 +46,7 @@ export function PlanList({ title, repeat_rule, tasks }: PlanListProps) {
                 {task.exp && (
                   <span
                     style={{
-                      color: `var(--select-color-${categoryInfo?.priority ?? 1})`,
+                      color: `var(--select-color-${categoryInfo?.priority ?? 0})`,
                     }}
                   >
                     +{task.exp}⚡
@@ -55,7 +55,7 @@ export function PlanList({ title, repeat_rule, tasks }: PlanListProps) {
               </div>
               <div className={styles.meta}>
                 {'start_time' in task && task.start_time && (
-                  <span title="Время старта">🕒 {task.start_time}</span>
+                  <span className={styles.metaspans} title="Время старта">🕒 {task.start_time}</span>
                 )}
                 {task.duration && (
                   <span className={styles.metaspans} title="Время выполнения">
