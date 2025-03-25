@@ -45,6 +45,7 @@ export type Plan = {
 export type CalendarEvent = {
   id: number;
   title: string;
+  status: 'done' | 'planned';
   start_time: string; // hh:mm:ss
   event_date: string; // YYYY-MM-DD
   duration?: string;
