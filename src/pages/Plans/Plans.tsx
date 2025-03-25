@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { fetchPlans } from '../../features/plans/plansThunks';
-import { TaskList } from '../../components/TaskList/TaskList';
+import { PlanList } from '../../components/PlanList/PlanList';
 import type { Plan } from '../../types/dbTypes';
 
 export default function PlansPage() {
@@ -35,8 +35,8 @@ export default function PlansPage() {
 
   return (
     <div>
-      <TaskList title="Задачи на каждый день" repeat_rule="daily" tasks={dailyPlans} />
-      <TaskList title="Задачи на неделю" repeat_rule="weekly" tasks={weeklyPlans} />
+      <PlanList title="Задачи на каждый день" repeat_rule="daily" tasks={dailyPlans} />
+      <PlanList title="Задачи на неделю" repeat_rule="weekly" tasks={weeklyPlans} />
     </div>
   );
 }

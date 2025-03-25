@@ -65,7 +65,7 @@ const mockEvents: CalendarEvent[] = [
     id: 7,
     title: 'Созвон с заказчикомвававаывавыаываываывавыавыавыаыва',
     start_time: '15:30:00',
-    event_date: '2025-03-05',
+    event_date: '2025-03-27',
     category: 'required',
     priority: 'high',
     user_id: 1,

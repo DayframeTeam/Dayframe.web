@@ -4,7 +4,7 @@ import { TextInput } from '../../components/TextInput/TextInput';
 import { SelectInput, Option } from '../../components/SelectInput/SelectInput';
 import { Button } from '../../components/Button/Button';
 import selectTemplates from '../../data/select_options.json';
-import { Task } from '../../types/task';
+import { Task } from '../../types/dbTypes';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../../features/tasks/tasksSlice';
 
@@ -31,7 +31,7 @@ export function AddTaskModal({
       title,
       duration: duration || undefined,
       priority: priority as Task['priority'],
-      startTime: startTime || undefined,
+      start_time: startTime || undefined,
       category: category as Task['category'],
       exp: exp ? (parseInt(exp) as Task['exp']) : undefined,
       description: description || undefined,

@@ -3,9 +3,9 @@ import selectTemplates from '../../data/select_options.json';
 import { Task, Plan } from '../../types/dbTypes';
 import { AddPlanModal } from '../AddPlanModal/AddPlanModal';
 import { Badge } from '../Badge/Badge';
-import styles from './TaskList.module.scss';
+import styles from './PlanList.module.scss';
 
-type TaskListProps = Readonly<{
+type PlanListProps = Readonly<{
   title: string;
   repeat_rule: Plan['repeat_rule'];
   tasks: (Task | Plan)[];
@@ -17,7 +17,7 @@ const getLabelAndPriority = (type: keyof typeof selectTemplates, value?: string)
   return found ? { label: found.label, priority: found.priority } : null;
 };
 
-export function TaskList({ title, repeat_rule, tasks }: TaskListProps) {
+export function PlanList({ title, repeat_rule, tasks }: PlanListProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -54,13 +54,13 @@ export function TaskList({ title, repeat_rule, tasks }: TaskListProps) {
                 )}
               </div>
               <div className={styles.meta}>
+                {'start_time' in task && task.start_time && (
+                  <span title="Время старта">🕒 {task.start_time}</span>
+                )}
                 {task.duration && (
                   <span className={styles.metaspans} title="Время выполнения">
                     ⏱ {task.duration}
                   </span>
-                )}
-                {'start_time' in task && task.start_time && (
-                  <span title="Время старта">🕒 {task.start_time}</span>
                 )}
                 {categoryInfo && (
                   <span title="Категория">
@@ -82,7 +82,11 @@ export function TaskList({ title, repeat_rule, tasks }: TaskListProps) {
           );
         })}
       </div>
-      <AddPlanModal repeat_rule={repeat_rule} isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddPlanModal
+        repeat_rule={repeat_rule}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </section>
   );
 }

@@ -18,6 +18,7 @@ type AddPlanModalProps = Readonly<{
 export function AddPlanModal({ repeat_rule, isOpen, onClose }: AddPlanModalProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [title, setTitle] = useState('');
+  const [startTime, setStartTime] = useState('');
   const [duration, setDuration] = useState('');
   const [priority, setPriority] = useState('');
   const [category, setCategory] = useState('');
@@ -32,6 +33,7 @@ export function AddPlanModal({ repeat_rule, isOpen, onClose }: AddPlanModalProps
 
     const plan: Omit<Plan, 'id' | 'created_at' | 'user_id'> & { user_id: number } = {
       title,
+      start_time: startTime || undefined,
       duration: duration || undefined,
       category: category as Plan['category'],
       priority: priority as Plan['priority'],
@@ -52,6 +54,13 @@ export function AddPlanModal({ repeat_rule, isOpen, onClose }: AddPlanModalProps
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
         <TextInput id="plan-title" label="Название плана *" value={title} onChange={setTitle} />
+        <TextInput
+          id="start-time"
+          label="Время начала (чч:мм)"
+          value={startTime}
+          onChange={setStartTime}
+        />
+
         <TextInput
           id="plan-duration"
           label="Длительность (чч:мм)"

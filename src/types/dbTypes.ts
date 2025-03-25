@@ -33,6 +33,7 @@ export type Plan = {
   duration?: string;
   category?: 'required' | 'optional';
   priority?: 'low' | 'medium' | 'high';
+  start_time?: string; // hh:mm:ss
   exp?: number;
   description?: string;
   is_active: boolean;
