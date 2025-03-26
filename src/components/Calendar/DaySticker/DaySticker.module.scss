@@ -19,7 +19,7 @@
 }
 
 .today {
-  border: 2px solid var(--accent);
+  border: 1px solid var(--accent);
   color: var(--text-primary);
 }
 
@@ -39,10 +39,10 @@
 }
 
 .event {
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   font-size: 0.75rem;
   line-height: 1.2;
-  max-height: 2.4em; // 2 строки
+  max-height: 2.4em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;

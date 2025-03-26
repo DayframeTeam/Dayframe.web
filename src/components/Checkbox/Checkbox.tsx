@@ -1,16 +1,14 @@
 // src/components/Checkbox/Checkbox.tsx
 import styles from './Checkbox.module.scss';
-import { useId } from 'react';
 
 type Props = Readonly<{
+  id: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
 }>;
 
-export function Checkbox({ checked, onChange, label }: Props) {
-  const id = useId();
-
+export function Checkbox({ id, checked, onChange, label }: Props) {
   return (
     <label className={styles.checkbox}>
       <input

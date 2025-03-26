@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { CalendarEvent } from '../../types/dbTypes';
-import { fetchCalendarEvents } from './calendarThunks';
+import { fetchCalendarEvents, addCalendarEvent, updateCalendarEventStatus } from './calendarThunks';
 
 interface CalendarState {
   list: CalendarEvent[];
@@ -31,6 +31,15 @@ const calendarSlice = createSlice({
       .addCase(fetchCalendarEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Ошибка загрузки событий';
+      })
+      .addCase(addCalendarEvent.fulfilled, (state, action) => {
+        state.list.push(action.payload);
+      })
+      .addCase(updateCalendarEventStatus.fulfilled, (state, action) => {
+        const event = state.list.find((e) => e.id === action.payload.id);
+        if (event) {
+          event.status = action.payload.status;
+        }
       });
   },
 });

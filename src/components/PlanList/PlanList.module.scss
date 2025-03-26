@@ -60,12 +60,6 @@
   overflow: hidden;
 }
 
-.row {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-}
-
 .title {
   max-width: 80%;
   white-space: nowrap;
@@ -74,24 +68,4 @@
   display: inline-block;
   margin-right: 0.75rem;
   cursor: default;
-}
-
-.meta {
-  margin-top: 0.4rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  cursor: default;
-}
-
-.metaspans {
-  color: var(--accent-muted);
-}
-
-.note {
-  margin-top: 0.5rem;
-  font-style: italic;
-  color: var(--text-secondary);
 }

@@ -7,6 +7,7 @@ type Props = Readonly<{
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary';
+  size?: 'normal' | 'small'; // ⬅️ Добавляем
   className?: string;
 }>;
 
@@ -15,13 +16,14 @@ export function Button({
   onClick,
   type = 'button',
   variant = 'primary',
+  size = 'normal', // ⬅️ Добавляем
   className,
 }: Props) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={clsx(styles.button, styles[variant], className)}
+      className={clsx(styles.button, styles[variant], styles[size], className)}
     >
       {children}
     </button>
