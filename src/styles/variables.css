@@ -22,9 +22,9 @@
     /* === SELECT COLORS === */
     --select-color-0: var(--text-primary);
     --select-color-1: #bbf7d0;
-    --select-color-2: #93c5fd;
-    --select-color-3: #fcd34d;
-    --select-color-4: #d8b4fe;
+    --select-color-2: #fcd34d;
+    --select-color-3: #d8b4fe;
+    /* --select-color-4: #93c5fd; */
 }
 
 /* 🌑 Dark theme*/
@@ -43,9 +43,4 @@
 
     --border-color: #3a3a3a;
     --shadow-color: rgba(0, 0, 0, 0.3);
-
-    /* --select-color-1: #166534;
-    --select-color-2: #1e40af;
-    --select-color-3: #b45309;
-    --select-color-4: #7e22ce; */
 }

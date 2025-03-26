@@ -1,49 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { Task } from '../../types/dbTypes';
-import { fetchTasks } from './tasksThunks';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { Task } from '../../types/dbTypes'; // путь адаптируй под себя
 
-interface TasksState {
-  list: Task[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: TasksState = {
-  list: [],
-  loading: false,
-  error: null,
-};
+const initialState: Task[] = [];
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    addTask: (state, action) => {
-      state.list.push(action.payload);
+    setTasks(state, action: PayloadAction<Task[]>) {
+      return action.payload;
     },
-    removeTask: (state, action) => {
-      state.list = state.list.filter((task) => task.id !== action.payload);
+    addTask(state, action: PayloadAction<Task>) {
+      state.push(action.payload);
     },
-    clearTasks: (state) => {
-      state.list = [];
+    updateTaskInState(state, action: PayloadAction<Task>) {
+      const index = state.findIndex((t) => t.id === action.payload.id);
+      if (index !== -1) state[index] = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchTasks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchTasks.fulfilled, (state, action) => {
-        state.list = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchTasks.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Ошибка загрузки задач';
-      });
+    removeTask(state, action: PayloadAction<number>) {
+      return state.filter((task) => task.id !== action.payload);
+    },
   },
 });
 
-export const { addTask, removeTask, clearTasks } = tasksSlice.actions;
+export const { setTasks, addTask, updateTaskInState, removeTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
