@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from './ThemeToggle.module.scss';
+import { Button } from '../ui/Button/Button';
 
 export function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
@@ -25,8 +25,8 @@ export function ThemeToggle() {
   };
 
   return (
-    <button onClick={toggleTheme} className={styles.button}>
+    <Button variant="secondary" onClick={toggleTheme}>
       {isDark ? '🌙' : '🌞'}
-    </button>
+    </Button>
   );
 }

@@ -13,3 +13,9 @@ export const timeStringToDate = (time: string | null | undefined): Date | null =
   now.setMilliseconds(0);
   return now;
 };
+
+export function formatDateToISO(year: number, month: number, day: number): string {
+  const paddedMonth = String(month + 1).padStart(2, '0');
+  const paddedDay = String(day).padStart(2, '0');
+  return `${year}-${paddedMonth}-${paddedDay}`;
+}

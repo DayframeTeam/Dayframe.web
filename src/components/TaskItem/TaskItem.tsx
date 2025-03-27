@@ -11,6 +11,7 @@ import { toLocalDateString } from '../../utils/dateUtils';
 import { updateTaskStatus } from '../../features/tasks/tasksThunks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
+import { Button } from '../ui/Button/Button';
 
 type Props = {
   task: Task | TemplateTask;
@@ -182,14 +183,14 @@ export default function TaskItem({ task }: Props) {
         )}
       </div>
       {hasSubtasks && (
-        <button
+        <Button
           className={styles.subtaskToggle}
           onClick={() => setShowSubtasks((prev) => !prev)}
-          title={t('task.subTask.visibility')}
+          variant='secondary'
           aria-label={t('task.subTask.visibility')}
         >
           {showSubtasks ? '▲' : '▼'}
-        </button>
+        </Button>
       )}
       {hasSubtasks && showSubtasks && (
         <div className={styles.subtaskBlock}>

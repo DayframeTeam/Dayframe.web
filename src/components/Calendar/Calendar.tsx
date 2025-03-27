@@ -1,15 +1,17 @@
 import { useMemo, useState } from 'react';
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { CalendarGrid } from './CalendarGrid/CalendarGrid';
-import type { CalendarEvent } from '../../types/dbTypes';
+import { Task } from '../../types/dbTypes';
+import { useTranslation } from 'react-i18next';
 
 const today = new Date();
 
 type Props = Readonly<{
-  events: CalendarEvent[];
+  tasks: Task[];
 }>;
 
-export default function Calendar({ events }: Props) {
+export default function Calendar({ tasks }: Props) {
+  const { t } = useTranslation();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
 
@@ -35,20 +37,18 @@ export default function Calendar({ events }: Props) {
     }
   };
 
-  const monthLabel = new Date(year, month).toLocaleString('ru-RU', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const monthNames = t('monthNames', { returnObjects: true }) as string[];
+  const monthLabel = `${monthNames[month]} ${year}`;
 
-  const filteredEvents = useMemo(() => {
-    return events.filter((event) => {
-      const eventDate = new Date(event.event_date);
-      return (
-        eventDate.getFullYear() === year &&
-        eventDate.getMonth() === month
-      );
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      if (!task.task_date) return false;
+
+      const tasksDate = new Date(task.task_date);
+
+      return tasksDate.getFullYear() === year && tasksDate.getMonth() === month;
     });
-  }, [events, year, month]);
+  }, [tasks, year, month]);
 
   return (
     <div style={{ padding: '1rem' }}>
@@ -58,7 +58,7 @@ export default function Calendar({ events }: Props) {
         currentDay={currentDay}
         year={year}
         month={month}
-        events={filteredEvents}
+        tasks={filteredTasks}
       />
     </div>
   );

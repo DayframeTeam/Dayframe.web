@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Task } from '../../types/dbTypes';
 import TaskItem from '../TaskItem/TaskItem';
+import styles from './TaskList.module.scss';
 
 type Props = Readonly<{
   tasks: Task[];
@@ -22,10 +23,13 @@ export default function TaskList({ tasks }: Props) {
   });
 
   return (
-    <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', padding: 0 }}>
-      {sortedTasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
-      ))}
-    </ul>
+    // Оборачиваем список в специальный контейнер
+    <div className={styles.taskListWrapper}>
+      <ul className={styles.taskList}>
+        {sortedTasks.map((task) => (
+          <TaskItem key={task.id} task={task} />
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -1,82 +1,82 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styles from './DaySticker.module.scss';
-import type { CalendarEvent } from '../../../types/dbTypes';
-import { DayDetailsModal } from '../DayDetailsModal/DayDetailsModal';
-import { formatDateToISO } from '../../../utils/date';
-import { getTemplateInfoByValue } from '../../../utils/getTemplateInfoByValue';
-import { AppDispatch } from '../../../store';
-import { updateCalendarEventStatus } from '../../../features/calendar/calendarThunks';
+import type { Task } from '../../../types/dbTypes';
+import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
+import { useState } from 'react';
+import TaskSection from '../../TaskSection/TaskSection';
+import { Modal } from '../../Modal/Modal';
+import { useTranslation } from 'react-i18next';
 
 type Props = Readonly<{
-  day: number;
+  date: string; // 'YYYY-MM-DD'
   isToday?: boolean;
-  events?: CalendarEvent[];
-  year: number;
-  month: number;
+  tasks: Task[];
 }>;
 
-export function DaySticker({ day, isToday = false, events = [], year, month }: Props) {
+export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
   const [open, setOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); // защита от спама
-  const dispatch = useDispatch<AppDispatch>();
-  const dateString = formatDateToISO(year, month, day);
 
-  const handleStatusChange = async (id: number) => {
-    if (isProcessing) return;
-    setIsProcessing(true);
+  // Проверяем, что день уже прошёл:
+  const isPast = new Date(date) < new Date(new Date().toDateString());
+  const { t } = useTranslation();
 
-    const event = events.find((e) => e.id === id);
-    if (!event) return;
+  // Получаем день месяца и день недели
+  const dateObj = new Date(date);
+  const dayNumber = dateObj.getDate();
+  // Индекс дня недели (0 = Вс, 1 = Пн, ... 6 = Сб)
+  const dayIndex = dateObj.getDay();
 
-    const newStatus = event.status === 'done' ? 'planned' : 'done';
+  // Берём строку из массива weekdaysShort
+  // weekday = "Пн" / "Tue" и т.д.
+  const weekday = t(`weekdaysShort.${dayIndex}`);
 
-    try {
-      await dispatch(updateCalendarEventStatus({ eventId: id, status: newStatus }));
-    } catch (err) {
-      console.error('Ошибка при обновлении статуса задачи', err);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  // Сортируем задачи:
+  // 1) Сначала те, у которых есть start_time (по возрастанию)
+  // 2) В конце те, у которых start_time отсутствует
+  const sortedTasks = [...tasks].sort((a, b) => {
+    const aTime = a.start_time;
+    const bTime = b.start_time;
+
+    // Если у обоих нет времени, оставляем их как есть
+    if (!aTime && !bTime) return 0;
+    // Если у a нет времени — отправляем его в конец
+    if (!aTime) return 1;
+    // Если у b нет времени — отправляем его в конец
+    if (!bTime) return -1;
+
+    // Иначе сравниваем строки "HH:MM" в алфавитном порядке
+    return aTime.localeCompare(bTime);
+  });
 
   return (
     <>
       <div
-        className={`${styles.sticker} ${isToday ? styles.today : ''}`}
+        className={`${styles.sticker} ${isToday ? styles.today : ''} ${isPast ? styles.past : ''}`}
         onClick={() => setOpen(true)}
         title="Нажмите, чтобы открыть"
       >
-        <div className={styles.day}>{day}</div>
+        <div className={styles.day}>
+          {dayNumber} <span className={styles.weekday}>{weekday}</span>
+        </div>
         <div className={styles.events}>
-          {events.map((event) => (
+          {sortedTasks.map((task) => (
             <div
-              key={event.id}
+              key={task.id}
               className={styles.event}
               style={{
-                color: `var(--select-color-${getTemplateInfoByValue('priority', event.priority)?.priority})`,
+                borderLeftColor: `var(--select-color-${getPriorityColorIndex(task.priority)})`,
               }}
-              title={event.title}
+              title={task.title}
             >
-              {event.start_time?.slice(0, 5)} {event.title}
+              {task.start_time?.slice(0, 5)} {task.title}
             </div>
           ))}
         </div>
       </div>
 
       {open && (
-        <DayDetailsModal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          day={day}
-          date={dateString}
-          events={events}
-          onMarkDone={handleStatusChange}
-          onDelete={(id) => {
-            console.log('🗑 Удалить задачу:', id);
-            // TODO: dispatch удаления
-          }}
-        />
+        <Modal isOpen={open} onClose={() => setOpen(false)}>
+          <TaskSection date={date} tasks={sortedTasks} />
+        </Modal>
       )}
     </>
   );

@@ -1,6 +1,6 @@
 .sticker {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1; // Квадратное соотношение по умолчанию
   background: var(--bg-secondary);
   border-radius: 0.5rem;
   border: 1px solid var(--border-color);
@@ -9,7 +9,6 @@
   padding: 0.3rem;
   position: relative;
   font-size: 0.75rem;
-  color: var(--text-muted);
   transition: 0.2s;
   cursor: pointer;
 
@@ -23,28 +22,67 @@
   color: var(--text-primary);
 }
 
+.past {
+  opacity: 0.4;
+  filter: grayscale(50%);
+}
+
 .day {
   font-weight: 600;
   font-size: 0.8rem;
   text-align: left;
 }
 
+/* Блок для задач */
 .events {
   flex: 1;
   margin-top: 0.25rem;
-  overflow: hidden;
+  /* Разрешаем вертикальный скролл */
+  overflow-y: auto;
   padding-right: 0.2rem;
   gap: 0.2rem;
   max-height: calc(100% - 1.2rem);
+
+  /* Для Chrome, Safari и остальных WebKit-браузеров */
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Для Firefox */
+  scrollbar-width: none;
+
+  /* Для старых IE/Edge (иногда помогает) */
+  -ms-overflow-style: none;
 }
 
+/* Одна задача */
 .event {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 0.75rem;
   line-height: 1.2;
   max-height: 2.4em;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
   word-break: break-word;
+  border-left: 4px solid;
+  border-radius: 0.2rem;
+}
+
+/* Адаптивные стили для телефонов */
+@media (max-width: 480px) {
+  .sticker {
+    /* Отменяем фиксированное соотношение, чтобы ячейка могла растягиваться */
+    aspect-ratio: auto;
+    padding: 0.2rem;
+    font-size: 0.7rem;
+  }
+
+  .day {
+    font-size: 0.75rem;
+  }
+
+  .events {
+    font-size: 0.65rem;
+  }
 }

@@ -7,7 +7,7 @@ type Props = Readonly<{
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary';
-  size?: 'normal' | 'small'; // ⬅️ Добавляем
+  size?: 'normal' | 'small';
   className?: string;
 }>;
 
@@ -16,7 +16,7 @@ export function Button({
   onClick,
   type = 'button',
   variant = 'primary',
-  size = 'normal', // ⬅️ Добавляем
+  size = 'normal',
   className,
 }: Props) {
   return (

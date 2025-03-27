@@ -33,7 +33,7 @@ function SubtaskItem({ subtask }: Props) {
         }}
       >
         <Checkbox id={`subtask-${subtask.id}`} checked={subtask.is_done} disabled={isUpdating} />
-        <button className={styles.title}>{subtask.title}</button>
+        <div className={styles.title}>{subtask.title}</div>
       </label>
     </li>
   );

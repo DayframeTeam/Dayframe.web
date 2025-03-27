@@ -1,0 +1,24 @@
+.taskListWrapper {
+  /* Задаём высоту или max-height, чтобы список мог прокручиваться */
+  overflow-y: auto;
+
+  /* Скрываем полосу прокрутки в Chrome, Safari и т.д. */
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Скрываем полосу прокрутки в Firefox */
+  scrollbar-width: 0px !important;
+
+  /* Для IE/Edge (иногда помогает) */
+  -ms-overflow-style: 0px;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0; /* Убираем отступы списка */
+}

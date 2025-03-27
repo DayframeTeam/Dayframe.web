@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import styles from './LanguageToggle.module.scss';
+import { Button } from '../ui/Button/Button';
 
 export function LanguageToggle() {
   const { i18n } = useTranslation();
@@ -11,8 +11,8 @@ export function LanguageToggle() {
   };
 
   return (
-    <button className={styles.button} onClick={toggleLanguage}>
+    <Button variant="secondary" onClick={toggleLanguage}>
       {lang === 'ru' ? '🇷🇺' : '🇺🇸'}
-    </button>
+    </Button>
   );
 }

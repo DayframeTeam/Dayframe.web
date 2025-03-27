@@ -10,9 +10,5 @@ export default function TodayPage() {
     (task) => !task.task_date || toLocalDateString(task.task_date) === today
   );
 
-  return (
-    <div style={{ padding: '2rem' }}>
-      <TaskSection date={today} tasks={todayTasks} />
-    </div>
-  );
+  return <TaskSection date={today} tasks={todayTasks} />;
 }

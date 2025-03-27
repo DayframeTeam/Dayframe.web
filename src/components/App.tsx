@@ -10,6 +10,7 @@ function App() {
     <>
       <InitialDataLoader />
       <Header
+        left={<div style={{ width: '123px' }}></div>}
         center={<HeaderNav />}
         right={
           <>
