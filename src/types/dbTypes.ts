@@ -16,7 +16,7 @@ export type Task = {
   title: string; // Название задачи
   description?: string | null; // Описание задачи (опционально)
 
-  status: boolean; // Статус: false — запланировано, true — выполнено
+  is_done: boolean;// Статус: false — запланировано, true — выполнено
   category?: string | null; // Категория задачи (выбирается пользователем) (опционально)
   priority?: 'low' | 'medium' | 'high' | null; // Приоритет задачи (опционально)
   exp: 0 | 1 | 5 | 10 | 20 | 50; // Кол-во XP за выполнение
@@ -25,9 +25,11 @@ export type Task = {
   start_time?: string | null; // Время начала (локальное), формат 'HH:mm:ss' (опционально)
   end_time?: string | null; // Время окончания, формат 'HH:mm:ss' (опционально)
   task_date?: string | null; // Дата задачи (в UTC, ISO строка) (опционально)
-//TODO: special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
+  special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
   user_id: number; // Внешний ключ к пользователю
   created_at: string; // Время создания задачи (ISO timestamp в UTC)
+
+  subtasks: Subtask[]; //TODO: чисто для фронта
 };
 
 export type TemplateTask = {
@@ -43,7 +45,7 @@ export type TemplateTask = {
   start_time?: string | null; // Время старта задачи по шаблону (опционально)
   end_time?: string | null; // Время окончания (опционально)
 
-  is_active: boolean; // Активен ли шаблон (можно временно выключить) базово включен
+  is_done: boolean; // Активен ли шаблон (можно временно выключить) базово включен
   special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
 
   repeat_rule: RepeatRule; // Правило повторения: daily | weekly | [дни недели]
@@ -52,6 +54,8 @@ export type TemplateTask = {
 
   user_id: number; // К какому пользователю относится шаблон
   created_at: string; // Время создания (ISO UTC)
+
+  subtasks: TemplateSubtask[]; //TODO: чисто для фронта
 };
 
 export type RepeatRule =
@@ -66,7 +70,8 @@ export type Subtask = {
   title: string; // Название подзадачи
   is_done: boolean; // Выполнена или нет
   position: number; // Позиция в списке (для drag-and-drop)
-
+  special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
+  user_id: number; // Внешний ключ к пользователю
   created_at: string; // Когда была создана (ISO UTC)
 };
 
@@ -77,6 +82,6 @@ export type TemplateSubtask = {
   title: string; // Название подзадачи
   position: number; // Позиция в списке
   special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
-
+  user_id: number; // Внешний ключ к пользователю
   created_at: string; // Когда была создана (ISO UTC)
 };

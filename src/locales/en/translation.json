@@ -1,0 +1,51 @@
+{
+  "taskSection": {
+    "today": "Tasks for today",
+    "dateTasks": "Tasks for {{date}}",
+    "empty": "No tasks for today"
+  },
+  "nav": {
+    "today": "Today",
+    "templates": "Templates",
+    "calendar": "Calendar"
+  },
+  "task": {
+    "subtasks": {
+      "progress": "Progress",
+      "toggle": "Show/Hide subtasks"
+    },
+    "exp": "Task XP",
+    "status": {
+      "active": "🔁 Active",
+      "inactive": "🔕 Inactive"
+    },
+    "timing": {
+      "start": "Start time",
+      "end": "End time",
+      "duration": "Duration",
+      "from": "From",
+      "to": "to"
+    },
+    "date": "Due Date",
+    "repeat": {
+      "label": "Repeat",
+      "from": "From",
+      "to": "Until",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    },
+    "priority": "Priority",
+    "priorityType": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "category": "Category",
+    "subTask": {
+      "add": "Add subtask",
+      "remove": "Remove subtask",
+      "visibility": "Show/hide subtasks"
+    }
+  }
+}

@@ -1,62 +1,75 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/http/axios';
 import { Task } from '../../types/dbTypes';
-import { addTask, removeTask, setTasks, updateTaskInState } from './tasksSlice';
+import { setTasks, updateOneTask, deleteTask as removeTask, addTask } from './tasksSlice';
 
 const url = '/tasks';
 
-// Общий обработчик ошибок
 const handleError = (error: unknown, message: string, thunkAPI: any) => {
   console.error(message, error);
   return thunkAPI.rejectWithValue(message);
 };
 
-// Подгрузка задач
+// Получение всех задач с подзадачами
 export const fetchTasks = createAsyncThunk('tasks/fetchAll', async (_, thunkAPI) => {
   try {
     const res = await api.get<Task[]>(url);
     thunkAPI.dispatch(setTasks(res.data));
-    console.log('fetchTasks', res.data);
     return res.data;
   } catch (error) {
     return handleError(error, 'Ошибка загрузки задач', thunkAPI);
   }
 });
 
-// Добавление задачи
-export const createTask = createAsyncThunk(
-  'tasks/create',
-  async (taskData: Partial<Task>, thunkAPI) => {
-    try {
-      const res = await api.post<Task>(url, taskData);
-      thunkAPI.dispatch(addTask(res.data));
-      return res.data;
-    } catch (error) {
-      return handleError(error, 'Ошибка создания задачи', thunkAPI);
-    }
+// Обновить статус is_done
+export const updateTaskStatus = createAsyncThunk(
+  'tasks/updateStatus',
+  ({ id, is_done }: { id: number; is_done: boolean }, thunkAPI) => {
+    return api
+      .patch<Task>(`${url}/is_done/${id}`, { is_done })
+      .then((res) => {
+        thunkAPI.dispatch(updateOneTask(res.data));
+        return res.data;
+      })
+      .catch((err) => handleError(err, 'Ошибка обновления статуса задачи', thunkAPI));
   }
 );
 
-// Обновление задачи
+// Обновить всю задачу
 export const updateTask = createAsyncThunk(
-  'tasks/update',
-  async ({ id, data }: { id: number; data: Partial<Task> }, thunkAPI) => {
-    try {
-      const res = await api.patch<Task>(`${url}/${id}`, data);
-      thunkAPI.dispatch(updateTaskInState(res.data));
-      return res.data;
-    } catch (error) {
-      return handleError(error, 'Ошибка обновления задачи', thunkAPI);
-    }
+  'tasks/updateTask',
+  ({ id, data }: { id: number; data: Partial<Task> }, thunkAPI) => {
+    return api
+      .patch<Task>(`${url}/${id}`, data)
+      .then((res) => {
+        thunkAPI.dispatch(updateOneTask(res.data));
+        return res.data;
+      })
+      .catch((err) => handleError(err, 'Ошибка обновления задачи', thunkAPI));
   }
 );
 
 // Удаление задачи
-export const deleteTask = createAsyncThunk('tasks/delete', async (id: number, thunkAPI) => {
-  try {
-    await api.delete(`${url}/${id}`);
-    thunkAPI.dispatch(removeTask(id));
-  } catch (error) {
-    return handleError(error, 'Ошибка удаления задачи', thunkAPI);
-  }
+export const deleteTask = createAsyncThunk('tasks/deleteTask', (id: number, thunkAPI) => {
+  return api
+    .delete(`${url}/${id}`)
+    .then(() => {
+      thunkAPI.dispatch(removeTask(id));
+      return id;
+    })
+    .catch((err) => handleError(err, 'Ошибка удаления задачи', thunkAPI));
 });
+
+// Создание новой задачи
+export const createTask = createAsyncThunk(
+  'tasks/createTask',
+  (task: Omit<Task, 'id' | 'created_at'>, thunkAPI) => {
+    return api
+      .post<Task>(url, task)
+      .then((res) => {
+        thunkAPI.dispatch(addTask(res.data));
+        return res.data;
+      })
+      .catch((err) => handleError(err, 'Ошибка создания задачи', thunkAPI));
+  }
+);

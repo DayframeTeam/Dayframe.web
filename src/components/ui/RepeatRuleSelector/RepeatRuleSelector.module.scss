@@ -1,0 +1,48 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modeBtn {
+  padding: 0.4em 0.8em;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5em;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  transition: 0.2s;
+
+  &.active {
+    background: var(--accent);
+    color: var(--text-on-accent);
+  }
+}
+
+.days {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dayBtn {
+  padding: 0.3em 0.6em;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.4em;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  cursor: pointer;
+
+  &.selected {
+    background: var(--accent-muted);
+    color: var(--text-on-accent);
+    font-weight: 600;
+  }
+}

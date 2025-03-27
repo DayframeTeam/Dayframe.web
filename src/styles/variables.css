@@ -20,11 +20,17 @@
     --shadow-color: rgba(0, 0, 0, 0.05);
 
     /* === SELECT COLORS === */
-    --select-color-0: var(--text-primary);
+    --select-color-0: #bbbaba;
     --select-color-1: #bbf7d0;
     --select-color-2: #fcd34d;
     --select-color-3: #d8b4fe;
     /* --select-color-4: #93c5fd; */
+
+    /* TASK progress */
+    --subtask-progress-complete: #22c55e;
+    --subtask-progress-incomplete: #FFC83D;
+    /* GLOBAL */
+
 }
 
 /* 🌑 Dark theme*/
@@ -43,4 +49,7 @@
 
     --border-color: #3a3a3a;
     --shadow-color: rgba(0, 0, 0, 0.3);
+
+    --subtask-progress-complete: #22c55e;
+    --subtask-progress-incomplete: #FFC83D;
 }

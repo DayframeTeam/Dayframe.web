@@ -1,0 +1,21 @@
+.button {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0.4em 0.4em;
+  border-radius: 0.5em;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-primary);
+  user-select: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 600px) {
+    padding: 0.2em 0.4em;
+    font-size: 1rem;
+  }
+}

@@ -1,14 +1,16 @@
 import styles from './HeaderNav.module.scss';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-const navItems = [
-  { label: 'Сегодня', to: '/today' },
-  { label: 'Шаблоны', to: '/templates' },
-  { label: 'Календарь', to: '/calendar' },
-];
-
 export function HeaderNav() {
+  const { t } = useTranslation();
+  const navItems = [
+    { label: t('nav.today'), to: '/today' },
+    { label: t('nav.templates'), to: '/templates' },
+    { label: t('nav.calendar'), to: '/calendar' },
+  ];
+
   return (
     <nav className={styles.nav}>
       {navItems.map((item) => (
