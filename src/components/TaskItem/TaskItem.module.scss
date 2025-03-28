@@ -1,4 +1,5 @@
 .taskItem {
+  position: relative;
   background: var(--bg-secondary);
   padding: 1rem;
   border-radius: 0.75rem;
@@ -171,4 +172,11 @@
 
 .date {
   margin-top: 8px;
+}
+
+.editButton {
+  position: absolute;
+  top: 80px;
+  right: 30px;
+  border: 2px solid var(--border-color);
 }

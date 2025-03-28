@@ -46,7 +46,8 @@
       "add": "Add subtask",
       "remove": "Remove subtask",
       "visibility": "Show/hide subtasks"
-    }
+    },
+    "edit": "Edit"
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   "monthNames": [

@@ -1,13 +1,18 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../hooks/storeHooks'; // или откуда ты экспортируешь
+import { useAppDispatch, useAppSelector } from '../hooks/storeHooks';
 import { fetchTasks } from '../features/tasks/tasksThunks';
 
-export const InitialDataLoader = () => {
+export const InitialDataLoader = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.tasks.isLoading);
 
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
 
-  return null;
+  if (isLoading) {
+    return <div style={{ padding: '2rem', textAlign: 'center' }}>Загрузка...</div>;
+  }
+
+  return <>{children}</>;
 };

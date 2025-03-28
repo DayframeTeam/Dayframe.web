@@ -12,6 +12,7 @@ import { updateTaskStatus } from '../../features/tasks/tasksThunks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { Button } from '../ui/Button/Button';
+import TaskEditModal from '../EditTaskModal/EditTaskModal';
 
 type Props = {
   task: Task | TemplateTask;
@@ -48,6 +49,7 @@ export default function TaskItem({ task }: Props) {
 
   const [showXPAnim, setShowXPAnim] = useState(false);
   const wasDoneRef = useRef(task.is_done);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     // Если задача только что была выполнена (is_done поменялось с false на true)
@@ -186,7 +188,7 @@ export default function TaskItem({ task }: Props) {
         <Button
           className={styles.subtaskToggle}
           onClick={() => setShowSubtasks((prev) => !prev)}
-          variant='secondary'
+          variant="secondary"
           aria-label={t('task.subTask.visibility')}
         >
           {showSubtasks ? '▲' : '▼'}
@@ -201,6 +203,17 @@ export default function TaskItem({ task }: Props) {
             }))}
           />
         </div>
+      )}
+      <Button className={styles.editButton} onClick={() => setIsEditing(true)} size='small' variant='secondary'>
+        ✏️ {t('task.edit')}
+      </Button>
+      {isEditing && (
+        <TaskEditModal
+          isOpen={isEditing}
+          onClose={() => setIsEditing(false)}
+          task={task}
+          onSave={() => setIsEditing(false)}
+        />
       )}
     </li>
   );

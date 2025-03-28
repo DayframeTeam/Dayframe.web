@@ -4,7 +4,7 @@ import { toLocalDateString } from '../../utils/dateUtils';
 import TaskSection from '../../components/TaskSection/TaskSection';
 
 export default function TodayPage() {
-  const tasks = useAppSelector((state) => state.tasks);
+  const tasks = useAppSelector((state) => state.tasks.tasks);
   const today = new Date().toLocaleDateString('sv-SE');
   const todayTasks: Task[] = tasks.filter(
     (task) => !task.task_date || toLocalDateString(task.task_date) === today
