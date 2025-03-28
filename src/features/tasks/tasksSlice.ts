@@ -2,19 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { Task } from '../../types/dbTypes';
 import { fetchTasks } from './tasksThunks';
 
-type TasksState = {
-  tasks: Task[];
-  isLoading: boolean;
-};
-
-const initialState: TasksState = {
-  tasks: [],
-  isLoading: false,
-};
-
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState,
+  initialState: {
+    tasks: [] as Task[],
+    isLoading: false,
+    error: null as string | null,
+  },
   reducers: {
     setTasks(state, action: PayloadAction<Task[]>) {
       state.tasks = action.payload;
@@ -36,13 +30,15 @@ const tasksSlice = createSlice({
     builder
       .addCase(fetchTasks.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.tasks = action.payload;
-        state.isLoading = false;
       })
-      .addCase(fetchTasks.rejected, (state) => {
+      .addCase(fetchTasks.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.error.message || 'Ошибка загрузки данных';
       });
   },
 });

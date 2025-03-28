@@ -7,7 +7,7 @@ import { ThemeToggle } from './ThemeToggle/ThemeToggle.tsx';
 
 function App() {
   return (
-    <InitialDataLoader>
+    <>
       <Header
         left={<div style={{ width: '123px' }}></div>}
         center={<HeaderNav />}
@@ -17,8 +17,10 @@ function App() {
           </>
         }
       />
-      <PageContainer />
-    </InitialDataLoader>
+      <InitialDataLoader>
+        <PageContainer />
+      </InitialDataLoader>
+    </>
   );
 }
 

@@ -63,5 +63,7 @@
     "October",
     "November",
     "December"
-  ]
+  ],
+  "loading": "Loading...",
+  "error.loading": "⚠️ Failed to load data"
 }
