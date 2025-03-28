@@ -8,8 +8,8 @@
 
     /* === BACKGROUND === */
     --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f5;
-    --bg-tertiary: #e8e8e8;
+    --bg-secondary: #ece7e7;
+    --bg-tertiary: #d3d1d1;
 
     /* === ACCENTS === */
     --accent: #3b82f6;
@@ -19,18 +19,18 @@
     --border-color: #d4d4d4;
     --shadow-color: rgba(0, 0, 0, 0.05);
 
+    /* TASK progress */
+    --subtask-progress-complete: #04d04f;
+    --subtask-progress-incomplete: #cb9200;
+
+    /* === GLOBAL === */
+
     /* === SELECT COLORS === */
-    --select-color-0: #bbbaba;
+    --select-color-0: #b0cdff;
     --select-color-1: #bbf7d0;
     --select-color-2: #fcd34d;
     --select-color-3: #d8b4fe;
     /* --select-color-4: #93c5fd; */
-
-    /* TASK progress */
-    --subtask-progress-complete: #22c55e;
-    --subtask-progress-incomplete: #FFC83D;
-    /* GLOBAL */
-
 }
 
 /* 🌑 Dark theme*/

@@ -185,14 +185,16 @@ export default function TaskItem({ task }: Props) {
         )}
       </div>
       {hasSubtasks && (
-        <Button
-          className={styles.subtaskToggle}
-          onClick={() => setShowSubtasks((prev) => !prev)}
-          variant="secondary"
-          aria-label={t('task.subTask.visibility')}
-        >
-          {showSubtasks ? '▲' : '▼'}
-        </Button>
+        <div className={styles.subtaskToggle}>
+          <Button
+            className={styles.subtaskToggleBtn}
+            onClick={() => setShowSubtasks((prev) => !prev)}
+            variant="secondary"
+            aria-label={t('task.subTask.visibility')}
+          >
+            {showSubtasks ? '▲' : '▼'}
+          </Button>
+        </div>
       )}
       {hasSubtasks && showSubtasks && (
         <div className={styles.subtaskBlock}>
@@ -204,7 +206,12 @@ export default function TaskItem({ task }: Props) {
           />
         </div>
       )}
-      <Button className={styles.editButton} onClick={() => setIsEditing(true)} size='small' variant='secondary'>
+      <Button
+        className={styles.editButton}
+        onClick={() => setIsEditing(true)}
+        size="small"
+        variant="secondary"
+      >
         ✏️ {t('task.edit')}
       </Button>
       {isEditing && (
