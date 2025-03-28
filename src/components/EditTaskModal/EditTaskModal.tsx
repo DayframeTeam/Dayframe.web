@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Modal } from '../../components/Modal/Modal';
 import { Task, TemplateTask, RepeatRule, Subtask, TemplateSubtask } from '../../types/dbTypes';
 import { Button } from '../ui/Button/Button';
@@ -61,7 +61,6 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
 
   const handleSubtaskAdd = () => {
     const newSubtask: any = {
-      id: Date.now(), // Временный
       title: '',
       position: subtasks.length,
       special_id: crypto.randomUUID(),
@@ -95,19 +94,52 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
 
     const updated = isTemplate
       ? {
+          id: task.id,
           ...base,
           repeat_rule: repeatRule,
           subtasks: subtasks as TemplateSubtask[],
         }
       : {
+          id: task.id,
           ...base,
           task_date: taskDate,
           subtasks: subtasks as Subtask[],
         };
-
-    onSave(updated);
+    console.log('[Updated Task]', updated); // 👈 Выводим результат
+    //onSave(updated);
     onClose();
   };
+
+  const isChanged = useMemo(() => {
+    return (
+      title !== task.title ||
+      description !== (task.description ?? '') ||
+      category !== (task.category ?? '') ||
+      priority !== (task.priority ?? null) ||
+      exp !== task.exp ||
+      duration !== (task.duration ?? '') ||
+      startTime !== (task.start_time ?? '') ||
+      endTime !== (task.end_time ?? '') ||
+      (!isTemplate && taskDate !== (task.task_date ?? '')) ||
+      (isTemplate &&
+        JSON.stringify(repeatRule) !== JSON.stringify((task as TemplateTask).repeat_rule)) ||
+      JSON.stringify(subtasks) !== JSON.stringify(task.subtasks || [])
+    );
+  }, [
+    title,
+    description,
+    category,
+    priority,
+    exp,
+    duration,
+    startTime,
+    endTime,
+    taskDate,
+    repeatRule,
+    subtasks,
+    task,
+    isTemplate,
+  ]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('task.edit')}>
@@ -163,8 +195,19 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
           />
         )}
 
-        <div>
-          <h3>{t('task.subtasks.label')}</h3>
+        <div
+          style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            justifyContent: 'center',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: "center", justifyContent: "space-between", margin: "20px 0" }}>
+            <h3 style={{ margin: "0" }}>{t('task.subtasks.edit')}</h3>
+            <Button type="button" variant="secondary" size="small" onClick={handleSubtaskAdd}>
+              + {t('task.subtasks.add')}
+            </Button>
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {subtasks.map((subtask, index) => (
               <div key={subtask.special_id} style={{ display: 'flex', gap: '0.5rem' }}>
@@ -183,13 +226,12 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
                 </Button>
               </div>
             ))}
-            <Button type="button" onClick={handleSubtaskAdd}>
-              + {t('task.subtasks.add')}
-            </Button>
           </div>
         </div>
 
-        <Button type="submit">{t('task.save')}</Button>
+        <Button type="submit" disabled={!isChanged}>
+          {t('task.save')}
+        </Button>
       </form>
     </Modal>
   );

@@ -9,6 +9,7 @@ type Props = Readonly<{
   variant?: 'primary' | 'secondary';
   size?: 'normal' | 'small';
   className?: string;
+  disabled?: boolean;
 }>;
 
 export function Button({
@@ -18,11 +19,13 @@ export function Button({
   variant = 'primary',
   size = 'normal',
   className,
+  disabled = false,
 }: Props) {
   return (
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={clsx(styles.button, styles[variant], styles[size], className)}
     >
       {children}

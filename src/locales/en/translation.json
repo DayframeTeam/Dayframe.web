@@ -49,7 +49,8 @@
       "progress": "Progress",
       "visibility": "Show/hide subtasks",
       "add": "Add subtask",
-      "remove": "Remove subtask"
+      "remove": "Remove subtask",
+      "edit": "Edit subtasks"
     }
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
