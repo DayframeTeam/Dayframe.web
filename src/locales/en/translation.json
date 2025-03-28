@@ -10,10 +10,11 @@
     "calendar": "Calendar"
   },
   "task": {
-    "subtasks": {
-      "progress": "Progress",
-      "toggle": "Show/Hide subtasks"
-    },
+    "title": "Task title",
+    "description": "Task description",
+    "duration": "Task duration",
+    "add": "Add task",
+    "delete": "Delete task",
     "exp": "Task XP",
     "status": {
       "active": "🔁 Active",
@@ -26,7 +27,7 @@
       "from": "From",
       "to": "to"
     },
-    "date": "Due Date",
+    "date": "Due date",
     "repeat": {
       "label": "Repeat",
       "from": "From",
@@ -42,10 +43,11 @@
       "high": "High"
     },
     "category": "Category",
-    "subTask": {
+    "subtasks": {
+      "progress": "Progress",
+      "visibility": "Show/hide subtasks",
       "add": "Add subtask",
-      "remove": "Remove subtask",
-      "visibility": "Show/hide subtasks"
+      "remove": "Remove subtask"
     },
     "edit": "Edit"
   },

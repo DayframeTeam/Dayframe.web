@@ -6,12 +6,12 @@ import { Button } from '../ui/Button/Button';
 import { TextInput } from '../ui/TextInput/TextInput';
 import { SelectInput } from '../ui/SelectInput/SelectInput';
 
-type Props = {
+type Props = Readonly<{
   isOpen: boolean;
   onClose: () => void;
   task: Task | TemplateTask;
   onSave: (updated: Partial<Task | TemplateTask>) => void;
-};
+}>;
 
 export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) {
   const { t } = useTranslation();
@@ -137,7 +137,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
             label: `+${xp} ⚡`,
           }))}
         />
-        <TextInput label={t('task.duration')} value={duration} onChange={setDuration} />
+        <TextInput label={t('task.duration')} value={duration} onChange={setDuration} type="time" />
         <TextInput
           label={t('task.timing.start')}
           value={startTime}

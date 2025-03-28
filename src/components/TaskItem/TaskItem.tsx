@@ -190,7 +190,6 @@ export default function TaskItem({ task }: Props) {
             className={styles.subtaskToggleBtn}
             onClick={() => setShowSubtasks((prev) => !prev)}
             variant="secondary"
-            aria-label={t('task.subTask.visibility')}
           >
             {showSubtasks ? '▲' : '▼'}
           </Button>
