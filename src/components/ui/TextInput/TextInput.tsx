@@ -1,8 +1,8 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useId } from 'react';
 import styles from './TextInput.module.scss';
 
 type TextInputProps = Readonly<{
-  label: string;
+  label?: string; // label теперь опционален
   value: string | number;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -20,7 +20,8 @@ export function TextInput({
   type = 'text',
   required = false,
 }: TextInputProps) {
-  const inputId = id || `input-${label.replace(/\s+/g, '-').toLowerCase()}`;
+  const autoId = useId();
+  const inputId = id || autoId;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -28,9 +29,11 @@ export function TextInput({
 
   return (
     <div className={styles.wrapper}>
-      <label htmlFor={inputId} className={styles.label}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
+      )}
       <input
         id={inputId}
         className={styles.input}

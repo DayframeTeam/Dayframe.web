@@ -50,7 +50,8 @@
       "visibility": "Show/hide subtasks",
       "add": "Add subtask",
       "remove": "Remove subtask",
-      "edit": "Edit subtasks"
+      "edit": "Edit subtasks",
+      "placeholderTitle": "Enter subtask name"
     }
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],

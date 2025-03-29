@@ -1,0 +1,26 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  padding-left: 30px; /* отступ для стрелки */
+  &:hover {
+    background-color: var(--bg-tertiary);
+  }
+}
+
+.wrapper::before {
+  content: '⇅';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #888;
+  pointer-events: none; /* чтобы стрелка не мешала перетаскиванию */
+}

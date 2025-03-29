@@ -6,6 +6,11 @@ import { Button } from '../ui/Button/Button';
 import { TextInput } from '../ui/TextInput/TextInput';
 import { SelectInput } from '../ui/SelectInput/SelectInput';
 
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import SortableSubtaskItem from './SortableSubtaskItem/SortableSubtaskItem';
+
+
 type Props = Readonly<{
   isOpen: boolean;
   onClose: () => void;
@@ -17,6 +22,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
   const { t } = useTranslation();
   const isTemplate = 'repeat_rule' in task;
 
+  // Инициализация состояния для основных полей задачи
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? '');
   const [category, setCategory] = useState(task.category ?? '');
@@ -38,11 +44,15 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
     setDuration(task.duration ?? '');
     setStartTime(task.start_time ?? '');
     setEndTime(task.end_time ?? '');
-    if (!isTemplate) setTaskDate(task.task_date ?? '');
-    else setRepeatRule(task.repeat_rule);
+    if (!isTemplate) {
+      setTaskDate(task.task_date ?? '');
+    } else {
+      setRepeatRule(task.repeat_rule);
+    }
     setSubtasks(task.subtasks || []);
   }, [task, isTemplate]);
 
+  // Обновление заголовка подзадачи по индексу
   const handleSubtaskTitleChange = (index: number, newTitle: string) => {
     const updated = [...subtasks];
     updated[index] = { ...updated[index], title: newTitle };
@@ -53,16 +63,24 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
     }
   };
 
+  // Удаление подзадачи и перенумерация оставшихся
   const handleSubtaskDelete = (index: number) => {
-    const updated = subtasks.filter((_, i) => i !== index).map((s, i) => ({ ...s, position: i }));
-
-    setSubtasks(updated as Subtask[]); // или as TemplateSubtask[] если шаблон
+    const updated = subtasks
+      .filter((_, i) => i !== index)
+      .map((s, i) => ({ ...s, position: i }));
+      if (isTemplate) {
+        setSubtasks(updated as TemplateSubtask[]);
+      } else {
+        setSubtasks(updated as Subtask[]);
+      }
   };
 
+  // Добавление новой подзадачи
   const handleSubtaskAdd = () => {
     const newSubtask: any = {
       title: '',
       position: subtasks.length,
+      // Если special_id нужен для DnD, его генерируем здесь (и он далее участвует в комбинированном ключе)
       special_id: crypto.randomUUID(),
       user_id: task.user_id,
       created_at: new Date().toISOString(),
@@ -74,10 +92,34 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
       (newSubtask as Subtask).parent_task_id = (task as Task).id;
       (newSubtask as Subtask).is_done = false;
     }
-
     setSubtasks((prev) => [...prev, newSubtask]);
   };
 
+  // Функция для получения уникального и стабильного ключа для DnD
+  const getUniqueKey = (subtask: Subtask | TemplateSubtask) => {
+    return `${subtask.id}_${subtask.special_id}`;
+  };
+
+  // Обработка завершения перетаскивания
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = String(active.id);
+    const overId = String(over.id);
+
+    if (activeId !== overId) {
+      const oldIndex = subtasks.findIndex((sub) => getUniqueKey(sub) === activeId);
+      const newIndex = subtasks.findIndex((sub) => getUniqueKey(sub) === overId);
+      if (oldIndex < 0 || newIndex < 0) return;
+
+      const newSubtasks = arrayMove(subtasks, oldIndex, newIndex)
+        .map((sub, i) => ({ ...sub, position: i }));
+      setSubtasks(newSubtasks);
+    }
+  };
+
+  // Отправка формы
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -105,11 +147,12 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
           task_date: taskDate,
           subtasks: subtasks as Subtask[],
         };
-    console.log('[Updated Task]', updated); // 👈 Выводим результат
-    //onSave(updated);
+    console.log('[Updated Task]', updated);
+    // Здесь можно вызвать onSave(updated);
     onClose();
   };
 
+  // Проверка, были ли внесены изменения
   const isChanged = useMemo(() => {
     return (
       title !== task.title ||
@@ -143,10 +186,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('task.edit')}>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-      >
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <TextInput label={t('task.title')} value={title} onChange={setTitle} required />
         <TextInput label={t('task.description')} value={description} onChange={setDescription} />
         <TextInput label={t('task.category')} value={category} onChange={setCategory} />
@@ -170,12 +210,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
           }))}
         />
         <TextInput label={t('task.duration')} value={duration} onChange={setDuration} type="time" />
-        <TextInput
-          label={t('task.timing.start')}
-          value={startTime}
-          onChange={setStartTime}
-          type="time"
-        />
+        <TextInput label={t('task.timing.start')} value={startTime} onChange={setStartTime} type="time" />
         <TextInput label={t('task.timing.end')} value={endTime} onChange={setEndTime} type="time" />
 
         {!isTemplate ? (
@@ -195,38 +230,32 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
           />
         )}
 
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'column wrap',
-            justifyContent: 'center',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: "center", justifyContent: "space-between", margin: "20px 0" }}>
-            <h3 style={{ margin: "0" }}>{t('task.subtasks.edit')}</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '20px 0' }}>
+            <h3 style={{ margin: 0 }}>{t('task.subtasks.edit')}</h3>
             <Button type="button" variant="secondary" size="small" onClick={handleSubtaskAdd}>
               + {t('task.subtasks.add')}
             </Button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {subtasks.map((subtask, index) => (
-              <div key={subtask.special_id} style={{ display: 'flex', gap: '0.5rem' }}>
-                <TextInput
-                  label="название"
-                  value={subtask.title}
-                  onChange={(val) => handleSubtaskTitleChange(index, val)}
-                  placeholder={t('task.subtasks.placeholder')}
-                />
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => handleSubtaskDelete(index)}
-                >
-                  ✖
-                </Button>
-              </div>
-            ))}
-          </div>
+
+          {/* Оборачиваем список подзадач в контекст DnD */}
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={subtasks.map(getUniqueKey)} strategy={verticalListSortingStrategy}>
+              {subtasks.map((subtask, index) => {
+                const uniqueKey = getUniqueKey(subtask);
+                return (
+                  <SortableSubtaskItem
+                    key={uniqueKey}
+                    id={uniqueKey}
+                    subtask={subtask}
+                    index={index}
+                    onTitleChange={handleSubtaskTitleChange}
+                    onDelete={handleSubtaskDelete}
+                  />
+                );
+              })}
+            </SortableContext>
+          </DndContext>
         </div>
 
         <Button type="submit" disabled={!isChanged}>
