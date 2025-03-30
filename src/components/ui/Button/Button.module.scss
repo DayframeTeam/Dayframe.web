@@ -35,6 +35,15 @@
   }
 }
 
+.danger {
+  background: var(--danger, #dc3545);
+  color: var(--text-on-danger, #fff);
+
+  &:hover {
+    background: var(--danger-hover, #c82333);
+  }
+}
+
 .small {
   padding: 0.2rem 0.6rem;
   font-size: 0.75rem;

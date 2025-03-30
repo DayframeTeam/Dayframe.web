@@ -15,7 +15,9 @@
     "duration": "Task duration",
     "add": "Add task",
     "save": "Save task",
+    "saveChanges": "Save changes",
     "delete": "Delete task",
+    "deleted": "Task deleted",
     "exp": "Task XP",
     "edit": "Edit",
     "status": {
