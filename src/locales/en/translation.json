@@ -20,6 +20,9 @@
     "deleted": "Task deleted",
     "exp": "Task XP",
     "edit": "Edit",
+    "alert": {
+      "title": "Task title is required"
+    },
     "status": {
       "active": "🔁 Active",
       "inactive": "🔕 Inactive"
@@ -53,7 +56,10 @@
       "add": "Add subtask",
       "remove": "Remove subtask",
       "edit": "Edit subtasks",
-      "placeholderTitle": "Enter subtask name"
+      "placeholderTitle": "Enter subtask name",
+      "alert": {
+        "title": "All subtasks must have a title"
+      }
     }
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],

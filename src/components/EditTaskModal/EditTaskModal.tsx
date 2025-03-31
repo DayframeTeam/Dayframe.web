@@ -64,8 +64,23 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!localTask.title.trim()) {
+      alert(t('task.alert.title'));
+      return;
+    }
+
+    const hasEmptySubtask = localTask.subtasks.some((s) => !s.is_deleted && !s.title.trim());
+
+    if (hasEmptySubtask) {
+      alert(t('task.subtasks.alert.title'));
+      return;
+    }
+
+    // Всё ок — можно сохранять
+    // const updated = { ...localTask, ... }
     console.log(localTask);
-    //onSave(updated);
+    // onSave(updated);
     onClose();
   };
 
@@ -206,15 +221,17 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
               />
             ) : (
               <DatePicker
-              label={t('task.date')}
-              value={(localTask as Task).task_date ? new Date((localTask as Task).task_date!) : null}
-              onChange={(date) =>
-                setLocalTask((prev) => ({
-                  ...prev,
-                  task_date: date ? date.toISOString().split('T')[0] : null,
-                }))
-              }
-            />
+                label={t('task.date')}
+                value={
+                  (localTask as Task).task_date ? new Date((localTask as Task).task_date!) : null
+                }
+                onChange={(date) =>
+                  setLocalTask((prev) => ({
+                    ...prev,
+                    task_date: date ? date.toISOString().split('T')[0] : null,
+                  }))
+                }
+              />
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
