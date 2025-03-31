@@ -8,7 +8,7 @@ import { TextInput } from '../ui/TextInput/TextInput';
 import { SelectInput } from '../ui/SelectInput/SelectInput';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import SortableSubtaskItem  from './SortableSubtaskItem/SortableSubtaskItem';
+import SortableSubtaskItem from './SortableSubtaskItem/SortableSubtaskItem';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -39,6 +39,19 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
   const sortedSubtasks = useMemo(() => {
     return localTask.subtasks.filter((s) => !s.is_deleted).sort((a, b) => a.position - b.position);
   }, [localTask.subtasks]);
+
+  const initialTask = useMemo(() => createTaskCopy(task), [task]);
+  function normalizeTask(task: typeof localTask) {
+    return {
+      ...task,
+      subtasks: task.subtasks
+        .filter((s) => !s.is_deleted)
+        .map(({ uniqueKey, is_deleted, ...rest }) => rest),
+    };
+  }
+  const isChanged = useMemo(() => {
+    return JSON.stringify(normalizeTask(localTask)) !== JSON.stringify(normalizeTask(initialTask));
+  }, [localTask, initialTask]);
 
   const handleTaskDelete = () => {
     setLocalTask((prev) => ({
@@ -97,25 +110,25 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-  
+
     setLocalTask((prev) => {
       // Фильтруем и сортируем так же, как sortedSubtasks
       const activeList = prev.subtasks
         .filter((s) => !s.is_deleted)
         .sort((a, b) => a.position - b.position);
-  
+
       const oldIndex = activeList.findIndex((s) => s.uniqueKey === active.id);
       const newIndex = activeList.findIndex((s) => s.uniqueKey === over.id);
       if (oldIndex === -1 || newIndex === -1) return prev;
-  
+
       // Переставляем в отсортированном списке
       const reordered = [...activeList];
       const [moved] = reordered.splice(oldIndex, 1);
       reordered.splice(newIndex, 0, moved);
-  
+
       // Обновляем позиции
       const updated = reordered.map((s, idx) => ({ ...s, position: idx }));
-  
+
       // Возвращаем обновлённый общий список (включая is_deleted = true)
       const untouched = prev.subtasks.filter((s) => s.is_deleted);
       return {
@@ -124,7 +137,6 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
       };
     });
   };
-  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('task.edit')}>
@@ -215,15 +227,14 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
                   items={sortedSubtasks.map((s) => s.uniqueKey)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {sortedSubtasks
-                    .map((subtask) => (
-                      <SortableSubtaskItem
-                        key={subtask.uniqueKey}
-                        subtask={subtask}
-                        onTitleChange={handleSubtaskTitleChange}
-                        onDelete={handleSubtaskDelete}
-                      />
-                    ))}
+                  {sortedSubtasks.map((subtask) => (
+                    <SortableSubtaskItem
+                      key={subtask.uniqueKey}
+                      subtask={subtask}
+                      onTitleChange={handleSubtaskTitleChange}
+                      onDelete={handleSubtaskDelete}
+                    />
+                  ))}
                 </SortableContext>
               </DndContext>
             </div>
@@ -234,7 +245,9 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
         ) : (
           <p>{t('task.deleted')}</p>
         )}
-        <Button type="submit">{t('task.saveChanges')}</Button>
+        <Button type="submit" disabled={!isChanged}>
+          {t('task.saveChanges')}
+        </Button>
       </form>
     </Modal>
   );
