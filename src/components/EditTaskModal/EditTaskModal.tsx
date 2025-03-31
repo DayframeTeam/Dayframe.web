@@ -9,6 +9,8 @@ import { SelectInput } from '../ui/SelectInput/SelectInput';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import SortableSubtaskItem from './SortableSubtaskItem/SortableSubtaskItem';
+import RepeatRuleSelector from '../ui/RepeatRuleSelector/RepeatRuleSelector';
+import DatePicker from '../ui/DatePicker/DatePicker';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -192,27 +194,28 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
               onChange={(val) => setLocalTask({ ...localTask, end_time: val })}
               type="time"
             />
-            {/* {isTemplate ? (
-              <SelectInput
-                label={t('task.repeat.label')}
-                value={Array.isArray(repeatRule) ? 'custom' : repeatRule}
-                onChange={(value) =>
-                  setRepeatRule(value === 'custom' ? [1, 3, 5] : (value as RepeatRule))
+            {isTemplate ? (
+              <RepeatRuleSelector
+                value={(localTask as TemplateTask).repeat_rule}
+                onChange={(newRule) =>
+                  setLocalTask((prev) => ({
+                    ...prev,
+                    repeat_rule: newRule,
+                  }))
                 }
-                options={[
-                  { value: 'daily', label: t('task.repeat.daily') },
-                  { value: 'weekly', label: t('task.repeat.weekly') },
-                  { value: 'custom', label: t('task.repeat.custom') },
-                ]}
               />
             ) : (
-              <TextInput
-                label={t('task.date')}
-                value={localTask.taskDate}
-                onChange={(val) => setLocalTask({ ...localTask, taskDate: val })}
-                type="date"
-              />
-            )} */}
+              <DatePicker
+              label={t('task.date')}
+              value={(localTask as Task).task_date ? new Date((localTask as Task).task_date!) : null}
+              onChange={(date) =>
+                setLocalTask((prev) => ({
+                  ...prev,
+                  task_date: date ? date.toISOString().split('T')[0] : null,
+                }))
+              }
+            />
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', margin: '20px 0' }}>
