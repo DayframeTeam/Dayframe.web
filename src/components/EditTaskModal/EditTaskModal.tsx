@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useMemo } from 'react';
+import { nanoid } from 'nanoid';
 import { Modal } from '../../components/Modal/Modal';
 import { Task, TemplateTask, RepeatRule, Subtask, TemplateSubtask } from '../../types/dbTypes';
 import { Button } from '../ui/Button/Button';
 import { TextInput } from '../ui/TextInput/TextInput';
 import { SelectInput } from '../ui/SelectInput/SelectInput';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import SortableSubtaskItem from './SortableSubtaskItem/SortableSubtaskItem';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import SortableSubtaskItem  from './SortableSubtaskItem/SortableSubtaskItem';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -16,8 +17,8 @@ type Props = Readonly<{
   onSave: (updated: Partial<Task | TemplateTask>) => void;
 }>;
 
-export type SubtaskLocal = Subtask & { is_deleted: boolean };
-export type TemplateSubtaskLocal = TemplateSubtask & { is_deleted: boolean };
+export type SubtaskLocal = Subtask & { is_deleted: boolean; uniqueKey: string };
+export type TemplateSubtaskLocal = TemplateSubtask & { is_deleted: boolean; uniqueKey: string };
 
 export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) {
   const { t } = useTranslation();
@@ -26,150 +27,103 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
   const createTaskCopy = (task: Task | TemplateTask) => ({
     ...task,
     is_deleted: false,
-    subtasks: (task.subtasks || []).map((s) => ({ ...s, is_deleted: false })) as (
-      | SubtaskLocal
-      | TemplateSubtaskLocal
-    )[],
+    subtasks: (task.subtasks || []).map((s) => ({
+      ...s,
+      is_deleted: false,
+      uniqueKey: nanoid(),
+    })) as (SubtaskLocal | TemplateSubtaskLocal)[],
   });
 
-  const [localTask, setLocalTask] = useState(createTaskCopy(task));
-  const [taskDate, setTaskDate] = useState(!isTemplate ? ((task as Task).task_date ?? '') : '');
-  const [repeatRule, setRepeatRule] = useState<RepeatRule>(
-    isTemplate ? (task as TemplateTask).repeat_rule : 'daily'
-  );
-  const [taskDeleted, setTaskDeleted] = useState(false);
+  const [localTask, setLocalTask] = useState(() => createTaskCopy(task));
 
   const sortedSubtasks = useMemo(() => {
-    return [...localTask.subtasks].sort((a, b) => a.position - b.position);
+    return localTask.subtasks.filter((s) => !s.is_deleted).sort((a, b) => a.position - b.position);
   }, [localTask.subtasks]);
 
-  const getUniqueKey = (subtask: SubtaskLocal | TemplateSubtaskLocal) =>
-    `${subtask.id}_${subtask.special_id}`;
-
-  const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {
-    const updated = [...localTask.subtasks];
-    const index = updated.findIndex((s) => getUniqueKey(s) === uniqueKey);
-    if (index === -1) return;
-    updated[index] = { ...updated[index], title: newTitle };
-    setLocalTask({ ...localTask, subtasks: updated });
-  };
-
-  const handleSubtaskDelete = (uniqueKey: string) => {
-    const updated = [...localTask.subtasks];
-    const index = updated.findIndex((s) => getUniqueKey(s) === uniqueKey);
-    if (index === -1) return;
-
-    updated[index].is_deleted = true;
-
-    const nonDeleted = updated.filter((s) => !s.is_deleted).map((s, i) => ({ ...s, position: i }));
-    const final = updated.map((s) => {
-      const updatedSubtask = nonDeleted.find((x) => x.id === s.id && x.special_id === s.special_id);
-      return updatedSubtask ?? s;
-    });
-
-    setLocalTask({ ...localTask, subtasks: final });
-  };
-
-  const handleSubtaskAdd = () => {
-    const newSubtask: any = {
-      title: '',
-      position: localTask.subtasks.filter((s) => !s.is_deleted).length,
-      special_id: crypto.randomUUID(),
-      user_id: task.user_id,
-      created_at: new Date().toISOString(),
-      is_deleted: false,
-    };
-
-    if (isTemplate) {
-      newSubtask.template_task_id = (task as TemplateTask).id;
-    } else {
-      newSubtask.parent_task_id = (task as Task).id;
-      newSubtask.is_done = false;
-    }
-
-    setLocalTask({ ...localTask, subtasks: [...localTask.subtasks, newSubtask] });
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = String(active.id);
-    const overId = String(over.id);
-    if (activeId === overId) return;
-
-    const visible = localTask.subtasks.filter((s) => !s.is_deleted);
-    const oldIndex = visible.findIndex((s) => getUniqueKey(s) === activeId);
-    const newIndex = visible.findIndex((s) => getUniqueKey(s) === overId);
-    if (oldIndex < 0 || newIndex < 0) return;
-
-    const reordered = arrayMove(visible, oldIndex, newIndex).map((s, i) => ({ ...s, position: i }));
-    const full = localTask.subtasks.map((s) => {
-      const updated = reordered.find((r) => r.id === s.id && r.special_id === s.special_id);
-      return updated ?? s;
-    });
-
-    setLocalTask({ ...localTask, subtasks: full });
-  };
-
   const handleTaskDelete = () => {
-    setTaskDeleted(true);
+    setLocalTask((prev) => ({
+      ...prev,
+      is_deleted: true,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const updated = {
-      ...localTask,
-      task_date: !isTemplate ? taskDate : undefined,
-      repeat_rule: isTemplate ? repeatRule : undefined,
-      is_deleted: taskDeleted,
-    };
-
-    console.log('[Updated Task]', updated);
-    // onSave(updated);
+    console.log(localTask);
+    //onSave(updated);
     onClose();
   };
 
-  const isChanged = useMemo(() => {
-    const originalSubtasks = (task.subtasks || []).map((s) => ({ ...s, is_deleted: false }));
+  const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {
+    setLocalTask((prev) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((s) =>
+        s.uniqueKey === uniqueKey ? { ...s, title: newTitle } : s
+      ),
+    }));
+  };
+
+  const handleSubtaskDelete = (uniqueKey: string) => {
+    console.log('Удаление подзадачи:', uniqueKey);
+    setLocalTask((prev) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((s) =>
+        s.uniqueKey === uniqueKey ? { ...s, is_deleted: true } : s
+      ),
+    }));
+  };
+
+  const handleSubtaskAdd = () => {
+    const newSubtask: SubtaskLocal | TemplateSubtaskLocal = {
+      id: 0,
+      title: '',
+      position: localTask.subtasks.length,
+      special_id: nanoid(),
+      user_id: localTask.user_id,
+      created_at: '',
+      is_deleted: false,
+      uniqueKey: nanoid(),
+      ...(isTemplate
+        ? { template_task_id: localTask.id }
+        : { parent_task_id: localTask.id, is_done: false }),
+    };
+
+    setLocalTask((prev) => ({
+      ...prev,
+      subtasks: [...prev.subtasks, newSubtask],
+    }));
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
   
-    const isFieldChanged = (
-      localTask.title !== task.title ||
-      localTask.description !== (task.description ?? '') ||
-      localTask.category !== (task.category ?? '') ||
-      localTask.priority !== (task.priority ?? null) ||
-      localTask.duration !== (task.duration ?? '') ||
-      localTask.start_time !== (task.start_time ?? '') ||
-      localTask.end_time !== (task.end_time ?? '')
-    );
+    setLocalTask((prev) => {
+      // Фильтруем и сортируем так же, как sortedSubtasks
+      const activeList = prev.subtasks
+        .filter((s) => !s.is_deleted)
+        .sort((a, b) => a.position - b.position);
   
-    const isRepeatOrDateChanged = !isTemplate
-      ? taskDate !== ((task as Task).task_date ?? '')
-      : JSON.stringify(repeatRule) !== JSON.stringify((task as TemplateTask).repeat_rule);
+      const oldIndex = activeList.findIndex((s) => s.uniqueKey === active.id);
+      const newIndex = activeList.findIndex((s) => s.uniqueKey === over.id);
+      if (oldIndex === -1 || newIndex === -1) return prev;
   
-    const isTaskDeletedChanged = taskDeleted;
+      // Переставляем в отсортированном списке
+      const reordered = [...activeList];
+      const [moved] = reordered.splice(oldIndex, 1);
+      reordered.splice(newIndex, 0, moved);
   
-    const localSubtasks = localTask.subtasks;
-    if (localSubtasks.length !== originalSubtasks.length) return true;
+      // Обновляем позиции
+      const updated = reordered.map((s, idx) => ({ ...s, position: idx }));
   
-    for (let i = 0; i < localSubtasks.length; i++) {
-      const local = localSubtasks[i];
-      const original = originalSubtasks[i];
-  
-      if (
-        local.id !== original.id ||
-        local.title !== original.title ||
-        local.position !== original.position ||
-        ('is_done' in local && local.is_done !== (original as Subtask).is_done) ||
-        local.is_deleted !== original.is_deleted
-      ) {
-        return true;
-      }
-    }
-  
-    return isFieldChanged || isRepeatOrDateChanged || isTaskDeletedChanged;
-  }, [localTask, task, taskDate, repeatRule, taskDeleted, isTemplate]);
+      // Возвращаем обновлённый общий список (включая is_deleted = true)
+      const untouched = prev.subtasks.filter((s) => s.is_deleted);
+      return {
+        ...prev,
+        subtasks: [...updated, ...untouched],
+      };
+    });
+  };
   
 
   return (
@@ -178,7 +132,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
         onSubmit={handleSubmit}
         style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
       >
-        {!taskDeleted ? (
+        {!localTask.is_deleted ? (
           <>
             <TextInput
               label={t('task.title')}
@@ -226,14 +180,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
               onChange={(val) => setLocalTask({ ...localTask, end_time: val })}
               type="time"
             />
-            {!isTemplate ? (
-              <TextInput
-                label={t('task.date')}
-                value={taskDate}
-                onChange={setTaskDate}
-                type="date"
-              />
-            ) : (
+            {/* {isTemplate ? (
               <SelectInput
                 label={t('task.repeat.label')}
                 value={Array.isArray(repeatRule) ? 'custom' : repeatRule}
@@ -246,7 +193,14 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
                   { value: 'custom', label: t('task.repeat.custom') },
                 ]}
               />
-            )}
+            ) : (
+              <TextInput
+                label={t('task.date')}
+                value={localTask.taskDate}
+                onChange={(val) => setLocalTask({ ...localTask, taskDate: val })}
+                type="date"
+              />
+            )} */}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', margin: '20px 0' }}>
@@ -258,27 +212,21 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
 
               <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext
-                  items={sortedSubtasks.map(getUniqueKey)}
+                  items={sortedSubtasks.map((s) => s.uniqueKey)}
                   strategy={verticalListSortingStrategy}
                 >
                   {sortedSubtasks
-                    .filter((subtask) => !subtask.is_deleted)
-                    .map((subtask) => {
-                      const uniqueKey = getUniqueKey(subtask);
-                      return (
-                        <SortableSubtaskItem
-                          key={uniqueKey}
-                          id={uniqueKey}
-                          subtask={subtask}
-                          onTitleChange={handleSubtaskTitleChange}
-                          onDelete={handleSubtaskDelete}
-                        />
-                      );
-                    })}
+                    .map((subtask) => (
+                      <SortableSubtaskItem
+                        key={subtask.uniqueKey}
+                        subtask={subtask}
+                        onTitleChange={handleSubtaskTitleChange}
+                        onDelete={handleSubtaskDelete}
+                      />
+                    ))}
                 </SortableContext>
               </DndContext>
             </div>
-
             <Button type="button" variant="danger" onClick={handleTaskDelete}>
               {t('task.delete')}
             </Button>
@@ -286,10 +234,7 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
         ) : (
           <p>{t('task.deleted')}</p>
         )}
-
-        <Button type="submit" disabled={!isChanged}>
-          {t('task.saveChanges')}
-        </Button>
+        <Button type="submit">{t('task.saveChanges')}</Button>
       </form>
     </Modal>
   );

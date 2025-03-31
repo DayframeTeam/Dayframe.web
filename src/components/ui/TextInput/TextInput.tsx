@@ -9,6 +9,7 @@ type TextInputProps = Readonly<{
   id?: string;
   type?: string;
   required?: boolean;
+  className?: string;
 }>;
 
 export function TextInput({
@@ -19,6 +20,7 @@ export function TextInput({
   id,
   type = 'text',
   required = false,
+  className = '',
 }: TextInputProps) {
   const autoId = useId();
   const inputId = id || autoId;
@@ -36,7 +38,7 @@ export function TextInput({
       )}
       <input
         id={inputId}
-        className={styles.input}
+        className={styles.input + ' ' + className}
         type={type}
         value={value}
         onChange={handleChange}
