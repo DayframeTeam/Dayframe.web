@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useMemo } from 'react';
 import { nanoid } from 'nanoid';
 import { Modal } from '../../components/Modal/Modal';
-import { Task, TemplateTask, RepeatRule, Subtask, TemplateSubtask } from '../../types/dbTypes';
+import { Task, TemplateTask, Subtask, TemplateSubtask } from '../../types/dbTypes';
 import { Button } from '../ui/Button/Button';
 import { TextInput } from '../ui/TextInput/TextInput';
 import { SelectInput } from '../ui/SelectInput/SelectInput';
@@ -11,18 +11,29 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import SortableSubtaskItem from './SortableSubtaskItem/SortableSubtaskItem';
 import RepeatRuleSelector from '../ui/RepeatRuleSelector/RepeatRuleSelector';
 import DatePicker from '../ui/DatePicker/DatePicker';
+import { useAppDispatch } from '../../hooks/storeHooks';
+import { updateTask } from '../../features/tasks/tasksThunks';
 
 type Props = Readonly<{
   isOpen: boolean;
   onClose: () => void;
   task: Task | TemplateTask;
-  onSave: (updated: Partial<Task | TemplateTask>) => void;
 }>;
+
+export type TaskLocal = Task & {
+  is_deleted: boolean;
+  subtasks: SubtaskLocal[];
+};
+
+export type TemplateTaskLocal = TemplateTask & {
+  is_deleted: boolean;
+  subtasks: TemplateSubtaskLocal[];
+};
 
 export type SubtaskLocal = Subtask & { is_deleted: boolean; uniqueKey: string };
 export type TemplateSubtaskLocal = TemplateSubtask & { is_deleted: boolean; uniqueKey: string };
 
-export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) {
+export default function TaskEditModal({ isOpen, onClose, task }: Props) {
   const { t } = useTranslation();
   const isTemplate = 'repeat_rule' in task;
 
@@ -62,7 +73,9 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!localTask.title.trim()) {
@@ -77,11 +90,17 @@ export default function TaskEditModal({ isOpen, onClose, task, onSave }: Props) 
       return;
     }
 
-    // Всё ок — можно сохранять
-    // const updated = { ...localTask, ... }
     console.log(localTask);
-    // onSave(updated);
-    onClose();
+    dispatch(updateTask({ id: localTask.id, data: localTask as TaskLocal | TemplateTaskLocal }))
+    .unwrap()
+    .then(() => {
+      console.log('Task updated, closing modal');
+      onClose();
+    })
+    .catch((err) => {
+      console.error('Ошибка при обновлении', err);
+      alert(t('task.alert.updateError'));
+    });
   };
 
   const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/http/axios';
 import { Task } from '../../types/dbTypes';
 import { setTasks, updateOneTask, deleteTask as removeTask, addTask } from './tasksSlice';
+import { TaskLocal, TemplateTaskLocal } from '../../components/EditTaskModal/EditTaskModal';
 
 const url = '/tasks';
 
@@ -38,7 +39,7 @@ export const updateTaskStatus = createAsyncThunk(
 // Обновить всю задачу
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
-  ({ id, data }: { id: number; data: Partial<Task> }, thunkAPI) => {
+  ({ id, data }: { id: number; data: TaskLocal | TemplateTaskLocal }, thunkAPI) => {
     return api
       .patch<Task>(`${url}/${id}`, data)
       .then((res) => {

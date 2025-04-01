@@ -21,7 +21,8 @@
     "exp": "Task XP",
     "edit": "Edit",
     "alert": {
-      "title": "Task title is required"
+      "title": "Task title is required",
+      "updateError": "Update error"
     },
     "status": {
       "active": "🔁 Active",

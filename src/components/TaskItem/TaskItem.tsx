@@ -218,7 +218,6 @@ export default function TaskItem({ task }: Props) {
           isOpen={isEditing}
           onClose={() => setIsEditing(false)}
           task={task}
-          onSave={() => setIsEditing(false)}
         />
       )}
     </li>
