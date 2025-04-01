@@ -13,6 +13,7 @@ import RepeatRuleSelector from '../ui/RepeatRuleSelector/RepeatRuleSelector';
 import DatePicker from '../ui/DatePicker/DatePicker';
 import { useAppDispatch } from '../../hooks/storeHooks';
 import { updateTask } from '../../features/tasks/tasksThunks';
+import { parseTaskDate, formatDateToISO } from '../../utils/dateUtils';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -40,6 +41,7 @@ export default function TaskEditModal({ isOpen, onClose, task }: Props) {
   const createTaskCopy = (task: Task | TemplateTask) => ({
     ...task,
     is_deleted: false,
+    task_date: 'task_date' in task ? parseTaskDate(task.task_date) : undefined,
     subtasks: (task.subtasks || []).map((s) => ({
       ...s,
       is_deleted: false,
@@ -90,17 +92,15 @@ export default function TaskEditModal({ isOpen, onClose, task }: Props) {
       return;
     }
 
-    console.log(localTask);
     dispatch(updateTask({ id: localTask.id, data: localTask as TaskLocal | TemplateTaskLocal }))
-    .unwrap()
-    .then(() => {
-      console.log('Task updated, closing modal');
-      onClose();
-    })
-    .catch((err) => {
-      console.error('Ошибка при обновлении', err);
-      alert(t('task.alert.updateError'));
-    });
+      .unwrap()
+      .then(() => {
+        onClose();
+      })
+      .catch((err) => {
+        console.error('Ошибка при обновлении', err);
+        alert(t('task.alert.updateError'));
+      });
   };
 
   const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {
@@ -247,7 +247,9 @@ export default function TaskEditModal({ isOpen, onClose, task }: Props) {
                 onChange={(date) =>
                   setLocalTask((prev) => ({
                     ...prev,
-                    task_date: date ? date.toISOString().split('T')[0] : null,
+                    task_date: date
+                      ? formatDateToISO(date.getFullYear(), date.getMonth(), date.getDate())
+                      : null,
                   }))
                 }
               />

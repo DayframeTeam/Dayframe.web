@@ -40,26 +40,28 @@ export const updateTaskStatus = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   ({ id, data }: { id: number; data: TaskLocal | TemplateTaskLocal }, thunkAPI) => {
+    // Нормализуем данные перед отправкой на сервер
+    const normalizedData = {
+      ...data,
+      subtasks: data.subtasks
+        .filter((s) => !s.is_deleted)
+        .map(({ uniqueKey, is_deleted, ...rest }) => rest)
+        .map((subtask, index) => ({
+          ...subtask,
+          position: index,
+        })),
+    };
+
     return api
-      .patch<Task>(`${url}/${id}`, data)
+      .patch<Task>(`${url}/${id}`, normalizedData)
       .then((res) => {
+        // Обновляем store только после успешного ответа от сервера
         thunkAPI.dispatch(updateOneTask(res.data));
         return res.data;
       })
       .catch((err) => handleError(err, 'Ошибка обновления задачи', thunkAPI));
   }
 );
-
-// Удаление задачи
-export const deleteTask = createAsyncThunk('tasks/deleteTask', (id: number, thunkAPI) => {
-  return api
-    .delete(`${url}/${id}`)
-    .then(() => {
-      thunkAPI.dispatch(removeTask(id));
-      return id;
-    })
-    .catch((err) => handleError(err, 'Ошибка удаления задачи', thunkAPI));
-});
 
 // Создание новой задачи
 export const createTask = createAsyncThunk(

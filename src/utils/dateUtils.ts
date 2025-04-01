@@ -19,3 +19,9 @@ export function formatDateToISO(year: number, month: number, day: number): strin
   const paddedDay = String(day).padStart(2, '0');
   return `${year}-${paddedMonth}-${paddedDay}`;
 }
+
+export function parseTaskDate(dateString: string | null | undefined): string | null {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return formatDateToISO(date.getFullYear(), date.getMonth(), date.getDate());
+}

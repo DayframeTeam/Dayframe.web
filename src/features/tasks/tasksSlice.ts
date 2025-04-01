@@ -16,7 +16,11 @@ const tasksSlice = createSlice({
     updateOneTask(state, action: PayloadAction<Task>) {
       const index = state.tasks.findIndex((t) => t.id === action.payload.id);
       if (index !== -1) {
-        state.tasks[index] = action.payload;
+        const updatedTask = {
+          ...action.payload,
+          subtasks: [...(action.payload.subtasks || [])].sort((a, b) => a.position - b.position),
+        };
+        state.tasks[index] = updatedTask;
       }
     },
     deleteTask(state, action: PayloadAction<number>) {
