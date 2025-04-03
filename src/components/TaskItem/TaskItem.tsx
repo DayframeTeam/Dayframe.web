@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox } from '../../components/ui/Checkbox/Checkbox';
 import { Badge } from '../../components/ui/Badge/Badge';
 import SubtaskList from '../ui/SubtaskList/SubtaskList';
-import { toLocalDateString } from '../../utils/dateUtils';
 import { updateTaskStatus } from '../../features/tasks/tasksThunks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
@@ -131,40 +130,54 @@ export default function TaskItem({ task }: Props) {
           )}
         </div>
 
-        {task.description && <div className={styles.description}>{task.description}</div>}
-
-        <div className={styles.meta}>
-          {task.category && <Badge label={task.category} title={t('task.category')} />}
-          {task.priority && (
-            <Badge
-              label={'🎯 ' + t(`task.priorityType.${task.priority}`)}
-              num={colorIndex}
-              title={t('task.priority')}
-            />
-          )}
+        <div className={styles.descriptionBlock}>
+          {task.description && <div className={styles.description}>{task.description}</div>}
+          <div onClick={(e) => e.stopPropagation()}>
+            <Button
+              className={styles.editButton}
+              onClick={() => setIsEditing(true)}
+              size="small"
+              variant="secondary"
+            >
+              ✏️ {t('task.edit')}
+            </Button>
+          </div>
         </div>
 
-        {(task.start_time || task.end_time || task.duration) && (
-          <div className={styles.timing}>
-            {task.start_time && (
-              <span title={t('task.timing.start')}>
-                {t('task.timing.from')} {task.start_time}
-              </span>
-            )}
-            {task.end_time && (
-              <span title={t('task.timing.end')}>
-                {t('task.timing.to')} {task.end_time}
-              </span>
-            )}
-            {task.duration && <span title={t('task.timing.duration')}>⏳ {task.duration}</span>}
-          </div>
-        )}
+        <div className={styles.metaAndTiming}>
+          {(task.start_time || task.end_time || task.duration) && (
+            <div className={styles.timing}>
+              {task.start_time && (
+                <span title={t('task.timing.start')}>
+                  {t('task.timing.from')} {task.start_time}
+                </span>
+              )}
+              {task.end_time && (
+                <span title={t('task.timing.end')}>
+                  {t('task.timing.to')} {task.end_time}
+                </span>
+              )}
+              {task.duration && <span title={t('task.timing.duration')}>⏳ {task.duration}</span>}
+            </div>
+          )}
 
-        {!isTemplate && task.task_date && (
+          <div className={styles.meta}>
+            {task.category && <Badge label={task.category} title={t('task.category')} />}
+            {task.priority && (
+              <Badge
+                label={'🎯 ' + t(`task.priorityType.${task.priority}`)}
+                num={colorIndex}
+                title={t('task.priority')}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* {!isTemplate && task.task_date && (
           <div className={styles.date}>
             📅 {t('task.date')}: {toLocalDateString(task.task_date)}
           </div>
-        )}
+        )} */}
 
         {isTemplate && (
           <>
@@ -196,29 +209,16 @@ export default function TaskItem({ task }: Props) {
         </div>
       )}
       {hasSubtasks && showSubtasks && (
-        <div className={styles.subtaskBlock}>
-          <SubtaskList
-            subtasks={task.subtasks.map((s) => ({
-              ...s,
-              is_done: task.is_done ? true : s.is_done,
-            }))}
-          />
-        </div>
-      )}
-      <Button
-        className={styles.editButton}
-        onClick={() => setIsEditing(true)}
-        size="small"
-        variant="secondary"
-      >
-        ✏️ {t('task.edit')}
-      </Button>
-      {isEditing && (
-        <TaskEditModal
-          isOpen={isEditing}
-          onClose={() => setIsEditing(false)}
-          task={task}
+        <SubtaskList
+          subtasks={task.subtasks.map((s) => ({
+            ...s,
+            is_done: task.is_done ? true : s.is_done,
+          }))}
         />
+      )}
+
+      {isEditing && (
+        <TaskEditModal isOpen={isEditing} onClose={() => setIsEditing(false)} task={task} />
       )}
     </li>
   );

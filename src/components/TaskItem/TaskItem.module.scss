@@ -9,6 +9,7 @@
   flex-direction: column;
   gap: 0.4rem;
   overflow: hidden;
+  font-size: 0.9rem;
 }
 
 .wrapper {
@@ -26,7 +27,6 @@
   position: relative;
   color: var(--text-primary);
   font-weight: 500;
-  padding: 0.15em 0.5em;
   border-radius: 0.4em;
   white-space: nowrap;
   flex-shrink: 0;
@@ -98,13 +98,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+  font-size: 1rem;
+}
+
+.descriptionBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .description {
   color: var(--text-secondary);
-  font-size: 16px;
   word-break: break-word;
-  margin-top: 8px;
 }
 
 .completed {
@@ -118,18 +126,10 @@
 
 .meta,
 .timing {
-  font-size: 16px;
   display: flex;
   gap: 0.3rem;
   flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.repeat,
-.date,
-.range,
-.created {
-  font-size: 16px;
+  margin-top: 16px;
 }
 
 .subtaskSummary {
@@ -146,7 +146,6 @@
   justify-content: center;
 
   &Btn {
-    font-size: 14px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -182,8 +181,28 @@
 }
 
 .editButton {
-  position: absolute;
-  top: 80px;
-  right: 30px;
   border: 2px solid var(--border-color);
+}
+
+.metaAndTiming {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.timing {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0;
+}
+
+.meta {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0;
 }
