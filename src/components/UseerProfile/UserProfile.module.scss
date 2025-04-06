@@ -1,0 +1,52 @@
+.userProfile {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.levelInfo {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+}
+
+.expCircle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.exp {
+  font-size: 0.7rem;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lightning {
+  font-size: 0.6rem;
+  transition: color 0.3s ease;
+}
+
+.progressRing {
+  position: absolute;
+  top: -0.25rem;
+  left: -0.25rem;
+  width: calc(100% + 0.5rem);
+  height: calc(100% + 0.5rem);
+  border-radius: 50%;
+  background: conic-gradient(var(--ring-color) var(--progress), transparent var(--progress));
+  z-index: 0;
+}

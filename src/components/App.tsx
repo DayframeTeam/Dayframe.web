@@ -4,17 +4,18 @@ import { InitialDataLoader } from './InitialDataLoader.tsx';
 import { LanguageToggle } from './LanguageToggle/LanguageToggle.tsx';
 import { PageContainer } from './PageContainer/PageContainer.tsx';
 import { ThemeToggle } from './ThemeToggle/ThemeToggle.tsx';
+import UserProfile from './UseerProfile/UseerProfilel.tsx';
 
 function App() {
   return (
     <>
       <Header
-        left={<div style={{ width: '123px' }}></div>}
+        left={<UserProfile />}
         center={<HeaderNav />}
         right={
-          <>
+          <div style={{ width: 'max-content' }}>
             <ThemeToggle /> <LanguageToggle />
-          </>
+          </div>
         }
       />
       <InitialDataLoader>

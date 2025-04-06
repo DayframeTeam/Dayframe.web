@@ -79,5 +79,10 @@
     "December"
   ],
   "loading": "Loading...",
-  "error.loading": "⚠️ Failed to load data"
+  "error.loading": "⚠️ Failed to load data",
+  "user": {
+    "level": "Level",
+    "exp": "XP",
+    "nextLevel": "Next level"
+  }
 }
