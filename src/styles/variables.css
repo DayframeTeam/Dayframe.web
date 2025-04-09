@@ -36,6 +36,11 @@
     --select-color-2: #fcd34d;
     --select-color-3: #d8b4fe;
     /* --select-color-4: #93c5fd; */
+
+    --border-radius-primary: 0.5rem;
+    --font-size-primary: 1rem;
+    --font-size-secondary: 0.875rem;
+    --font-size-tertiary: 0.7rem;
 }
 
 /* 🌑 Dark theme*/

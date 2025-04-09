@@ -14,11 +14,12 @@ import DatePicker from '../ui/DatePicker/DatePicker';
 import { useAppDispatch } from '../../hooks/storeHooks';
 import { updateTask } from '../../features/tasks/tasksThunks';
 import { parseTaskDate, formatDateToISO } from '../../utils/dateUtils';
+import styles from './TaskModal.module.scss';
 
 type Props = Readonly<{
   isOpen: boolean;
   onClose: () => void;
-  task: Task | TemplateTask;
+  task?: Task | TemplateTask;
 }>;
 
 export type TaskLocal = Task & {
@@ -34,7 +35,7 @@ export type TemplateTaskLocal = TemplateTask & {
 export type SubtaskLocal = Subtask & { is_deleted: boolean; uniqueKey: string };
 export type TemplateSubtaskLocal = TemplateSubtask & { is_deleted: boolean; uniqueKey: string };
 
-export default function TaskEditModal({ isOpen, onClose, task }: Props) {
+export default function TaskModal({ isOpen, onClose, task }: Props) {
   const { t } = useTranslation();
   const isTemplate = 'repeat_rule' in task;
 
@@ -193,41 +194,48 @@ export default function TaskEditModal({ isOpen, onClose, task }: Props) {
               value={localTask.description ?? ''}
               onChange={(val) => setLocalTask({ ...localTask, description: val })}
             />
-            <TextInput
-              label={t('task.category')}
-              value={localTask.category ?? ''}
-              onChange={(val) => setLocalTask({ ...localTask, category: val })}
-            />
+            <div className={styles.categoryWrapper}>
             <SelectInput
-              label={t('task.priority')}
-              value={localTask.priority ?? ''}
-              onChange={(val) =>
-                setLocalTask({ ...localTask, priority: val as 'low' | 'medium' | 'high' })
-              }
-              options={[
-                { value: 'low', label: t('task.priorityType.low') },
-                { value: 'medium', label: t('task.priorityType.medium') },
-                { value: 'high', label: t('task.priorityType.high') },
-              ]}
-            />
-            <TextInput
+                label={t('task.priority')}
+                value={localTask.priority ?? ''}
+                onChange={(val) =>
+                  setLocalTask({ ...localTask, priority: val as 'low' | 'medium' | 'high' })
+                }
+                options={[
+                  { value: 'low', label: t('task.priorityType.low') },
+                  { value: 'medium', label: t('task.priorityType.medium') },
+                  { value: 'high', label: t('task.priorityType.high') },
+                ]}
+              />
+              <div style={{margin: '0.5rem 0'}}></div>
+              <TextInput
+                label={t('task.category')}
+                value={localTask.category ?? ''}
+                onChange={(val) => setLocalTask({ ...localTask, category: val })}
+              />
+            </div>
+
+            {/* <TextInput
               label={t('task.duration')}
               value={localTask.duration ?? ''}
               onChange={(val) => setLocalTask({ ...localTask, duration: val })}
               type="time"
-            />
-            <TextInput
-              label={t('task.timing.start')}
-              value={localTask.start_time ?? ''}
-              onChange={(val) => setLocalTask({ ...localTask, start_time: val })}
-              type="time"
-            />
-            <TextInput
-              label={t('task.timing.end')}
-              value={localTask.end_time ?? ''}
-              onChange={(val) => setLocalTask({ ...localTask, end_time: val })}
-              type="time"
-            />
+            /> */}
+            <div className={styles.categoryWrapper}>
+              <TextInput
+                label={t('task.timing.start')}
+                value={localTask.start_time ?? ''}
+                onChange={(val) => setLocalTask({ ...localTask, start_time: val })}
+                type="time"
+              />
+              <div style={{margin: '0.5rem 0'}}></div>
+              <TextInput
+                label={t('task.timing.end')}
+                value={localTask.end_time ?? ''}
+                onChange={(val) => setLocalTask({ ...localTask, end_time: val })}
+                type="time"
+              />
+            </div>
             {isTemplate ? (
               <RepeatRuleSelector
                 value={(localTask as TemplateTask).repeat_rule}

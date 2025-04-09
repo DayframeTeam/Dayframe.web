@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Task, TemplateTask } from '../../types/dbTypes';
 import { getPriorityColorIndex } from '../../utils/getPriorityColorIndex';
+import { formatTime, calculateDuration } from '../../utils/dateUtils';
 import styles from './TaskItem.module.scss';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,7 @@ import { updateTaskStatus } from '../../features/tasks/tasksThunks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { Button } from '../ui/Button/Button';
-import TaskEditModal from '../EditTaskModal/EditTaskModal';
+import TaskEditModal from '../TaskModal/TaskModal';
 
 type Props = {
   task: Task | TemplateTask;
@@ -64,7 +65,10 @@ export default function TaskItem({ task }: Props) {
   return (
     <li
       className={clsx(styles.taskItem, !isTemplate && task.is_done && styles.completed)}
-      style={{ borderLeftColor: `var(--select-color-${colorIndex})` }}
+      style={{
+        borderLeftColor: `var(--select-color-${colorIndex})`,
+        paddingBottom: hasSubtasks ? 0 : undefined,
+      }}
     >
       <div
         className={styles.wrapper}
@@ -149,15 +153,21 @@ export default function TaskItem({ task }: Props) {
             <div className={styles.timing}>
               {task.start_time && (
                 <span title={t('task.timing.start')}>
-                  {t('task.timing.from')} {task.start_time}
+                  {t('task.timing.from')}{' '}
+                  <span style={{ fontWeight: 600 }}>{formatTime(task.start_time)}</span>
                 </span>
               )}
               {task.end_time && (
                 <span title={t('task.timing.end')}>
-                  {t('task.timing.to')} {task.end_time}
+                  {t('task.timing.to')}{' '}
+                  <span style={{ fontWeight: 600 }}>{formatTime(task.end_time)}</span>
                 </span>
               )}
-              {task.duration && <span title={t('task.timing.duration')}>⏳ {task.duration}</span>}
+              {task.start_time && task.end_time && (
+                <span title={t('task.timing.duration')}>
+                  ⏳ {calculateDuration(task.start_time, task.end_time)}
+                </span>
+              )}
             </div>
           )}
 
@@ -203,6 +213,7 @@ export default function TaskItem({ task }: Props) {
             className={styles.subtaskToggleBtn}
             onClick={() => setShowSubtasks((prev) => !prev)}
             variant="secondary"
+            size="small"
           >
             {showSubtasks ? '▲' : '▼'}
           </Button>

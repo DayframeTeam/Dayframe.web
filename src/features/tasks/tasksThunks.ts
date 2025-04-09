@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/http/axios';
 import { Task } from '../../types/dbTypes';
 import { setTasks, updateOneTask, deleteTask as removeTask, addTask } from './tasksSlice';
-import { TaskLocal, TemplateTaskLocal } from '../../components/EditTaskModal/EditTaskModal';
+import { TaskLocal, TemplateTaskLocal } from '../../components/TaskModal/TaskModal';
 
 const url = '/tasks';
 

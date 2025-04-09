@@ -13,9 +13,9 @@
   padding: 0.4em 0.8em;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 0.5em;
+  border-radius: var(--border-radius-primary);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--font-size-secondary);
   color: var(--text-primary);
   transition: 0.2s;
 
@@ -35,8 +35,8 @@
   padding: 0.3em 0.6em;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 0.4em;
-  font-size: 0.85rem;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-secondary);
   color: var(--text-primary);
   cursor: pointer;
 

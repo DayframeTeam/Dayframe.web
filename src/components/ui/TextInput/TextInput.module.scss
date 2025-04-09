@@ -5,7 +5,7 @@
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: var(--font-size-secondary);
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -13,10 +13,10 @@
 .input {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border-color);
-  border-radius: 0.4rem;
+  border-radius: var(--border-radius-primary);
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-primary);
   transition: border 0.2s;
 
   &:focus {

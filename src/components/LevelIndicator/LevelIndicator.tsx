@@ -1,4 +1,4 @@
-import styles from './UserProfile.module.scss';
+import styles from './LevelIndicator.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ const getLevelColorScheme = (level: number): { accent: string } => {
   }
 };
 
-export default function UserProfile() {
+export default function LevelIndicator() {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
 

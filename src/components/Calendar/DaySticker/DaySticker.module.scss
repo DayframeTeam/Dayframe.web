@@ -2,7 +2,7 @@
   width: 100%;
   aspect-ratio: 1 / 1; // Квадратное соотношение по умолчанию
   background: var(--bg-secondary);
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius-primary);
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;

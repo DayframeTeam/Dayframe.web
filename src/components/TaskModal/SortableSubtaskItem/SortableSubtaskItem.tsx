@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { TextInput } from '../../ui/TextInput/TextInput';
 import { Button } from '../../ui/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { SubtaskLocal, TemplateSubtaskLocal } from '../EditTaskModal';
+import { SubtaskLocal, TemplateSubtaskLocal } from '../TaskModal';
 
 type Props = Readonly<{
   subtask: SubtaskLocal | TemplateSubtaskLocal;

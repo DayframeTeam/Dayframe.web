@@ -27,7 +27,7 @@
   position: relative;
   color: var(--text-primary);
   font-weight: 500;
-  border-radius: 0.4em;
+  border-radius: var(--border-radius-primary);
   white-space: nowrap;
   flex-shrink: 0;
   user-select: none;
@@ -195,9 +195,11 @@
 
 .timing {
   display: flex;
-  gap: 0.3rem;
+  align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 0;
+  width: 200px;
 }
 
 .meta {

@@ -3,6 +3,29 @@ export const toLocalDateString = (dateString: string): string => {
   return date.toLocaleDateString('sv-SE'); // формат YYYY-MM-DD
 };
 
+export const formatTime = (time: string | null | undefined): string | null => {
+  if (!time) return null;
+  return time.split(':').slice(0, 2).join(':');
+};
+
+export const calculateDuration = (
+  startTime: string | null | undefined,
+  endTime: string | null | undefined
+): string | null => {
+  if (!startTime || !endTime) return null;
+
+  const [startHours, startMinutes] = startTime.split(':').map(Number);
+  const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+  let durationMinutes = endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
+  if (durationMinutes < 0) durationMinutes += 24 * 60; // если конец на следующий день
+
+  const hours = Math.floor(durationMinutes / 60);
+  const minutes = durationMinutes % 60;
+
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+};
+
 export const timeStringToDate = (time: string | null | undefined): Date | null => {
   if (!time) return null;
   const [hours, minutes, seconds] = time.split(':').map(Number);

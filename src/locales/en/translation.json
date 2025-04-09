@@ -84,5 +84,10 @@
     "level": "Level",
     "exp": "XP",
     "nextLevel": "Next level"
+  },
+  "theme": {
+    "light": "Light theme",
+    "dark": "Dark theme",
+    "change": "Change theme"
   }
 }
