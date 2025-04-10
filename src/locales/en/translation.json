@@ -89,6 +89,7 @@
     "November",
     "December"
   ],
+  "confirm": "Confirm",
   "loading": "Loading...",
   "error.loading": "⚠️ Failed to load data",
   "user": {

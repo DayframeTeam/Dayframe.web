@@ -28,16 +28,3 @@
   align-items: center;
   margin-top: 0.5rem;
 }
-
-.deletionMessage {
-  text-align: center;
-  padding: 2rem 1rem;
-  margin: 1rem 0;
-  background-color: var(--bg-danger-light);
-  border-radius: var(--border-radius-primary);
-
-  p {
-    color: var(--text-danger);
-    font-weight: var(--font-weight-big);
-  }
-}

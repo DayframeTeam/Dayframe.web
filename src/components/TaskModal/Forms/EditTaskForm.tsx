@@ -225,28 +225,33 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
       )}
 
       {localTask.is_deleted && (
-        <div className={shared.deletionMessage}>
-          <p>{t('task.confirmDelete')}</p>
-        </div>
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>{t('task.confirmDelete')}</div>
       )}
 
       <div className={shared.btnsWrapper} style={{ justifyContent: 'space-between' }}>
         {localTask.is_deleted ? (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => handleTaskChange({ is_deleted: false })}
-          >
-            {t('task.cancel')}
-          </Button>
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => handleTaskChange({ is_deleted: false })}
+            >
+              {t('task.cancel')}
+            </Button>
+            <Button type="submit" variant="primary" disabled={!hasChanges}>
+              {t('confirm')}
+            </Button>
+          </>
         ) : (
-          <Button type="button" variant="danger" onClick={handleTaskDelete}>
-            {t('task.delete')}
-          </Button>
+          <>
+            <Button type="button" variant="danger" onClick={handleTaskDelete}>
+              {t('task.delete')}
+            </Button>
+            <Button type="submit" variant="primary" disabled={!hasChanges}>
+              {t('task.save')}
+            </Button>
+          </>
         )}
-        <Button type="submit" variant="primary" disabled={!hasChanges}>
-          {t('task.save')}
-        </Button>
       </div>
     </form>
   );

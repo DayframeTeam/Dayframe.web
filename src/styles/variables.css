@@ -24,9 +24,9 @@
     --subtask-progress-incomplete: #cb9200;
 
     /* === DANGER COLORS === */
-    --danger: #dc3545;
+    --danger: #cf7f7f;
     --text-on-danger: #ffffff;
-    --danger-hover: #c82333;
+    --danger-hover: #ff7979cb;
 
     /* === GLOBAL === */
 
@@ -68,7 +68,7 @@
     --subtask-progress-complete: #22c55e;
     --subtask-progress-incomplete: #FFC83D;
 
-    --danger: #ff6b6b;
+    --danger: #CA5555;
     --text-on-danger: #ffffff;
-    --danger-hover: #ff4d4d;
+    --danger-hover: #ff4d4dcb;
 }
