@@ -4,7 +4,6 @@ import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { useState } from 'react';
 import TaskSection from '../../TaskSection/TaskSection';
 import { Modal } from '../../Modal/Modal';
-import { useTranslation } from 'react-i18next';
 
 type Props = Readonly<{
   date: string; // 'YYYY-MM-DD'
@@ -17,17 +16,9 @@ export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
 
   // Проверяем, что день уже прошёл:
   const isPast = new Date(date) < new Date(new Date().toDateString());
-  const { t } = useTranslation();
 
-  // Получаем день месяца и день недели
-  const dateObj = new Date(date);
-  const dayNumber = dateObj.getDate();
-  // Индекс дня недели (0 = Вс, 1 = Пн, ... 6 = Сб)
-  const dayIndex = dateObj.getDay();
-
-  // Берём строку из массива weekdaysShort
-  // weekday = "Пн" / "Tue" и т.д.
-  const weekday = t(`weekdaysShort.${dayIndex}`);
+  // Получаем день месяца
+  const dayNumber = new Date(date).getDate();
 
   // Сортируем задачи:
   // 1) Сначала те, у которых есть start_time (по возрастанию)
@@ -54,9 +45,7 @@ export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
         onClick={() => setOpen(true)}
         title="Нажмите, чтобы открыть"
       >
-        <div className={styles.day}>
-          {dayNumber} <span className={styles.weekday}>{weekday}</span>
-        </div>
+        <div className={styles.day}>{dayNumber}</div>
         <div className={styles.events}>
           {sortedTasks.map((task) => (
             <div
