@@ -7,4 +7,9 @@
   position: relative;
   cursor: pointer;
   padding: 0.2rem;
+
+  &:hover {
+    background-color: var(--bg-tertiary);
+    border-radius: 50%;
+  }
 }
