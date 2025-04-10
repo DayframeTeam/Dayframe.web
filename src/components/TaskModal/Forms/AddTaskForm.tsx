@@ -10,6 +10,7 @@ import { memo, useState } from 'react';
 import shared from '../UI/shared.module.scss';
 import { SubtaskLocal, TaskLocal } from '../types';
 import { nanoid } from '@reduxjs/toolkit';
+import { SelectInput } from '../../ui/SelectInput/SelectInput';
 
 export const AddTaskForm = memo(({ date }: { date?: string }) => {
   const { t } = useTranslation();
@@ -33,6 +34,16 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
     subtasks: [] as SubtaskLocal[],
     is_deleted: false,
   });
+
+  // Опции для выбора опыта (XP)
+  const expOptions = [
+    { label: '\u00A0 0 ⚡', value: 0 },
+    { label: '\u00A0 1 ⚡', value: 1 },
+    { label: '\u00A0 5 ⚡', value: 5 },
+    { label: '10 ⚡', value: 10 },
+    { label: '20 ⚡', value: 20 },
+    { label: '50 ⚡', value: 50 },
+  ];
 
   const cleanupDeletedSubtasks = (taskToClean: TaskLocal): TaskLocal => {
     return {
@@ -138,6 +149,16 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
       </Button>
 
       <div className={clsx(shared.advancedSettings, { [shared.visible]: showAdvancedSettings })}>
+        <SelectInput
+          label={t('task.exp')}
+          options={expOptions}
+          value={localTask.exp}
+          onChange={(value) => {
+            // Приводим значение к конкретному типу exp
+            const expValue = Number(value) as 0 | 1 | 5 | 10 | 20 | 50;
+            handleTaskChange({ exp: expValue });
+          }}
+        />
         <div className={shared.categoryWrapper}>
           <TextInput
             label={t('task.timing.start')}
@@ -154,7 +175,7 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
           />
           <div style={{ margin: '0.5rem 0' }}></div>
           <DatePicker
-            value={localTask.task_date ? new Date(localTask.task_date) : undefined }
+            value={localTask.task_date ? new Date(localTask.task_date) : undefined}
             label={t('task.date')}
             onChange={(date) =>
               handleTaskChange({
@@ -163,7 +184,6 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
             }
           />
         </div>
-
         <SortableSubtaskList
           localTask={localTask}
           onSubtaskAdd={handleSubtaskAdd}
