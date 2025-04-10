@@ -24,7 +24,7 @@ export default function TaskSection({ date, tasks }: Props) {
           {isToday ? t('taskSection.today') : t('taskSection.dateTasks', { date })}
         </h2>
         <Button size="small" variant="primary" onClick={() => setIsAdding(true)}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: 'var(--font-size-secondary)' }}>
             <PlusIcon />
             {t('task.add')}
           </span>

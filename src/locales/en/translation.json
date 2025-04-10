@@ -20,6 +20,8 @@
     "deleted": "Task deleted",
     "exp": "Task XP",
     "edit": "Edit",
+    "showAdvanced": "Advanced settings",
+    "hideAdvanced": "Hide settings",
     "alert": {
       "title": "Task title is required",
       "updateError": "Update error"

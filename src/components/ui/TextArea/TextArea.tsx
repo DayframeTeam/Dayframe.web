@@ -1,5 +1,5 @@
 import { TextareaHTMLAttributes, forwardRef } from 'react';
-import styles from './TextInput.module.scss'; // используем те же стили
+import styles from './TextArea.module.scss'; // используем те же стили
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;

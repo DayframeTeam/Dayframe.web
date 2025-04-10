@@ -25,18 +25,22 @@ export default function SortableSubtaskItem({ subtask, onTitleChange, onDelete }
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} className={styles.wrapper}>
-      <div {...listeners} className={styles.dragHandle}>
-        ⇅
-      </div>
+      <Button type="button" variant="danger" size="small" onClick={() => onDelete(subtask.uniqueKey)}>
+        ✖
+      </Button>
       <TextInput
         className={styles.textField}
         value={subtask.title}
         onChange={(val) => onTitleChange(subtask.uniqueKey, val)}
         placeholder={t('task.subtasks.placeholderTitle')}
       />
-      <Button type="button" variant="danger" onClick={() => onDelete(subtask.uniqueKey)}>
-        ✖
-      </Button>
+      <div
+        {...listeners}
+        className={styles.dragHandle}
+        style={{ color: 'var(--subtask-progress-complete' }}
+      >
+        ⇅
+      </div>
     </div>
   );
 }
