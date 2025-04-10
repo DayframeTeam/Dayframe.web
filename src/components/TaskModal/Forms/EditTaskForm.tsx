@@ -106,6 +106,11 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
   const compareTasks = (original: Task, current: TaskLocal): boolean => {
     const cleanedCurrent = cleanupDeletedSubtasks(current);
 
+    // Проверяем флаг удаления
+    if (current.is_deleted) {
+      return true;
+    }
+
     // Сравниваем основные поля
     if (
       original.title !== cleanedCurrent.title ||
@@ -143,11 +148,7 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
   }, [localTask, task]);
 
   const handleTaskDelete = () => {
-    const updatedTask = {
-      ...localTask,
-      is_deleted: true,
-    };
-    setLocalTask(updatedTask);
+    handleTaskChange({ is_deleted: true });
   };
 
   const handleTaskChange = (updates: Partial<TaskLocal>) => {
@@ -163,64 +164,86 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TaskBasicFields
-        title={localTask.title}
-        description={localTask.description}
-        priority={localTask.priority}
-        category={localTask.category}
-        setValue={(values) => handleTaskChange(values)}
-      />
+      {!localTask.is_deleted && (
+        <>
+          <TaskBasicFields
+            title={localTask.title}
+            description={localTask.description}
+            priority={localTask.priority}
+            category={localTask.category}
+            setValue={(values) => handleTaskChange(values)}
+          />
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-        className={shared.toggleButton}
-      >
-        {showAdvancedSettings ? t('task.hideAdvanced') : t('task.showAdvanced')}
-        {showAdvancedSettings ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
+            className={shared.toggleButton}
+          >
+            {showAdvancedSettings ? t('task.hideAdvanced') : t('task.showAdvanced')}
+            {showAdvancedSettings ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </Button>
 
-      <div className={clsx(shared.advancedSettings, { [shared.visible]: showAdvancedSettings })}>
-        <div className={shared.categoryWrapper}>
-          <TextInput
-            label={t('task.timing.start')}
-            value={localTask.start_time ?? ''}
-            onChange={(val) => handleTaskChange({ start_time: val })}
-            type="time"
-          />
-          <div style={{ margin: '0.5rem 0' }}></div>
-          <TextInput
-            label={t('task.timing.end')}
-            value={localTask.end_time ?? ''}
-            onChange={(val) => handleTaskChange({ end_time: val })}
-            type="time"
-          />
-          <div style={{ margin: '0.5rem 0' }}></div>
-          <DatePicker
-            value={localTask.task_date ? new Date(localTask.task_date) : null}
-            label={t('task.date')}
-            onChange={(date) =>
-              handleTaskChange({
-                task_date: date ? date.toISOString() : undefined,
-              })
-            }
-          />
+          <div
+            className={clsx(shared.advancedSettings, { [shared.visible]: showAdvancedSettings })}
+          >
+            <div className={shared.categoryWrapper}>
+              <TextInput
+                label={t('task.timing.start')}
+                value={localTask.start_time ?? ''}
+                onChange={(val) => handleTaskChange({ start_time: val })}
+                type="time"
+              />
+              <div style={{ margin: '0.5rem 0' }}></div>
+              <TextInput
+                label={t('task.timing.end')}
+                value={localTask.end_time ?? ''}
+                onChange={(val) => handleTaskChange({ end_time: val })}
+                type="time"
+              />
+              <div style={{ margin: '0.5rem 0' }}></div>
+              <DatePicker
+                value={localTask.task_date ? new Date(localTask.task_date) : null}
+                label={t('task.date')}
+                onChange={(date) =>
+                  handleTaskChange({
+                    task_date: date ? date.toISOString() : undefined,
+                  })
+                }
+              />
+            </div>
+
+            <SortableSubtaskList
+              localTask={localTask}
+              onSubtaskAdd={handleSubtaskAdd}
+              onSubtaskDelete={handleSubtaskDelete}
+              onSubtaskTitleChange={handleSubtaskTitleChange}
+              onSubtasksReorder={handleSubtaskReorder}
+            />
+          </div>
+        </>
+      )}
+
+      {localTask.is_deleted && (
+        <div className={shared.deletionMessage}>
+          <p>{t('task.confirmDelete')}</p>
         </div>
-
-        <SortableSubtaskList
-          localTask={localTask}
-          onSubtaskAdd={handleSubtaskAdd}
-          onSubtaskDelete={handleSubtaskDelete}
-          onSubtaskTitleChange={handleSubtaskTitleChange}
-          onSubtasksReorder={handleSubtaskReorder}
-        />
-      </div>
+      )}
 
       <div className={shared.btnsWrapper} style={{ justifyContent: 'space-between' }}>
-        <Button type="button" variant="danger" onClick={handleTaskDelete}>
-          {t('task.delete')}
-        </Button>
+        {localTask.is_deleted ? (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => handleTaskChange({ is_deleted: false })}
+          >
+            {t('task.cancel')}
+          </Button>
+        ) : (
+          <Button type="button" variant="danger" onClick={handleTaskDelete}>
+            {t('task.delete')}
+          </Button>
+        )}
         <Button type="submit" variant="primary" disabled={!hasChanges}>
           {t('task.save')}
         </Button>
