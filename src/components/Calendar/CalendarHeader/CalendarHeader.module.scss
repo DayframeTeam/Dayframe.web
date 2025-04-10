@@ -11,18 +11,3 @@
     font-size: var(--font-size-big);
   }
 }
-
-button {
-  background-color: var(--accent-muted);
-  border: none;
-  border-radius: var(--border-radius-primary);
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-  font-size: var(--font-size-big);
-  color: var(--text-on-accent);
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: var(--accent);
-  }
-}

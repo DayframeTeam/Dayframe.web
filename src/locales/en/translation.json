@@ -2,7 +2,7 @@
   "taskSection": {
     "today": "Tasks for today",
     "dateTasks": "Tasks for {{date}}",
-    "empty": "No tasks for today"
+    "empty": "No tasks for this day"
   },
   "nav": {
     "today": "Today",
@@ -111,5 +111,20 @@
     "light": "Light theme",
     "dark": "Dark theme",
     "change": "Change theme"
+  },
+  "weather": {
+    "location": "{{location}}",
+    "detectLocation": "Detect location",
+    "loading": "Loading weather...",
+    "forecast": "(forecast)",
+    "errors": {
+      "permissionDenied": "⚠️ Location access denied. Please allow access in browser settings",
+      "positionUnavailable": "⚠️ Could not determine location",
+      "timeout": "⚠️ Request timed out. Please try again",
+      "notSupported": "⚠️ Your browser does not support geolocation",
+      "noCity": "⚠️ Could not determine city",
+      "fetchError": "⚠️ Error fetching location data",
+      "unknown": "⚠️ Unknown error"
+    }
   }
 }

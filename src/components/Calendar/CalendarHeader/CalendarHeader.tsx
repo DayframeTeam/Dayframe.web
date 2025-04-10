@@ -1,3 +1,4 @@
+import { Button } from '../../ui/Button/Button';
 import styles from './CalendarHeader.module.scss';
 
 type Props = Readonly<{
@@ -9,9 +10,13 @@ type Props = Readonly<{
 export function CalendarHeader({ monthLabel, onPrev, onNext }: Props) {
   return (
     <div className={styles.header}>
-      <button onClick={onPrev}>←</button>
+      <Button variant="secondary" size='normal' onClick={onPrev}>
+        ←
+      </Button>
       <span>{monthLabel}</span>
-      <button onClick={onNext}>→</button>
+      <Button variant="secondary" size="normal" onClick={onNext}>
+        →
+      </Button>
     </div>
   );
 }

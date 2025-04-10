@@ -53,7 +53,7 @@ export const SortableSubtaskList = memo(
           <h3 style={{ display: 'flex', alignItems: 'center', margin: 0, paddingLeft: '0.5rem' }}>
             {t('task.subtasks.edit')}
           </h3>
-          <Button type="button" variant="primary" size="small" onClick={onSubtaskAdd}>
+          <Button type="button" variant="secondary" size="small" onClick={onSubtaskAdd}>
             + {t('task.subtasks.add')}
           </Button>
         </div>
