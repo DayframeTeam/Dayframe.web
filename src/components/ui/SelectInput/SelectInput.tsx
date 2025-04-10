@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Badge } from '../Badge/Badge';
 import styles from './SelectInput.module.scss';
 import shared from '../shared.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export type Option = {
   label: string;
@@ -20,6 +21,7 @@ type Props = Readonly<{
 export function SelectInput({ id, label, options, value, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const selected = options.find((opt) => opt.value === value);
+  const { t } = useTranslation();
 
   const inputId = id || `select-${label.replace(/\s+/g, '-').toLowerCase()}`;
 
@@ -39,12 +41,12 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
         <span className={styles.value}>
           {selected ? (
             selected.priority !== undefined ? (
-              <Badge label={selected.label}/>
+              <Badge label={selected.label} />
             ) : (
               selected.label
             )
           ) : (
-            'Выбери...'
+            t('ui.select.placeholder')
           )}
         </span>
 
@@ -58,11 +60,7 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
                   setOpen(false);
                 }}
               >
-                {opt.priority !== undefined ? (
-                  <Badge label={opt.label} />
-                ) : (
-                  opt.label
-                )}
+                {opt.priority !== undefined ? <Badge label={opt.label} /> : opt.label}
               </li>
             ))}
           </ul>

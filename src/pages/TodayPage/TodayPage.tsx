@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../hooks/storeHooks';
 import { Task } from '../../types/dbTypes';
 import { toLocalDateString } from '../../utils/dateUtils';
-import TaskSection from '../../components/TaskSection/TaskSection';
+import { TaskSection } from '../../components/TaskSection/TaskSection';
 
 export default function TodayPage() {
   const tasks = useAppSelector((state) => state.tasks.tasks);

@@ -1,15 +1,14 @@
-.userProfile {
-  padding: 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
 .levelInfo {
   position: relative;
-  width: 2rem;
-  height: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.levelInfoLarge {
+  .exp {
+    font-size: 2rem;
+    font-weight: var(--font-weight-big);
+  }
 }
 
 .expCircle {
@@ -49,4 +48,6 @@
   border-radius: 50%;
   background: conic-gradient(var(--ring-color) var(--progress), transparent var(--progress));
   z-index: 0;
+  -webkit-mask: radial-gradient(farthest-side, transparent 70%, #000 71%);
+  mask: radial-gradient(farthest-side, transparent 70%, #000 71%);
 }

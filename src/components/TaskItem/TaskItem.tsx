@@ -12,10 +12,10 @@ import { updateTaskStatus } from '../../features/tasks/tasksThunks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { Button } from '../ui/Button/Button';
-import TaskEditModal from '../TaskModal/TaskModal';
+import { TaskModal } from '../TaskModal/TaskModal';
 
 type Props = {
-  task: Task | TemplateTask;
+  task: Task;
 };
 
 export default function TaskItem({ task }: Props) {
@@ -229,7 +229,7 @@ export default function TaskItem({ task }: Props) {
       )}
 
       {isEditing && (
-        <TaskEditModal isOpen={isEditing} onClose={() => setIsEditing(false)} task={task} />
+        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} task={task} />
       )}
     </li>
   );

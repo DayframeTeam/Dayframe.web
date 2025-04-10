@@ -2,9 +2,9 @@ import { Header } from './Header/Header.tsx';
 import { HeaderNav } from './HeaderNav/HeaderNav.tsx';
 import { InitialDataLoader } from './InitialDataLoader.tsx';
 import { PageContainer } from './PageContainer/PageContainer.tsx';
-import LevelIndicator from './LevelIndicator/LevelIndicator.tsx';
 import HeaderDropdown from './HeaderDropdown/HeaderDropdown.tsx';
 import { useEffect } from 'react';
+import { UserProfile } from './User/UserProfile/UserProfile.tsx';
 
 function App() {
   // Инициализация темы при старте приложения
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <Header left={<LevelIndicator />} center={<HeaderNav />} right={<HeaderDropdown />} />
+      <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
       <InitialDataLoader>
         <PageContainer />
       </InitialDataLoader>

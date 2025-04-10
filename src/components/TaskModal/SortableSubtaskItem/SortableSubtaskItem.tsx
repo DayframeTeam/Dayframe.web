@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { TextInput } from '../../ui/TextInput/TextInput';
 import { Button } from '../../ui/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { SubtaskLocal, TemplateSubtaskLocal } from '../TaskModal';
+import { SubtaskLocal, TemplateSubtaskLocal } from '../types';
 
 type Props = Readonly<{
   subtask: SubtaskLocal | TemplateSubtaskLocal;
@@ -25,9 +25,16 @@ export default function SortableSubtaskItem({ subtask, onTitleChange, onDelete }
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} className={styles.wrapper}>
-      <Button type="button" variant="danger" size="small" onClick={() => onDelete(subtask.uniqueKey)}>
-        ✖
-      </Button>
+      <div title={t('task.subtasks.delete')}>
+        <Button
+          type="button"
+          variant="danger"
+          size="small"
+          onClick={() => onDelete(subtask.uniqueKey)}
+        >
+          ✖
+        </Button>
+      </div>
       <TextInput
         className={styles.textField}
         value={subtask.title}
@@ -39,6 +46,7 @@ export default function SortableSubtaskItem({ subtask, onTitleChange, onDelete }
         {...listeners}
         className={styles.dragHandle}
         style={{ color: 'var(--subtask-progress-complete' }}
+        title={t('task.subtasks.move')}
       >
         ⇅
       </div>

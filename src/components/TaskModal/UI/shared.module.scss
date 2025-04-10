@@ -22,3 +22,9 @@
     max-height: 1500px; // Достаточно большое значение, чтобы вместить контент
   }
 }
+
+.btnsWrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}

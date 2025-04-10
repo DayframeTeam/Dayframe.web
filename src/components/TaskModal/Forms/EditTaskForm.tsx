@@ -1,16 +1,16 @@
 import { memo, useState, useEffect } from 'react';
-import { TextInput } from '../ui/TextInput/TextInput';
-import { Task } from '../../types/dbTypes';
-import shared from './UI/shared.module.scss';
-import { TaskBasicFields } from './UI/TaskBasicFields';
-import { Button } from '../ui/Button/Button';
+import { TextInput } from '../../ui/TextInput/TextInput';
+import { Task } from '../../../types/dbTypes';
+import shared from '../UI/shared.module.scss';
+import { TaskBasicFields } from '../UI/TaskBasicFields';
+import { Button } from '../../ui/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { TaskLocal, SubtaskLocal } from './types';
+import { TaskLocal, SubtaskLocal } from '../types';
 import { nanoid } from 'nanoid';
-import { SortableSubtaskList } from './SortableSubtaskList/SortableSubtaskList';
+import { SortableSubtaskList } from '../SortableSubtaskList/SortableSubtaskList';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
-import DatePicker from '../ui/DatePicker/DatePicker';
+import DatePicker from '../../ui/DatePicker/DatePicker';
 
 type EditTaskFormProps = {
   task: Task;
@@ -217,14 +217,7 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
         />
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: '1rem',
-        }}
-      >
+      <div className={shared.btnsWrapper} style={{ justifyContent: 'space-between' }}>
         <Button type="button" variant="danger" onClick={handleTaskDelete}>
           {t('task.delete')}
         </Button>

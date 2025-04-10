@@ -2,7 +2,7 @@ import styles from './DaySticker.module.scss';
 import type { Task } from '../../../types/dbTypes';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { useState } from 'react';
-import TaskSection from '../../TaskSection/TaskSection';
+import { TaskSection } from '../../TaskSection/TaskSection';
 import { Modal } from '../../Modal/Modal';
 
 type Props = Readonly<{
