@@ -73,7 +73,12 @@
 @media (max-width: 480px) {
   .sticker {
     /* Отменяем фиксированное соотношение, чтобы ячейка могла растягиваться */
+    height: 60px;
     aspect-ratio: auto;
     padding: 0.2rem;
+  }
+
+  .event {
+    overflow: hidden;
   }
 }
