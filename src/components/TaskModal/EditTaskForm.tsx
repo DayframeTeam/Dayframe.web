@@ -25,10 +25,55 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
       ...s,
       is_deleted: false,
       uniqueKey: nanoid(),
-    })),
+    })) as SubtaskLocal[],
   });
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {
+    setLocalTask((prev: TaskLocal) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((s: SubtaskLocal) =>
+        s.uniqueKey === uniqueKey ? { ...s, title: newTitle } : s
+      ),
+    }));
+  };
+
+  const handleSubtaskDelete = (uniqueKey: string) => {
+    setLocalTask((prev: TaskLocal) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((s: SubtaskLocal) =>
+        s.uniqueKey === uniqueKey ? { ...s, is_deleted: true } : s
+      ),
+    }));
+  };
+
+  const handleSubtaskAdd = () => {
+    const newSubtask: SubtaskLocal = {
+      id: 0,
+      title: '',
+      position: localTask.subtasks.length,
+      special_id: nanoid(),
+      user_id: localTask.user_id,
+      created_at: '',
+      is_deleted: false,
+      uniqueKey: nanoid(),
+      is_done: false,
+      parent_task_id: localTask.id,
+    };
+
+    setLocalTask((prev: TaskLocal) => ({
+      ...prev,
+      subtasks: [...prev.subtasks, newSubtask],
+    }));
+  };
+
+  const handleSubtaskReorder = (reorderedSubtasks: SubtaskLocal[]) => {
+    setLocalTask((prev: TaskLocal) => ({
+      ...prev,
+      subtasks: reorderedSubtasks,
+    }));
+  };
 
   // Функция для сравнения задач
   const compareTasks = (original: Task, current: TaskLocal): boolean => {
@@ -86,7 +131,6 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
     // TODO: Здесь будет логика отправки формы
     console.log('Form submitted:', localTask);
   };
-  console.log(task);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -135,7 +179,13 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
           />
         </div>
 
-        <SortableSubtaskList task={localTask} />
+        <SortableSubtaskList
+          localTask={localTask}
+          onSubtaskAdd={handleSubtaskAdd}
+          onSubtaskDelete={handleSubtaskDelete}
+          onSubtaskTitleChange={handleSubtaskTitleChange}
+          onSubtasksReorder={handleSubtaskReorder}
+        />
       </div>
 
       <div
