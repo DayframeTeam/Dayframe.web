@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import ReactDatePicker from 'react-datepicker';
-import styles from './DatePicker.module.scss';
+import shared from '../shared.module.scss';
 import { ru, enUS } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 
@@ -24,17 +24,17 @@ export default function DatePicker({
   const inputId = useId();
   const { i18n } = useTranslation();
 
-const localeMap = {
-  ru,
-  en: enUS,
-};
+  const localeMap = {
+    ru,
+    en: enUS,
+  };
 
-const currentLocale = localeMap[i18n.language as keyof typeof localeMap] || enUS;
+  const currentLocale = localeMap[i18n.language as keyof typeof localeMap] || enUS;
 
   return (
-    <div className={styles.wrapper}>
+    <div className={shared.wrapper}>
       {label && (
-        <label htmlFor={inputId} className={styles.label}>
+        <label htmlFor={inputId} className={shared.label}>
           {label}
         </label>
       )}
@@ -44,7 +44,7 @@ const currentLocale = localeMap[i18n.language as keyof typeof localeMap] || enUS
         onChange={onChange}
         dateFormat="yyyy-MM-dd"
         placeholderText={placeholder}
-        className={styles.input}
+        className={shared.input}
         minDate={minDate}
         maxDate={maxDate}
         locale={currentLocale}

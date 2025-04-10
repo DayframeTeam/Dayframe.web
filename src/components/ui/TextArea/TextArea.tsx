@@ -1,5 +1,5 @@
 import { TextareaHTMLAttributes, forwardRef } from 'react';
-import styles from './TextArea.module.scss'; // используем те же стили
+import shared from '../shared.module.scss';
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -8,9 +8,9 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, ...props }, ref) => {
     return (
-      <label className={styles.wrapper}>
-        {label && <span className={styles.label}>{label}</span>}
-        <textarea ref={ref} className={styles.input} {...props} />
+      <label className={shared.wrapper}>
+        {label && <span className={shared.label}>{label}</span>}
+        <textarea ref={ref} className={shared.input} {...props} />
       </label>
     );
   }

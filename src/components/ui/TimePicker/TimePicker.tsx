@@ -1,6 +1,5 @@
-import React from 'react';
 import ReactDatePicker from 'react-datepicker';
-import styles from './TimePicker.module.scss';
+import shared from '../shared.module.scss';
 
 type Props = {
   value: Date | null;
@@ -10,7 +9,7 @@ type Props = {
 
 export default function TimePicker({ value, onChange, placeholder }: Props) {
   return (
-    <div className={styles.wrapper}>
+    <div className={shared.wrapper}>
       <ReactDatePicker
         selected={value}
         onChange={onChange}
@@ -20,7 +19,7 @@ export default function TimePicker({ value, onChange, placeholder }: Props) {
         timeCaption="Время"
         dateFormat="HH:mm"
         placeholderText={placeholder || 'Выберите время'}
-        className={styles.input}
+        className={shared.input}
       />
     </div>
   );

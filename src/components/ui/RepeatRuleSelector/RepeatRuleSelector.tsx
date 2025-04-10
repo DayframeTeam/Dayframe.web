@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './RepeatRuleSelector.module.scss';
 import clsx from 'clsx';
+import shared from '../shared.module.scss';
 
 export type RepeatRule = 'daily' | 'weekly' | number[];
 
@@ -33,7 +34,7 @@ export default function RepeatRuleSelector({ value, onChange }: Props) {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={shared.wrapper}>
       <div className={styles.modes}>
         {['daily', 'weekly', 'custom'].map((m) => (
           <button

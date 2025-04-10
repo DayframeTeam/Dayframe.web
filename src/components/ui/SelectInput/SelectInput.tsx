@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Badge } from '../Badge/Badge';
 import styles from './SelectInput.module.scss';
+import shared from '../shared.module.scss';
 
 export type Option = {
   label: string;
@@ -23,8 +24,8 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
   const inputId = id || `select-${label.replace(/\s+/g, '-').toLowerCase()}`;
 
   return (
-    <div className={styles.wrapper}>
-      <label className={styles.label} htmlFor={inputId}>
+    <div className={shared.wrapper}>
+      <label className={shared.label} htmlFor={inputId}>
         {label}
       </label>
 

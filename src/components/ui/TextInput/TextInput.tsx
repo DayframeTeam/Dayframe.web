@@ -1,5 +1,5 @@
 import { ChangeEvent, useId } from 'react';
-import styles from './TextInput.module.scss';
+import shared from '../shared.module.scss';
 
 type TextInputProps = Readonly<{
   label?: string; // label теперь опционален
@@ -30,15 +30,15 @@ export function TextInput({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={shared.wrapper}>
       {label && (
-        <label htmlFor={inputId} className={styles.label}>
+        <label htmlFor={inputId} className={shared.label}>
           {label}
         </label>
       )}
       <input
         id={inputId}
-        className={styles.input + ' ' + className}
+        className={shared.input + ' ' + className}
         type={type}
         value={value}
         onChange={handleChange}
