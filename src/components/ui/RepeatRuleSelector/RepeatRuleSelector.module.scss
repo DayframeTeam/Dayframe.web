@@ -37,6 +37,6 @@
   &.selected {
     background: var(--accent-muted);
     color: var(--text-on-accent);
-    font-weight: 600;
+    font-weight: var(--font-weight-big);
   }
 }

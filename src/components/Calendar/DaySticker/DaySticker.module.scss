@@ -8,7 +8,6 @@
   flex-direction: column;
   padding: 0.3rem;
   position: relative;
-  font-size: 0.75rem;
   transition: 0.2s;
   cursor: pointer;
 
@@ -28,9 +27,13 @@
 }
 
 .day {
-  font-weight: 600;
-  font-size: 0.8rem;
+  font-weight: var(--font-weight-big);
+  font-size: var(--font-size-secondary);
   text-align: left;
+
+  span {
+    font-size: var(--font-size-tertiary);
+  }
 }
 
 /* Блок для задач */
@@ -59,7 +62,7 @@
 /* Одна задача */
 .event {
   margin-bottom: 6px;
-  font-size: 0.75rem;
+  font-size: var(--font-size-tertiary);
   line-height: 1.2;
   max-height: 2.4em;
   text-overflow: ellipsis;
@@ -76,14 +79,5 @@
     /* Отменяем фиксированное соотношение, чтобы ячейка могла растягиваться */
     aspect-ratio: auto;
     padding: 0.2rem;
-    font-size: 0.7rem;
-  }
-
-  .day {
-    font-size: 0.75rem;
-  }
-
-  .events {
-    font-size: 0.65rem;
   }
 }

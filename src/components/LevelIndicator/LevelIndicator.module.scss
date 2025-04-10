@@ -27,16 +27,16 @@
 }
 
 .exp {
-  font-size: 0.7rem;
+  font-size: var(--font-size-tertiary);
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-big);
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
 .lightning {
-  font-size: 0.6rem;
+  font-size: var(--font-size-tertiary);
   transition: color 0.3s ease;
 }
 

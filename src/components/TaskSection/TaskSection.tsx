@@ -18,9 +18,9 @@ export default function TaskSection({ date, tasks }: Props) {
   const [isAdding, setIsAdding] = useState(false);
   
   return (
-    <section style={{ marginBottom: '1rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
+    <section>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem'  }}>
+        <h2 style={{ fontSize: '1.5rem', margin: '0'}}>
           {isToday ? t('taskSection.today') : t('taskSection.dateTasks', { date })}
         </h2>
         <Button size="small" variant="primary" onClick={() => setIsAdding(true)}>

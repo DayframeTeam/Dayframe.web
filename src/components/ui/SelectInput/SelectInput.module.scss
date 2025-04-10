@@ -18,7 +18,7 @@
 
   &::after {
     content: '▼';
-    font-size: 0.7rem;
+    font-size: var(--font-size-tertiary);
     color: var(--text-muted);
     margin-left: auto; // 👈 чтобы стрелка ушла вправо
   }
@@ -33,7 +33,7 @@
 }
 
 .arrow {
-  font-size: 0.7rem;
+  font-size: var(--font-size-tertiary);
   color: var(--text-muted);
   margin-left: 0.5rem;
 }

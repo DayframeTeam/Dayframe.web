@@ -9,7 +9,6 @@
   flex-direction: column;
   gap: 0.4rem;
   overflow: hidden;
-  font-size: 0.9rem;
 }
 
 .wrapper {
@@ -26,19 +25,18 @@
 .xp {
   position: relative;
   color: var(--text-primary);
-  font-weight: 500;
   border-radius: var(--border-radius-primary);
   white-space: nowrap;
   flex-shrink: 0;
   user-select: none;
+  font-size: var(--font-size-secondary);
 }
 
 .xpAnim {
   position: absolute;
   top: -1rem;
   right: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-big);
   color: var(--subtask-progress-complete);
   animation: popCelebration 1.2s ease-out forwards;
   pointer-events: none;
@@ -90,7 +88,7 @@
 }
 
 .title {
-  font-weight: 600;
+  font-weight: var(--font-weight-big);
   flex: 1;
   margin-left: 0.5rem;
   color: var(--text-primary);
@@ -98,7 +96,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
-  font-size: 1rem;
 }
 
 .descriptionBlock {
@@ -130,6 +127,10 @@
   gap: 0.3rem;
   flex-wrap: wrap;
   margin-top: 16px;
+  
+  span {
+    font-size: var(--font-size-secondary);
+  }
 }
 
 .subtaskSummary {
@@ -174,6 +175,7 @@
 .subtaskText {
   color: var(--subtask-progress-incomplete);
   white-space: nowrap;
+  font-size: var(--font-size-secondary);
 }
 
 .date {
@@ -181,7 +183,7 @@
 }
 
 .editButton {
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--border-color) !important;
 }
 
 .metaAndTiming {

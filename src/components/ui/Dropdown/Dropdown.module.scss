@@ -44,7 +44,7 @@
     text-align: left;
     cursor: pointer;
     border-radius: 0.25rem;
-    font-size: 0.875rem;
+    font-size: var(--font-size-secondary);
 
     &:hover {
       background: var(--bg-hover);

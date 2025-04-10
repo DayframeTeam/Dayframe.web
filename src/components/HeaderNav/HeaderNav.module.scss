@@ -17,7 +17,7 @@
   cursor: pointer;
   padding: 0.4rem 0.8rem;
   border-radius: var(--border-radius-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-big);
   text-decoration: none;
 
   &:hover {

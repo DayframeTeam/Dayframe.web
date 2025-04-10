@@ -32,14 +32,14 @@
 
 .title {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: var(--font-size-big);
+  font-weight: var(--font-weight-big);
 }
 
 .closeButton {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--font-size-big);
   color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.2s ease;
