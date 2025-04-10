@@ -1,12 +1,11 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { TextInput } from '../ui/TextInput/TextInput';
 import { Task } from '../../types/dbTypes';
 import shared from './UI/shared.module.scss';
 import { TaskBasicFields } from './UI/TaskBasicFields';
 import { Button } from '../ui/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { formatDateToISO } from '../../utils/dateUtils';
-import { TaskLocal } from './types';
+import { TaskLocal, SubtaskLocal } from './types';
 import { nanoid } from 'nanoid';
 import { SortableSubtaskList } from './SortableSubtaskList/SortableSubtaskList';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -29,6 +28,45 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
     })),
   });
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Функция для сравнения задач
+  const compareTasks = (original: Task, current: TaskLocal): boolean => {
+    // Сравниваем основные поля
+    if (
+      original.title !== current.title ||
+      original.description !== current.description ||
+      original.priority !== current.priority ||
+      original.category !== current.category ||
+      original.start_time !== current.start_time ||
+      original.end_time !== current.end_time ||
+      original.task_date !== current.task_date
+    ) {
+      return true;
+    }
+
+    // Сравниваем подзадачи
+    if (original.subtasks.length !== current.subtasks.length) {
+      return true;
+    }
+
+    // Сравниваем каждую подзадачу
+    return current.subtasks.some((subtask, index) => {
+      const originalSubtask = original.subtasks[index];
+      const localSubtask = subtask as SubtaskLocal;
+      return (
+        localSubtask.title !== originalSubtask.title ||
+        localSubtask.is_deleted ||
+        localSubtask.position !== originalSubtask.position
+      );
+    });
+  };
+
+  // Проверяем изменения при обновлении localTask
+  useEffect(() => {
+    const changed = compareTasks(task, localTask);
+    setHasChanges(changed);
+  }, [localTask, task]);
 
   const handleTaskDelete = () => {
     const updatedTask = {
@@ -48,6 +86,7 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
     // TODO: Здесь будет логика отправки формы
     console.log('Form submitted:', localTask);
   };
+  console.log(task);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -90,9 +129,7 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
             label={t('task.date')}
             onChange={(date) =>
               handleTaskChange({
-                task_date: date
-                  ? formatDateToISO(date.getFullYear(), date.getMonth(), date.getDate())
-                  : undefined,
+                task_date: date ? date.toISOString() : undefined,
               })
             }
           />
@@ -112,7 +149,7 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
         <Button type="button" variant="danger" onClick={handleTaskDelete}>
           {t('task.delete')}
         </Button>
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" disabled={!hasChanges}>
           {t('task.save')}
         </Button>
       </div>
