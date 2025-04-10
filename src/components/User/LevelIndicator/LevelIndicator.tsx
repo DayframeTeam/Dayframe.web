@@ -14,7 +14,7 @@ type LevelIndicatorProps = Readonly<{
 export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorProps) => {
   const currentLevel = calculateLevel(exp);
   const nextLevelExp = calculateNextLevelExp(currentLevel);
-  const progressPercent = (exp / nextLevelExp) * 100;
+  const progressPercent = (exp / nextLevelExp) * 300;
   const colors = getLevelColorScheme(currentLevel);
 
   return (
@@ -23,7 +23,7 @@ export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorPro
         className={styles.progressRing}
         style={
           {
-            '--progress': `${progressPercent}%`,
+            '--progress': `${progressPercent}deg`,
             '--ring-color': colors.accent,
           } as React.CSSProperties
         }
