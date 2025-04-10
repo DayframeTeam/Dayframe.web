@@ -4,6 +4,7 @@ import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { useState } from 'react';
 import { TaskSection } from '../../TaskSection/TaskSection';
 import { Modal } from '../../Modal/Modal';
+import { useTranslation } from 'react-i18next';
 
 type Props = Readonly<{
   date: string; // 'YYYY-MM-DD'
@@ -13,6 +14,7 @@ type Props = Readonly<{
 
 export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   // Проверяем, что день уже прошёл:
   const isPast = new Date(date) < new Date(new Date().toDateString());
@@ -43,7 +45,7 @@ export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
       <div
         className={`${styles.sticker} ${isToday ? styles.today : ''} ${isPast ? styles.past : ''}`}
         onClick={() => setOpen(true)}
-        title="Нажмите, чтобы открыть"
+        title={t('ui.clickToOpen')}
       >
         <div className={styles.day}>{dayNumber}</div>
         <div className={styles.events}>
