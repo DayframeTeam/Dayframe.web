@@ -11,18 +11,17 @@
 }
 
 .item {
-  background: transparent;
   border: none;
-  color: var(--text-secondary);
   cursor: pointer;
   padding: 0.4rem 0.8rem;
   border-radius: var(--border-radius-primary);
   font-weight: var(--font-weight-big);
   text-decoration: none;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 
   &:hover {
-    color: var(--text-on-accent);
-    background: var(--accent);
+    background: var(--bg-secondary);
   }
 
   @media (max-width: 600px) {
@@ -31,6 +30,5 @@
 }
 
 .active {
-  color: var(--text-on-accent);
-  background: var(--accent-muted);
+  background: var(--bg-tertiary);
 }
