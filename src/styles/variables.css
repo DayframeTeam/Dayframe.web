@@ -7,9 +7,13 @@
     --text-on-accent: #1e1e1e;
 
     /* === BACKGROUND === */
-    --bg-primary: #ffffff;
+    /* --bg-primary: #ffffff;
     --bg-secondary: #ece7e7;
-    --bg-tertiary: #d3d1d1;
+    --bg-tertiary: #d3d1d1; */
+    --bg-primary: #fcfcfc;
+    --bg-secondary: #e8e8e8;
+    --bg-tertiary: #cfcfcf;
+
 
     /* === ACCENTS === */
     --accent: #3b82f6;
