@@ -33,6 +33,7 @@ export default function SortableSubtaskItem({ subtask, onTitleChange, onDelete }
         value={subtask.title}
         onChange={(val) => onTitleChange(subtask.uniqueKey, val)}
         placeholder={t('task.subtasks.placeholderTitle')}
+        required
       />
       <div
         {...listeners}

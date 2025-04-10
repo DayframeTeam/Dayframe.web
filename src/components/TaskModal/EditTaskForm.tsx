@@ -30,6 +30,13 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
+  const cleanupDeletedSubtasks = (taskToClean: TaskLocal): TaskLocal => {
+    return {
+      ...taskToClean,
+      subtasks: taskToClean.subtasks.filter((s: SubtaskLocal) => !(s.is_deleted && s.id === 0)),
+    };
+  };
+
   const handleSubtaskTitleChange = (uniqueKey: string, newTitle: string) => {
     setLocalTask((prev: TaskLocal) => ({
       ...prev,
@@ -40,12 +47,32 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
   };
 
   const handleSubtaskDelete = (uniqueKey: string) => {
-    setLocalTask((prev: TaskLocal) => ({
-      ...prev,
-      subtasks: prev.subtasks.map((s: SubtaskLocal) =>
-        s.uniqueKey === uniqueKey ? { ...s, is_deleted: true } : s
-      ),
-    }));
+    setLocalTask((prev: TaskLocal) => {
+      // Сначала помечаем подзадачу как удаленную
+      const withDeleted = {
+        ...prev,
+        subtasks: prev.subtasks.map((s: SubtaskLocal) =>
+          s.uniqueKey === uniqueKey ? { ...s, is_deleted: true } : s
+        ),
+      };
+
+      // Очищаем удаленные подзадачи с id === 0
+      const cleaned = cleanupDeletedSubtasks(withDeleted);
+
+      // Пересчитываем позиции для оставшихся неудаленных подзадач
+      const reordered = {
+        ...cleaned,
+        subtasks: cleaned.subtasks
+          .filter((s: SubtaskLocal) => !s.is_deleted)
+          .map((s: SubtaskLocal, index: number) => ({
+            ...s,
+            position: index,
+          }))
+          .concat(cleaned.subtasks.filter((s: SubtaskLocal) => s.is_deleted)),
+      };
+
+      return reordered;
+    });
   };
 
   const handleSubtaskAdd = () => {
@@ -77,26 +104,28 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
 
   // Функция для сравнения задач
   const compareTasks = (original: Task, current: TaskLocal): boolean => {
+    const cleanedCurrent = cleanupDeletedSubtasks(current);
+
     // Сравниваем основные поля
     if (
-      original.title !== current.title ||
-      original.description !== current.description ||
-      original.priority !== current.priority ||
-      original.category !== current.category ||
-      original.start_time !== current.start_time ||
-      original.end_time !== current.end_time ||
-      original.task_date !== current.task_date
+      original.title !== cleanedCurrent.title ||
+      original.description !== cleanedCurrent.description ||
+      original.priority !== cleanedCurrent.priority ||
+      original.category !== cleanedCurrent.category ||
+      original.start_time !== cleanedCurrent.start_time ||
+      original.end_time !== cleanedCurrent.end_time ||
+      original.task_date !== cleanedCurrent.task_date
     ) {
       return true;
     }
 
     // Сравниваем подзадачи
-    if (original.subtasks.length !== current.subtasks.length) {
+    if (original.subtasks.length !== cleanedCurrent.subtasks.length) {
       return true;
     }
 
     // Сравниваем каждую подзадачу
-    return current.subtasks.some((subtask, index) => {
+    return cleanedCurrent.subtasks.some((subtask, index) => {
       const originalSubtask = original.subtasks[index];
       const localSubtask = subtask as SubtaskLocal;
       return (
