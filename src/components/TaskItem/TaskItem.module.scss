@@ -124,8 +124,8 @@
 .meta,
 .timing {
   display: flex;
-  gap: 0.3rem;
-  flex-wrap: wrap;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
   margin-top: 16px;
   
   span {
