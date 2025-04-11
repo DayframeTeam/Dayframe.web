@@ -2,7 +2,7 @@ import { Header } from './Header/Header.tsx';
 import { HeaderNav } from './HeaderNav/HeaderNav.tsx';
 import { InitialDataLoader } from './InitialDataLoader.tsx';
 import { PageContainer } from './PageContainer/PageContainer.tsx';
-import HeaderDropdown from './HeaderDropdown/HeaderDropdown.tsx';
+import { HeaderDropdown } from './HeaderDropdown/HeaderDropdown.tsx';
 import { useEffect } from 'react';
 import { UserProfile } from './User/UserProfile/UserProfile.tsx';
 

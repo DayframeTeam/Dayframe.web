@@ -4,7 +4,7 @@ import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { LanguageToggle } from '../LanguageToggle/LanguageToggle';
 import styles from './HeaderDropdown.module.scss';
 
-export default function HeaderDropdown() {
+export function HeaderDropdown() {
   return (
     <Dropdown
       trigger={
