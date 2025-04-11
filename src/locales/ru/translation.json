@@ -73,7 +73,8 @@
     "select": {
       "placeholder": "Выбери..."
     },
-    "clickToOpen": "Нажмите, чтобы открыть"
+    "clickToOpen": "Нажмите, чтобы открыть",
+    "resetDate": "Сбросить дату"
   },
   "weekdaysShort": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
   "monthNames": [

@@ -73,7 +73,8 @@
     "select": {
       "placeholder": "Select..."
     },
-    "clickToOpen": "Click to open"
+    "clickToOpen": "Click to open",
+    "resetDate": "Reset date"
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   "monthNames": [

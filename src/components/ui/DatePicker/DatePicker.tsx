@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useState, memo } from 'react';
 import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import { ru, enUS } from 'date-fns/locale';
@@ -6,6 +6,7 @@ import 'react-day-picker/dist/style.css';
 import shared from '../shared.module.scss';
 import styles from './DatePicker.module.scss';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../Button/Button';
 
 const modifiersStyles = {
   today: {
@@ -25,20 +26,11 @@ type Props = {
   label?: string;
   onChange: (date: Date | null) => void;
   placeholder?: string;
-  minDate?: Date;
-  maxDate?: Date;
 };
 
-export default function DatePicker({
-  value,
-  label,
-  onChange,
-  placeholder,
-  minDate,
-  maxDate,
-}: Props) {
+export const DatePicker = memo(({ value, label, onChange, placeholder }: Props) => {
   const inputId = useId();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleIsOpen = () => {
@@ -59,12 +51,23 @@ export default function DatePicker({
     setIsOpen(false);
   };
 
+  const handleReset = () => {
+    onChange(null);
+  };
+
   return (
     <div className={shared.wrapper}>
       {label && (
-        <label htmlFor={inputId} className={shared.label + ' ' + focusStyles}>
-          {label}
-        </label>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <label htmlFor={inputId} className={shared.label + ' ' + focusStyles}>
+            {label}
+          </label>
+          {value && (
+            <Button variant="secondary" size="small" onClick={handleReset}>
+              {t('ui.resetDate')}
+            </Button>
+          )}
+        </div>
       )}
       <input
         id={inputId}
@@ -92,4 +95,6 @@ export default function DatePicker({
       )}
     </div>
   );
-}
+});
+
+DatePicker.displayName = 'DatePicker';

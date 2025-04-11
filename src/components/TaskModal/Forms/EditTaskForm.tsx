@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import { SortableSubtaskList } from '../SortableSubtaskList/SortableSubtaskList';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
-import DatePicker from '../../ui/DatePicker/DatePicker';
+import { DatePicker } from '../../ui/DatePicker/DatePicker';
 
 type EditTaskFormProps = {
   task: Task;

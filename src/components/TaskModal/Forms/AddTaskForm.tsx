@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../../ui/Button/Button';
 import { TaskBasicFields } from '../UI/TaskBasicFields';
 import { TextInput } from '../../ui/TextInput/TextInput';
-import DatePicker from '../../ui/DatePicker/DatePicker';
+import { DatePicker } from '../../ui/DatePicker/DatePicker';
 import { SortableSubtaskList } from '../SortableSubtaskList/SortableSubtaskList';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
