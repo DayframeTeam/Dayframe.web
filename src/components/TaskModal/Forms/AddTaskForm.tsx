@@ -1,8 +1,6 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../../ui/Button/Button';
 import { TaskBasicFields } from '../UI/TaskBasicFields';
-import { TextInput } from '../../ui/TextInput/TextInput';
-import { DatePicker } from '../../ui/DatePicker/DatePicker';
 import { SortableSubtaskList } from '../SortableSubtaskList/SortableSubtaskList';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -11,6 +9,7 @@ import shared from '../UI/shared.module.scss';
 import { SubtaskLocal, TaskLocal } from '../types';
 import { nanoid } from '@reduxjs/toolkit';
 import { SelectInput } from '../../ui/SelectInput/SelectInput';
+import { TaskTimeFields } from '../UI/TaskTimeFields';
 
 export const AddTaskForm = memo(({ date }: { date?: string }) => {
   const { t } = useTranslation();
@@ -159,31 +158,7 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
             handleTaskChange({ exp: expValue });
           }}
         />
-        <div className={shared.categoryWrapper}>
-          <TextInput
-            label={t('task.timing.start') + ' ' + t('time.hour') + '/' + t('time.minute')}
-            value={localTask.start_time ?? ''}
-            onChange={(val) => handleTaskChange({ start_time: val })}
-            type="time"
-          />
-          <div style={{ margin: '0.5rem 0' }}></div>
-          <TextInput
-            label={t('task.timing.end') + ' ' + t('time.hour') + '/' + t('time.minute')}
-            value={localTask.end_time ?? ''}
-            onChange={(val) => handleTaskChange({ end_time: val })}
-            type="time"
-          />
-          <div style={{ margin: '0.5rem 0' }}></div>
-          <DatePicker
-            value={localTask.task_date ? new Date(localTask.task_date) : undefined}
-            label={t('task.date')}
-            onChange={(date) =>
-              handleTaskChange({
-                task_date: date ? date.toISOString() : undefined,
-              })
-            }
-          />
-        </div>
+        <TaskTimeFields localTask={localTask} handleTaskChange={handleTaskChange} />
         <SortableSubtaskList
           localTask={localTask}
           onSubtaskAdd={handleSubtaskAdd}
