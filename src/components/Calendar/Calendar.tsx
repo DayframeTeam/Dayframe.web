@@ -5,6 +5,7 @@ import { Task } from '../../types/dbTypes';
 import { useTranslation } from 'react-i18next';
 
 const today = new Date();
+const currentMonth = today.getMonth();
 
 type Props = Readonly<{
   tasks: Task[];
@@ -37,6 +38,10 @@ export default function Calendar({ tasks }: Props) {
     }
   };
 
+  const handleMonthSelect = (selectedMonth: number) => {
+    setMonth(selectedMonth);
+  };
+
   const monthNames = t('monthNames', { returnObjects: true }) as string[];
   const monthLabel = `${monthNames[month]} ${year}`;
 
@@ -52,7 +57,14 @@ export default function Calendar({ tasks }: Props) {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <CalendarHeader monthLabel={monthLabel} onPrev={handlePrev} onNext={handleNext} />
+      <CalendarHeader
+        monthLabel={monthLabel}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onMonthSelect={handleMonthSelect}
+        currentMonthIndex={month}
+        realCurrentMonth={currentMonth}
+      />
       <CalendarGrid
         daysInMonth={daysInMonth}
         currentDay={currentDay}
