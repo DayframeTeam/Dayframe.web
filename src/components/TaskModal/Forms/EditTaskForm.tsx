@@ -189,14 +189,14 @@ export const EditTaskForm = memo(({ task }: EditTaskFormProps) => {
           >
             <div className={shared.categoryWrapper}>
               <TextInput
-                label={t('task.timing.start')}
+                label={t('task.timing.start') + ' ' + t('time.hour') + '/' + t('time.minute')}
                 value={localTask.start_time ?? ''}
                 onChange={(val) => handleTaskChange({ start_time: val })}
                 type="time"
               />
               <div style={{ margin: '0.5rem 0' }}></div>
               <TextInput
-                label={t('task.timing.end')}
+                label={t('task.timing.end') + ' ' + t('time.hour') + '/' + t('time.minute')}
                 value={localTask.end_time ?? ''}
                 onChange={(val) => handleTaskChange({ end_time: val })}
                 type="time"

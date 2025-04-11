@@ -76,6 +76,10 @@
     "clickToOpen": "Click to open",
     "resetDate": "Reset date"
   },
+  "time": {
+    "hour": "h",
+    "minute": "m"
+  },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   "monthNames": [
     "January",
