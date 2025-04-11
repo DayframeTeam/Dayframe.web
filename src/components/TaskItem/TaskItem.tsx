@@ -166,6 +166,7 @@ export default function TaskItem({ task }: Props) {
               {task.start_time && task.end_time && (
                 <span title={t('task.timing.duration')}>
                   ⏳ {calculateDuration(task.start_time, task.end_time)}
+                  {' ' + t('time.hour') + ':' + t('time.minute')}
                 </span>
               )}
             </div>

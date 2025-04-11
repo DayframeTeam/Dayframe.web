@@ -7,6 +7,7 @@ import { memo, useState, useEffect } from 'react';
 import { TaskModal } from '../TaskModal/TaskModal';
 import { WeatherDisplay } from '../WeatherDisplay';
 import { LocationSettings } from '../LocationSettings';
+import { formatDateDayMonth } from '../../utils/dateUtils';
 
 type Props = Readonly<{
   date: string; // в формате 'YYYY-MM-DD'
@@ -52,7 +53,9 @@ export const TaskSection = memo(({ date, tasks }: Props) => {
         }}
       >
         <h2 style={{ fontSize: '1.5rem', margin: '0' }}>
-          {isToday ? t('taskSection.today') : t('taskSection.dateTasks', { date })}
+          {isToday
+            ? t('taskSection.today')
+            : t('taskSection.dateTasks', { date: formatDateDayMonth(date) })}
         </h2>
         <Button size="small" variant="secondary" onClick={() => setIsAdding(true)}>
           <span

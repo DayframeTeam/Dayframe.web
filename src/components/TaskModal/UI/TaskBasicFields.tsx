@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 import { TextInput } from '../../ui/TextInput/TextInput';
 import { SelectInput } from '../../ui/SelectInput/SelectInput';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +9,12 @@ type TaskBasicFieldsProps = {
   description?: string;
   priority?: 'low' | 'medium' | 'high';
   category?: string;
-  setValue: (values: Partial<Omit<TaskBasicFieldsProps, 'setValue'>>) => void;
+  children?: ReactNode;
+  setValue: (values: Partial<Omit<TaskBasicFieldsProps, 'setValue' | 'children'>>) => void;
 };
 
 export const TaskBasicFields = memo(
-  ({ title, description, priority, category, setValue }: TaskBasicFieldsProps) => {
+  ({ title, description, priority, category, children, setValue }: TaskBasicFieldsProps) => {
     const { t } = useTranslation();
     return (
       <>
@@ -23,12 +24,13 @@ export const TaskBasicFields = memo(
           onChange={(val) => setValue({ title: val })}
           required
         />
-        <div style={{ margin: '0.5rem 0' }}></div>
+        <div style={{ margin: '0.25rem 0' }}></div>
         <TextInput
           label={t('task.description')}
           value={description ?? ''}
           onChange={(val) => setValue({ description: val })}
         />
+        {children}
         <div className={shared.categoryWrapper}>
           <SelectInput
             label={t('task.priority')}
@@ -40,7 +42,7 @@ export const TaskBasicFields = memo(
               { value: 'high', label: t('task.priorityType.high') },
             ]}
           />
-          <div style={{ margin: '0.5rem 0' }}></div>
+          <div style={{ margin: '0.25rem 0' }}></div>
           <TextInput
             label={t('task.category')}
             value={category ?? ''}

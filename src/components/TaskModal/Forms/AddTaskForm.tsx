@@ -135,7 +135,19 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
         priority={localTask.priority}
         category={localTask.category}
         setValue={(values) => handleTaskChange(values)}
-      />
+      >
+        <div style={{ margin: '0.25rem 0' }}></div>
+        <SelectInput
+          label={t('task.exp')}
+          options={expOptions}
+          value={localTask.exp}
+          onChange={(value) => {
+            // Приводим значение к конкретному типу exp
+            const expValue = Number(value) as 0 | 1 | 5 | 10 | 20 | 50;
+            handleTaskChange({ exp: expValue });
+          }}
+        />
+      </TaskBasicFields>
 
       <Button
         type="button"
@@ -148,16 +160,6 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
       </Button>
 
       <div className={clsx(shared.advancedSettings, { [shared.visible]: showAdvancedSettings })}>
-        <SelectInput
-          label={t('task.exp')}
-          options={expOptions}
-          value={localTask.exp}
-          onChange={(value) => {
-            // Приводим значение к конкретному типу exp
-            const expValue = Number(value) as 0 | 1 | 5 | 10 | 20 | 50;
-            handleTaskChange({ exp: expValue });
-          }}
-        />
         <TaskTimeFields localTask={localTask} handleTaskChange={handleTaskChange} />
         <SortableSubtaskList
           localTask={localTask}
