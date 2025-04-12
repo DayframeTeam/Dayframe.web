@@ -471,26 +471,42 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       </div>
 
                       <div className={statsStyles.clockContainer}>
-                        <div className={statsStyles.clockFace} />
-                        <div className={statsStyles.clockMarkers}>
-                          {Array.from({ length: 12 }, (_, i) => (
-                            <div
-                              key={i}
-                              className={statsStyles.clockMarker}
-                              style={{ transform: `rotate(${i * 30}deg)` }}
-                            />
-                          ))}
+                        <div className={statsStyles.clockFace}>
+                          <div className={statsStyles.clockMarkers}>
+                            {[...Array(12)].map((_, i) => (
+                              <div
+                                key={i}
+                                className={statsStyles.clockMarker}
+                                style={{
+                                  transform: `rotate(${i * 30}deg)`,
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <div
+                            className={statsStyles.clockSector}
+                            style={{
+                              clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 30 * Math.PI) / 180 - Math.PI / 2)},${
+                                100 +
+                                95 *
+                                  Math.sin(
+                                    ((peakHour + peakMinute / 60) * 30 * Math.PI) / 180 -
+                                      Math.PI / 2
+                                  )
+                              } A 95,95 0 ${
+                                ((peakHour + 2) % 24) - peakHour > 12 ? 1 : 0
+                              },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 30 * Math.PI) / 180 - Math.PI / 2)},${
+                                100 +
+                                95 *
+                                  Math.sin(
+                                    ((((peakHour + 2) % 24) + peakMinute / 60) * 30 * Math.PI) /
+                                      180 -
+                                      Math.PI / 2
+                                  )
+                              } Z')`,
+                            }}
+                          />
                         </div>
-                        <div
-                          className={`${statsStyles.clockHand} ${statsStyles.hourHand}`}
-                          style={{
-                            transform: `rotate(${(peakHour % 12) * 30 + peakMinute / 2}deg)`,
-                          }}
-                        />
-                        <div
-                          className={`${statsStyles.clockHand} ${statsStyles.minuteHand}`}
-                          style={{ transform: `rotate(${peakMinute * 6}deg)` }}
-                        />
                       </div>
                     </>
                   );

@@ -513,25 +513,14 @@
   top: 0;
 }
 
-.clockHand {
+.clockSector {
   position: absolute;
-  bottom: 50%;
-  left: 50%;
-  transform-origin: 50% 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  clip-path: path('');
   background: var(--accent);
-  border-radius: 4px;
-}
-
-.hourHand {
-  width: 4px;
-  height: 60px;
-  margin-left: -2px;
-}
-
-.minuteHand {
-  width: 3px;
-  height: 80px;
-  margin-left: -1.5px;
+  opacity: 0.15;
 }
 
 .peakTimeWrapper {
