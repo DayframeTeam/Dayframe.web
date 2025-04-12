@@ -437,18 +437,9 @@
 .streakProgress {
   height: 8px;
   background: var(--bg-secondary);
-  border-radius: 4px;
+  border-radius: var(--border-radius-primary);
   overflow: hidden;
   position: relative;
-}
-
-.streakFill {
-  height: 100%;
-  background: linear-gradient(90deg, #ff4d4d, #ff9900);
-  border-radius: 4px;
-  position: relative;
-  transition: width 0.3s ease;
-
   &::after {
     content: '';
     position: absolute;
@@ -456,14 +447,23 @@
     left: 0;
     right: 0;
     bottom: 0;
+    border-radius: var(--border-radius-primary);
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.4) 50%,
       transparent 100%
     );
-    animation: fireShine 2s linear infinite;
+    animation: fireShine 4s ease-in-out infinite;
   }
+}
+
+.streakFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d4d, #ff9900);
+  border-radius: var(--border-radius-primary);
+  position: relative;
+  transition: width 0.3s ease;
 }
 
 @keyframes fireShine {
@@ -471,7 +471,8 @@
     transform: translateX(-100%);
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(100%) skewX(-15deg);
+    opacity: 0;
   }
 }
 
@@ -551,7 +552,23 @@
   border-radius: 50%;
   clip-path: path('');
   background: var(--accent);
-  opacity: 0.15;
+  opacity: 0.3;
+  animation: sectorPulse 2s ease-in-out infinite;
+}
+
+@keyframes sectorPulse {
+  0% {
+    opacity: 0.2;
+    filter: brightness(0.8);
+  }
+  50% {
+    opacity: 0.4;
+    filter: brightness(1.2);
+  }
+  100% {
+    opacity: 0.2;
+    filter: brightness(0.8);
+  }
 }
 
 .peakTimeWrapper {
