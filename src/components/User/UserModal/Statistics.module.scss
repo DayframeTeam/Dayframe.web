@@ -37,15 +37,12 @@
   transform: rotate(180deg);
 }
 
-.statisticsContent {
-  margin-top: 1rem;
-}
-
 // Completed Tasks Section
-.completedTasksSection {
+.sectionWrapper {
   background: var(--bg-secondary);
   border-radius: var(--border-radius-primary);
   padding: 20px;
+  margin-top: 1rem;
 }
 
 .completedTasksHeader {
@@ -259,4 +256,144 @@
   border-radius: var(--border-radius-primary);
   transform: translateX(50%);
   white-space: nowrap;
+}
+
+.activityTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.monthNavigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.currentMonth {
+  font-size: var(--font-size-secondary);
+  min-width: 100px;
+  text-align: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.weekdayHeader {
+  font-size: var(--font-size-tertiary);
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.dayNumber {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 0.7em;
+}
+
+.emptyDay {
+  background: transparent;
+}
+
+.heatmapGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20px);
+  gap: 4px;
+  padding: 1rem 0;
+}
+
+.heatmapDay {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.heatmapTooltip {
+  position: absolute;
+  background: var(--bg-secondary);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.monthLabel {
+  font-size: var(--font-size-tertiary);
+  margin-bottom: 0.25rem;
+}
+
+.quarterGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.monthGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.activityLegend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+}
+
+.legendText {
+  margin: 0 4px;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+
+  &:first-child {
+    margin-left: 4px;
+  }
 }

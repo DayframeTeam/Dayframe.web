@@ -33,6 +33,19 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
   const [showStatistics, setShowStatistics] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+
+  // Создаем границы для навигации
+  const minDate = new Date(2025, 0, 1); // Январь 2024
+  const maxDate = new Date(); // Текущая дата
+
+  const isMinMonth = currentMonth.getTime() <= minDate.getTime();
+  const isMaxMonth =
+    currentMonth.getMonth() === maxDate.getMonth() &&
+    currentMonth.getFullYear() === maxDate.getFullYear();
 
   if (!user) return null;
 
@@ -96,8 +109,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
           </div>
 
           {showStatistics && (
-            <div className={statsStyles.statisticsContent}>
-              <div className={statsStyles.completedTasksSection}>
+            <div>
+              <div className={statsStyles.sectionWrapper}>
                 <div className={statsStyles.completedTasksHeader}>
                   <div className={statsStyles.completedTasksTitle}>
                     <span className={statsStyles.completedTasksIcon}>✓</span>
@@ -254,6 +267,133 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       })()}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div className={statsStyles.sectionWrapper}>
+                <div className={statsStyles.activityHeader}>
+                  <div className={statsStyles.activityTitle}>
+                    <span>🔍</span>
+                    {t('stats.activity')}
+                  </div>
+                  <div className={statsStyles.monthNavigation}>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => {
+                        const prevMonth = new Date(currentMonth);
+                        prevMonth.setMonth(prevMonth.getMonth() - 1);
+                        setCurrentMonth(prevMonth);
+                      }}
+                      disabled={isMinMonth}
+                    >
+                      ◀
+                    </Button>
+                    <div className={statsStyles.currentMonth}>
+                      {t(`monthNames.${currentMonth.getMonth()}`)} {currentMonth.getFullYear()}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => {
+                        const nextMonth = new Date(currentMonth);
+                        nextMonth.setMonth(nextMonth.getMonth() + 1);
+                        setCurrentMonth(nextMonth);
+                      }}
+                      disabled={isMaxMonth}
+                    >
+                      ▶
+                    </Button>
+                  </div>
+                </div>
+
+                <div className={statsStyles.calendarGrid}>
+                  {(t('weekdaysShort', { returnObjects: true }) as string[]).map((day: string) => (
+                    <div key={day} className={statsStyles.weekdayHeader}>
+                      {day}
+                    </div>
+                  ))}
+
+                  {(() => {
+                    const firstDay = new Date(
+                      currentMonth.getFullYear(),
+                      currentMonth.getMonth(),
+                      1
+                    );
+                    const lastDay = new Date(
+                      currentMonth.getFullYear(),
+                      currentMonth.getMonth() + 1,
+                      0
+                    );
+
+                    // Получаем день недели для первого дня месяца (0 = воскресенье)
+                    const firstDayOfWeek = firstDay.getDay();
+                    // Общее количество дней в месяце
+                    const daysInMonth = lastDay.getDate();
+
+                    // Генерируем пустые ячейки для выравнивания календаря
+                    const emptyCells = Array(firstDayOfWeek).fill(null);
+
+                    // Генерируем данные для каждого дня
+                    const days = Array.from({ length: daysInMonth }, (_, index) => {
+                      const doneToday = Math.floor(Math.random() * 10);
+                      const avgPerDay = 5;
+                      const greenPercent = Math.min(100, (doneToday / avgPerDay) * 100);
+                      return {
+                        day: index + 1,
+                        count: doneToday,
+                        intensity: greenPercent,
+                      };
+                    });
+
+                    return (
+                      <>
+                        {emptyCells.map((_, index) => (
+                          <div
+                            key={`empty-${firstDay.getTime()}-${index}`}
+                            className={`${statsStyles.calendarDay} ${statsStyles.emptyDay}`}
+                          />
+                        ))}
+
+                        {days.map((day) => (
+                          <div
+                            key={`${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${day.day}`}
+                            className={statsStyles.calendarDay}
+                            style={{
+                              backgroundColor: `hsl(120, 50%, ${90 - day.intensity * 0.4}%)`,
+                            }}
+                            title={`${day.count} ${t('stats.tasksCompleted')}`}
+                          >
+                            <span className={statsStyles.dayNumber}>{day.day}</span>
+                          </div>
+                        ))}
+                      </>
+                    );
+                  })()}
+                </div>
+                <div className={statsStyles.activityLegend}>
+                  {t('stats.legend.less')}
+                  <div
+                    className={statsStyles.legendDot}
+                    style={{ backgroundColor: `hsl(120, 50%, 90%)` }}
+                  />
+                  <div
+                    className={statsStyles.legendDot}
+                    style={{ backgroundColor: `hsl(120, 50%, 80%)` }}
+                  />
+                  <div
+                    className={statsStyles.legendDot}
+                    style={{ backgroundColor: `hsl(120, 50%, 70%)` }}
+                  />
+                  <div
+                    className={statsStyles.legendDot}
+                    style={{ backgroundColor: `hsl(120, 50%, 60%)` }}
+                  />
+                  <div
+                    className={statsStyles.legendDot}
+                    style={{ backgroundColor: `hsl(120, 50%, 50%)` }}
+                  />
+                  {t('stats.legend.more')}
                 </div>
               </div>
             </div>

@@ -137,7 +137,13 @@
     "yearlyProgress": "Monthly progress",
     "byCategory": "By category",
     "byPriority": "By priority",
-    "timeSpent": "Time spent on tasks"
+    "timeSpent": "Time spent on tasks",
+    "activity": "Activity",
+    "tasksCompleted": "tasks completed",
+    "legend": {
+      "less": "Less tasks completed",
+      "more": "More tasks completed"
+    }
   },
   "weather": {
     "location": "{{location}}",
