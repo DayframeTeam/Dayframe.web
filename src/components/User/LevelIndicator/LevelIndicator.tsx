@@ -4,7 +4,8 @@ import {
   calculateNextLevelExp,
   getLevelColorScheme,
 } from '../../../utils/levelUtils';
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
+import { animate } from 'animejs';
 
 type LevelIndicatorProps = Readonly<{
   exp: number;
@@ -19,8 +20,22 @@ export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorPro
 
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
-  const dashArray = (circumference * 300) / 360; // Длина дуги для 300 градусов
-  const progress = (dashArray * progressPercent) / 300;
+  const dashArray = (circumference * 290) / 360;
+
+  const progressRef = useRef<SVGCircleElement>(null);
+
+  useEffect(() => {
+    if (!progressRef.current) return;
+    const progress = (dashArray * progressPercent) / 300;
+    animate(progressRef.current, {
+      strokeDasharray: [
+        exp ? `60 ${dashArray}` : `0 ${dashArray}`, // from
+        `${progress} ${dashArray}`, // to
+      ],
+      duration: 1000,
+      easing: 'easeOutQuad',
+    });
+  }, [exp]);
 
   return (
     <div className={`${styles.levelInfo} ${size === 'large' ? styles.levelInfoLarge : ''}`}>
@@ -34,6 +49,7 @@ export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorPro
           strokeWidth="8"
         />
         <circle
+          ref={progressRef}
           className={styles.progressPath}
           cx="50"
           cy="50"
@@ -41,7 +57,6 @@ export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorPro
           fill="none"
           strokeWidth="8"
           stroke={colors.accent}
-          strokeDasharray={`${progress} ${dashArray}`}
         />
       </svg>
       <div className={styles.expCircle}>

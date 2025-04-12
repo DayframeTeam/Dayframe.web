@@ -10,10 +10,11 @@ import {
   getLevelColorScheme,
 } from '../../../utils/levelUtils';
 import { LevelIndicator } from '../LevelIndicator/LevelIndicator';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '../../ui/Button/Button';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { Badge } from '../../ui/Badge/Badge';
+import { animate } from 'animejs';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -47,12 +48,27 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
     currentMonth.getMonth() === maxDate.getMonth() &&
     currentMonth.getFullYear() === maxDate.getFullYear();
 
-  if (!user) return null;
+  const progressRef = useRef<HTMLDivElement>(null);
 
-  const currentLevel = calculateLevel(user.exp);
+  const currentLevel = user ? calculateLevel(user.exp) : 0;
   const nextLevelExp = calculateNextLevelExp(currentLevel);
+  const progressPercent = user ? (user.exp / nextLevelExp) * 100 : 0;
   const colors = getLevelColorScheme(currentLevel);
-  const progressPercent = (user.exp / nextLevelExp) * 100;
+
+  useEffect(() => {
+    if (isOpen && progressRef.current && user) {
+      animate(progressRef.current!, {
+        width: {
+          from: '0%',
+          to: `${progressPercent}%`,
+          duration: 1000,
+          ease: 'outQuad',
+        },
+      });
+    }
+  }, [isOpen, progressPercent, user]);
+
+  if (!user) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('user.expDetails')}>
@@ -69,8 +85,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progress}
+                  ref={progressRef}
                   style={{
-                    width: `${progressPercent}%`,
                     backgroundColor: colors.accent,
                   }}
                 >
