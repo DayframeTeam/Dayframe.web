@@ -52,7 +52,8 @@
     "priorityType": {
       "low": "Low",
       "medium": "Medium",
-      "high": "High"
+      "high": "High",
+      "none": "No priority"
     },
     "category": "Category",
     "subtasks": {
@@ -95,6 +96,20 @@
     "November",
     "December"
   ],
+  "monthNamesShort": [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ],
   "required": "required",
   "confirm": "Confirm",
   "loading": "Loading...",
@@ -122,12 +137,6 @@
     "monthlyProgress": "Monthly progress",
     "byCategory": "By category",
     "byPriority": "By priority",
-    "priority": {
-      "high": "High",
-      "medium": "Medium",
-      "low": "Low",
-      "none": "No priority"
-    },
     "timeSpent": "Time spent on tasks"
   },
   "weather": {

@@ -13,6 +13,7 @@ import { LevelIndicator } from '../LevelIndicator/LevelIndicator';
 import { useState } from 'react';
 import { Button } from '../../ui/Button/Button';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
+import { Badge } from '../../ui/Badge/Badge';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -142,9 +143,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
                           // Используем правильный индекс для месяца
                           const monthDate = new Date(2024, index);
-                          const monthLabel = monthDate.toLocaleString('default', {
-                            month: 'short',
-                          });
+                          const monthLabel = t(`monthNamesShort.${monthDate.getMonth()}`);
 
                           return (
                             <div key={index + 1} className={statsStyles.chartBarWrapper}>
@@ -183,38 +182,42 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     <div className={statsStyles.breakdownTitle}>{t('stats.byPriority')}</div>
                     <div className={statsStyles.breakdownItems}>
                       <div className={statsStyles.breakdownItem}>
-                        <div
-                          className={statsStyles.breakdownLabel}
-                          style={{
-                            color: `var(--select-color-${getPriorityColorIndex('high')})`,
-                          }}
-                        >
-                          {t('stats.priority.high')}
+                        <div className={statsStyles.breakdownLabel}>
+                          <Badge
+                            label={'🎯 ' + t(`task.priorityType.high`)}
+                            num={getPriorityColorIndex('high')}
+                            title={t('task.priority')}
+                          />
                         </div>
                         <div className={statsStyles.breakdownValue}>245</div>
                       </div>
                       <div className={statsStyles.breakdownItem}>
-                        <div
-                          className={statsStyles.breakdownLabel}
-                          style={{
-                            color: `var(--select-color-${getPriorityColorIndex('medium')})`,
-                          }}
-                        >
-                          {t('stats.priority.medium')}
+                        <div className={statsStyles.breakdownLabel}>
+                          <Badge
+                            label={'🎯 ' + t(`task.priorityType.medium`)}
+                            num={getPriorityColorIndex('medium')}
+                            title={t('task.priority')}
+                          />
                         </div>
                         <div className={statsStyles.breakdownValue}>567</div>
                       </div>
                       <div className={statsStyles.breakdownItem}>
-                        <div
-                          className={statsStyles.breakdownLabel}
-                          style={{ color: `var(--select-color-${getPriorityColorIndex('low')})` }}
-                        >
-                          {t('stats.priority.low')}
+                        <div className={statsStyles.breakdownLabel}>
+                          <Badge
+                            label={'🎯 ' + t(`task.priorityType.low`)}
+                            num={getPriorityColorIndex('low')}
+                            title={t('task.priority')}
+                          />
                         </div>
                         <div className={statsStyles.breakdownValue}>422</div>
                       </div>
                       <div className={statsStyles.breakdownItem}>
-                        <div className={statsStyles.breakdownLabel}>{t('stats.priority.none')}</div>
+                        <div className={statsStyles.breakdownLabel}>
+                          <Badge
+                            label={'🎯 ' + t(`task.priorityType.none`)}
+                            title={t('task.priority')}
+                          />
+                        </div>
                         <div className={statsStyles.breakdownValue}>722</div>
                       </div>
                     </div>
