@@ -56,7 +56,7 @@ export default function Calendar({ tasks }: Props) {
   }, [tasks, year, month]);
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <>
       <CalendarHeader
         monthLabel={monthLabel}
         onPrev={handlePrev}
@@ -72,6 +72,6 @@ export default function Calendar({ tasks }: Props) {
         month={month}
         tasks={filteredTasks}
       />
-    </div>
+    </>
   );
 }
