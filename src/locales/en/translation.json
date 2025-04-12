@@ -105,18 +105,30 @@
     "exp": "XP",
     "nextLevel": "Next level",
     "levelExamples": "Level examples",
-    "expDetails": "Experience details",
-    "completedTasksTotal": "Total tasks completed",
-    "completedByPriority": {
-      "high": "High priority",
-      "medium": "Medium priority",
-      "low": "Low priority"
-    }
+    "expDetails": "Experience details"
   },
   "theme": {
     "light": "Light theme",
     "dark": "Dark theme",
     "change": "Change theme"
+  },
+  "stats": {
+    "hideStatistics": "Hide statistics",
+    "viewStatistics": "View statistics",
+    "completedTasks": "Completed tasks",
+    "allTime": "All time",
+    "thisMonth": "This month",
+    "today": "Today",
+    "monthlyProgress": "Monthly progress",
+    "byCategory": "By category",
+    "byPriority": "By priority",
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "none": "No priority"
+    },
+    "timeSpent": "Time spent on tasks"
   },
   "weather": {
     "location": "{{location}}",

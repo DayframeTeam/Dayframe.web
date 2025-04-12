@@ -105,18 +105,30 @@
     "exp": "Опыт",
     "nextLevel": "Следующий уровень",
     "levelExamples": "Примеры уровней",
-    "expDetails": "Информация об опыте",
-    "completedTasksTotal": "Всего выполнено задач",
-    "completedByPriority": {
-      "high": "Высокий приоритет",
-      "medium": "Средний приоритет",
-      "low": "Низкий приоритет"
-    }
+    "expDetails": "Информация об опыте"
   },
   "theme": {
     "light": "Светлая тема",
     "dark": "Темная тема",
     "change": "Сменить тему"
+  },
+  "stats": {
+    "hideStatistics": "Скрыть статистику",
+    "viewStatistics": "Показать статистику",
+    "completedTasks": "Выполненные задачи",
+    "allTime": "Всего",
+    "thisMonth": "Этот месяц",
+    "today": "Сегодня",
+    "monthlyProgress": "Месячный прогресс",
+    "byCategory": "По категориям",
+    "byPriority": "По приоритетам",
+    "priority": {
+      "high": "Высокий",
+      "medium": "Средний",
+      "low": "Низкий",
+      "none": "Без приоритета"
+    },
+    "timeSpent": "Время, проведенное на задачах"
   },
   "weather": {
     "location": "{{location}}",

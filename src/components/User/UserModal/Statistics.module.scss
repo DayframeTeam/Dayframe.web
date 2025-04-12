@@ -169,7 +169,6 @@
   background: var(--bg-primary);
   border-radius: var(--border-radius-primary);
   padding: 16px;
-  margin-bottom: 0.5rem;
 }
 
 .breakdownTitle {
@@ -220,4 +219,44 @@
   padding-left: 4px;
   z-index: 1;
   position: relative;
+}
+
+.timeSpentChart {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 16px;
+}
+
+.timeSpentTitle {
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.timeSpentLine {
+  position: relative;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+}
+
+.trendLine {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 65%;
+  border-radius: var(--border-radius-primary);
+  background: var(--accent);
+}
+
+.timeLabel {
+  position: absolute;
+  right: 35%;
+  top: -30px;
+  font-size: var(--font-size-tertiary);
+  background: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-primary);
+  transform: translateX(50%);
+  white-space: nowrap;
 }

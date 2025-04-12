@@ -85,7 +85,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
               onClick={() => setShowStatistics(!showStatistics)}
               className={statsStyles.statisticsButton}
             >
-              <span>{t(showStatistics ? 'user.hideStatistics' : 'user.viewStatistics')}</span>
+              <span>{t(showStatistics ? 'stats.hideStatistics' : 'stats.viewStatistics')}</span>
               <span
                 className={`${statsStyles.arrow} ${showStatistics ? statsStyles.arrowUp : statsStyles.arrowDown}`}
               >
@@ -151,7 +151,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                               <div
                                 className={statsStyles.chartBar}
                                 style={{ height: `${heightPx}px` }}
-                                title={`${monthLabel}: ${value} ${t('stats.tasks')}`}
+                                title={`${monthLabel}: ${value} ${t('stats.completedTasks')}`}
                               />
                               <div className={statsStyles.chartBarLabel}>{monthLabel}</div>
                             </div>
@@ -161,66 +161,94 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     </div>
                   </div>
 
-                  <div className={statsStyles.statsBreakdown}>
-                    <div className={statsStyles.breakdownSection}>
-                      <div className={statsStyles.breakdownTitle}>
-                        {t('stats.byCategory') + ' #'}
+                  <div className={statsStyles.breakdownSection}>
+                    <div className={statsStyles.breakdownTitle}>{t('stats.byCategory') + ' #'}</div>
+                    <div className={statsStyles.breakdownItems}>
+                      <div className={statsStyles.breakdownItem}>
+                        <div className={statsStyles.breakdownLabel}>Work</div>
+                        <div className={statsStyles.breakdownValue}>532</div>
                       </div>
-                      <div className={statsStyles.breakdownItems}>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Work</div>
-                          <div className={statsStyles.breakdownValue}>532</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Personal</div>
-                          <div className={statsStyles.breakdownValue}>328</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Study</div>
-                          <div className={statsStyles.breakdownValue}>374</div>
-                        </div>
+                      <div className={statsStyles.breakdownItem}>
+                        <div className={statsStyles.breakdownLabel}>Personal</div>
+                        <div className={statsStyles.breakdownValue}>328</div>
+                      </div>
+                      <div className={statsStyles.breakdownItem}>
+                        <div className={statsStyles.breakdownLabel}>Study</div>
+                        <div className={statsStyles.breakdownValue}>374</div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className={statsStyles.breakdownSection}>
-                      <div className={statsStyles.breakdownTitle}>{t('stats.byPriority')}</div>
-                      <div className={statsStyles.breakdownItems}>
-                        <div className={statsStyles.breakdownItem}>
-                          <div
-                            className={statsStyles.breakdownLabel}
-                            style={{
-                              color: `var(--select-color-${getPriorityColorIndex('high')})`,
-                            }}
-                          >
-                            {t('priority.high')}
-                          </div>
-                          <div className={statsStyles.breakdownValue}>245</div>
+                  <div className={statsStyles.breakdownSection}>
+                    <div className={statsStyles.breakdownTitle}>{t('stats.byPriority')}</div>
+                    <div className={statsStyles.breakdownItems}>
+                      <div className={statsStyles.breakdownItem}>
+                        <div
+                          className={statsStyles.breakdownLabel}
+                          style={{
+                            color: `var(--select-color-${getPriorityColorIndex('high')})`,
+                          }}
+                        >
+                          {t('stats.priority.high')}
                         </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div
-                            className={statsStyles.breakdownLabel}
-                            style={{
-                              color: `var(--select-color-${getPriorityColorIndex('medium')})`,
-                            }}
-                          >
-                            {t('priority.medium')}
-                          </div>
-                          <div className={statsStyles.breakdownValue}>567</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div
-                            className={statsStyles.breakdownLabel}
-                            style={{ color: `var(--select-color-${getPriorityColorIndex('low')})` }}
-                          >
-                            {t('priority.low')}
-                          </div>
-                          <div className={statsStyles.breakdownValue}>422</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>{t('priority.none')}</div>
-                          <div className={statsStyles.breakdownValue}>722</div>
-                        </div>
+                        <div className={statsStyles.breakdownValue}>245</div>
                       </div>
+                      <div className={statsStyles.breakdownItem}>
+                        <div
+                          className={statsStyles.breakdownLabel}
+                          style={{
+                            color: `var(--select-color-${getPriorityColorIndex('medium')})`,
+                          }}
+                        >
+                          {t('stats.priority.medium')}
+                        </div>
+                        <div className={statsStyles.breakdownValue}>567</div>
+                      </div>
+                      <div className={statsStyles.breakdownItem}>
+                        <div
+                          className={statsStyles.breakdownLabel}
+                          style={{ color: `var(--select-color-${getPriorityColorIndex('low')})` }}
+                        >
+                          {t('stats.priority.low')}
+                        </div>
+                        <div className={statsStyles.breakdownValue}>422</div>
+                      </div>
+                      <div className={statsStyles.breakdownItem}>
+                        <div className={statsStyles.breakdownLabel}>{t('stats.priority.none')}</div>
+                        <div className={statsStyles.breakdownValue}>722</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={statsStyles.timeSpentChart}>
+                    <div className={statsStyles.timeSpentTitle}>
+                      {t('stats.timeSpent')}
+                      <span className={statsStyles.year}> 2024</span>
+                    </div>
+                    <div className={statsStyles.timeSpentLine}>
+                      {(() => {
+                        // Генерируем случайное количество часов (от 100 до 500)
+                        const totalHours = Math.floor(Math.random() * 400) + 100;
+                        // Генерируем случайное количество минут (0-59)
+                        const minutes = Math.floor(Math.random() * 60);
+                        // Вычисляем процент заполнения (максимум 500 часов)
+                        const fillPercent = (totalHours / 500) * 100;
+
+                        return (
+                          <>
+                            <div
+                              className={statsStyles.trendLine}
+                              style={{ width: `${fillPercent}%` }}
+                            />
+                            <div
+                              className={statsStyles.timeLabel}
+                              style={{ right: `${100 - fillPercent}%` }}
+                            >
+                              {`${totalHours} ${t('time.hour')} ${minutes} ${t('time.minute')}`}
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
