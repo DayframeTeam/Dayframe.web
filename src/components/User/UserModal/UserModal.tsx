@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../../Modal/Modal';
 import styles from './UserModal.module.scss';
+import statsStyles from './Statistics.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
@@ -9,6 +10,9 @@ import {
   getLevelColorScheme,
 } from '../../../utils/levelUtils';
 import { LevelIndicator } from '../LevelIndicator/LevelIndicator';
+import { useState } from 'react';
+import { Button } from '../../ui/Button/Button';
+import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -27,6 +31,8 @@ type Props = Readonly<{
 export const UserModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
+  const [showStatistics, setShowStatistics] = useState(false);
+
   if (!user) return null;
 
   const currentLevel = calculateLevel(user.exp);
@@ -70,31 +76,157 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
             ))}
           </div>
         </div>
-        <div className={styles.completedTasks}>
-          <div className={styles.completedTasksLabel}>{t('user.completedTasksTotal')}</div>
-          <div className={styles.completedTasksValue}>333</div>
-          <div className={styles.completedByPriority}>
-            <div className={styles.priorityStats}>
-              <div className={styles.priorityItem}>
-                <div className={styles.priorityValue} style={{ color: 'var(--select-color-3)' }}>
-                  125
+
+        <div className={statsStyles.statisticsSection}>
+          <div className={statsStyles.statisticsButtonContainer}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setShowStatistics(!showStatistics)}
+              className={statsStyles.statisticsButton}
+            >
+              <span>{t(showStatistics ? 'user.hideStatistics' : 'user.viewStatistics')}</span>
+              <span
+                className={`${statsStyles.arrow} ${showStatistics ? statsStyles.arrowUp : statsStyles.arrowDown}`}
+              >
+                ▼
+              </span>
+            </Button>
+          </div>
+
+          {showStatistics && (
+            <div className={statsStyles.statisticsContent}>
+              <div className={statsStyles.completedTasksSection}>
+                <div className={statsStyles.completedTasksHeader}>
+                  <div className={statsStyles.completedTasksTitle}>
+                    <span className={statsStyles.completedTasksIcon}>✓</span>
+                    {t('stats.completedTasks')}
+                  </div>
                 </div>
-                <div>{t('user.completedByPriority.high')}</div>
-              </div>
-              <div className={styles.priorityItem}>
-                <div className={styles.priorityValue} style={{ color: 'var(--select-color-2)' }}>
-                  98
+
+                <div className={statsStyles.completedTasksOverview}>
+                  <div className={statsStyles.completedTasksNumbers}>
+                    <div className={statsStyles.completedTasksNumber}>
+                      <div className={statsStyles.completedTasksValue}>1,234</div>
+                      <div className={statsStyles.completedTasksLabel}>{t('stats.allTime')}</div>
+                    </div>
+                    <div className={statsStyles.completedTasksNumber}>
+                      <div className={statsStyles.completedTasksValue}>156</div>
+                      <div className={statsStyles.completedTasksLabel}>{t('stats.thisMonth')}</div>
+                    </div>
+                    <div className={statsStyles.completedTasksNumber}>
+                      <div className={statsStyles.completedTasksValue}>12</div>
+                      <div className={statsStyles.completedTasksLabel}>{t('stats.today')}</div>
+                    </div>
+                  </div>
+
+                  <div className={statsStyles.completedTasksChart}>
+                    <div className={statsStyles.completedTasksChartTitle}>
+                      <span>{t('stats.monthlyProgress')}</span>
+                      <span className={statsStyles.year}>2024</span>
+                    </div>
+                    <div className={statsStyles.chartBars}>
+                      {(() => {
+                        // Генерируем тестовые данные
+                        const monthlyData = Array.from(
+                          { length: 12 },
+                          () => Math.floor(Math.random() * 150) + 10
+                        );
+
+                        const maxValue = Math.max(...monthlyData);
+                        const MAX_HEIGHT = 180;
+
+                        return monthlyData.map((value, index) => {
+                          const heightPercentage = (value / maxValue) * 100;
+                          const heightPx = Math.max((heightPercentage * MAX_HEIGHT) / 100, 20);
+
+                          // Используем правильный индекс для месяца
+                          const monthDate = new Date(2024, index);
+                          const monthLabel = monthDate.toLocaleString('default', {
+                            month: 'short',
+                          });
+
+                          return (
+                            <div key={index + 1} className={statsStyles.chartBarWrapper}>
+                              <div
+                                className={statsStyles.chartBar}
+                                style={{ height: `${heightPx}px` }}
+                                title={`${monthLabel}: ${value} ${t('stats.tasks')}`}
+                              />
+                              <div className={statsStyles.chartBarLabel}>{monthLabel}</div>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+
+                  <div className={statsStyles.statsBreakdown}>
+                    <div className={statsStyles.breakdownSection}>
+                      <div className={statsStyles.breakdownTitle}>
+                        {t('stats.byCategory') + ' #'}
+                      </div>
+                      <div className={statsStyles.breakdownItems}>
+                        <div className={statsStyles.breakdownItem}>
+                          <div className={statsStyles.breakdownLabel}>Work</div>
+                          <div className={statsStyles.breakdownValue}>532</div>
+                        </div>
+                        <div className={statsStyles.breakdownItem}>
+                          <div className={statsStyles.breakdownLabel}>Personal</div>
+                          <div className={statsStyles.breakdownValue}>328</div>
+                        </div>
+                        <div className={statsStyles.breakdownItem}>
+                          <div className={statsStyles.breakdownLabel}>Study</div>
+                          <div className={statsStyles.breakdownValue}>374</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={statsStyles.breakdownSection}>
+                      <div className={statsStyles.breakdownTitle}>{t('stats.byPriority')}</div>
+                      <div className={statsStyles.breakdownItems}>
+                        <div className={statsStyles.breakdownItem}>
+                          <div
+                            className={statsStyles.breakdownLabel}
+                            style={{
+                              color: `var(--select-color-${getPriorityColorIndex('high')})`,
+                            }}
+                          >
+                            {t('priority.high')}
+                          </div>
+                          <div className={statsStyles.breakdownValue}>245</div>
+                        </div>
+                        <div className={statsStyles.breakdownItem}>
+                          <div
+                            className={statsStyles.breakdownLabel}
+                            style={{
+                              color: `var(--select-color-${getPriorityColorIndex('medium')})`,
+                            }}
+                          >
+                            {t('priority.medium')}
+                          </div>
+                          <div className={statsStyles.breakdownValue}>567</div>
+                        </div>
+                        <div className={statsStyles.breakdownItem}>
+                          <div
+                            className={statsStyles.breakdownLabel}
+                            style={{ color: `var(--select-color-${getPriorityColorIndex('low')})` }}
+                          >
+                            {t('priority.low')}
+                          </div>
+                          <div className={statsStyles.breakdownValue}>422</div>
+                        </div>
+                        <div className={statsStyles.breakdownItem}>
+                          <div className={statsStyles.breakdownLabel}>{t('priority.none')}</div>
+                          <div className={statsStyles.breakdownValue}>722</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>{t('user.completedByPriority.medium')}</div>
-              </div>
-              <div className={styles.priorityItem}>
-                <div className={styles.priorityValue} style={{ color: 'var(--select-color-1)' }}>
-                  110
-                </div>
-                <div>{t('user.completedByPriority.low')}</div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </Modal>

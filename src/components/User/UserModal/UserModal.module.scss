@@ -90,7 +90,6 @@
   color: var(--text-secondary);
   font-size: var(--font-size-secondary);
   text-align: center;
-  margin: 0.5rem 0;
 }
 
 .examplesList {
@@ -107,49 +106,4 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-}
-
-.completedTasks {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.completedTasksLabel {
-  color: var(--text-secondary);
-  font-size: var(--font-size-secondary);
-}
-
-.completedTasksValue {
-  font-size: var(--font-size-big);
-  font-weight: var(--font-weight-big);
-  color: var(--text-primary);
-}
-
-.completedByPriority {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.priorityStats {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.priorityItem {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: var(--font-size-tertiary);
-
-  div {
-    font-size: var(--font-size-tertiary);
-  }
 }
