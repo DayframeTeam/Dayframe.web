@@ -229,6 +229,271 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
               </div>
 
               <div className={statsStyles.sectionWrapper}>
+                <div className={statsStyles.productivityTitle}>
+                  <span>🧠</span>
+                  {t('stats.productivity.title')}
+                </div>
+                {(() => {
+                  // Генерируем случайное время для пика продуктивности (10:00-14:00)
+                  const peakHour = Math.floor(Math.random() * 4) + 10; // 10-13
+                  const peakMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
+
+                  return (
+                    <>
+                      <div className={statsStyles.peakTimeWrapper}>
+                        <div className={statsStyles.peakTimeLabel}>
+                          {t('stats.productivity.peakTime')}
+                        </div>
+                        <div className={statsStyles.peakTimeRange}>
+                          {t('stats.productivity.timeRange', {
+                            start: `${String(peakHour).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
+                            end: `${String((peakHour + 2) % 24).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
+                          })}
+                        </div>
+                      </div>
+
+                      <div className={statsStyles.clockContainer}>
+                        <div className={statsStyles.clockFace}>
+                          <div className={statsStyles.clockMarkers}>
+                            {[...Array(24)].map((_, i) => (
+                              <div
+                                key={i}
+                                className={statsStyles.clockMarker}
+                                style={{
+                                  transform: `rotate(${i * 15}deg)`,
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber0}`}>
+                            0
+                          </div>
+                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber6}`}>
+                            6
+                          </div>
+                          <div
+                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber12}`}
+                          >
+                            12
+                          </div>
+                          <div
+                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber18}`}
+                          >
+                            18
+                          </div>
+                          <div
+                            className={statsStyles.clockSector}
+                            style={{
+                              clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
+                                100 +
+                                95 *
+                                  Math.sin(
+                                    ((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 -
+                                      Math.PI / 2
+                                  )
+                              } A 95,95 0 ${
+                                ((peakHour + 2) % 24) - peakHour > 12 ? 1 : 0
+                              },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
+                                100 +
+                                95 *
+                                  Math.sin(
+                                    ((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) /
+                                      180 -
+                                      Math.PI / 2
+                                  )
+                              } Z')`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                <div className={statsStyles.dailyComparison}>
+                  <div className={statsStyles.dailyComparisonTitle}>
+                    {t('stats.productivity.dailyComparison')}
+                  </div>
+                  <div className={statsStyles.dailyList}>
+                    {(() => {
+                      // Генерируем данные о продуктивности по дням недели
+                      const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
+                      // Переупорядочиваем дни, чтобы начинались с понедельника
+                      const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
+
+                      const dailyData = reorderedWeekdays.map(() => {
+                        const tasks = Math.floor(Math.random() * 10) + 5;
+                        // Генерируем случайное время для каждого дня
+                        const startHour = Math.floor(Math.random() * 8) + 9; // 9-16
+                        const startMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
+                        const durationHours = Math.floor(Math.random() * 3) + 2; // 2-4 часа
+
+                        return {
+                          tasks,
+                          timeRange: {
+                            start: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
+                            end: `${String((startHour + durationHours) % 24).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
+                          },
+                        };
+                      });
+
+                      return reorderedWeekdays.map((day, index) => (
+                        <div key={day} className={statsStyles.dailyItem}>
+                          <div className={statsStyles.dailyDay}>{day}</div>
+                          <div className={statsStyles.dailyTimeRange}>
+                            {dailyData[index].timeRange.start} - {dailyData[index].timeRange.end}
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
+              </div>
+
+              <div className={statsStyles.sectionWrapper}>
+                <div className={statsStyles.timeAnalysisTitle}>
+                  <span>⏱️</span>
+                  {t('stats.timeAnalysis.title')}
+                </div>
+
+                {(() => {
+                  // Функция для генерации массива уникальных цветов
+                  const generateUniqueColors = (count: number) => {
+                    const colors: string[] = [];
+                    const hueStep = 360 / count; // Равномерно распределяем оттенки
+
+                    for (let i = 0; i < count; i++) {
+                      // Добавляем небольшую случайность к базовому оттенку
+                      const hue = (i * hueStep + Math.random() * 20 - 10) % 360;
+                      // Более сбалансированные параметры для насыщенности и яркости
+                      colors.push(`hsl(${hue}, 65%, 65%)`);
+                    }
+
+                    return colors;
+                  };
+
+                  // Список возможных категорий
+                  const allCategories = [
+                    'Work',
+                    'Study',
+                    'Personal',
+                    'Health',
+                    'Shopping',
+                    'Family',
+                    'Friends',
+                    'Hobby',
+                    'Sport',
+                    'Reading',
+                    'Learning',
+                    'Projects',
+                    'Meetings',
+                    'Planning',
+                    'Rest',
+                  ];
+
+                  // Генерируем данные для каждого дня
+                  const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
+                  const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
+
+                  const dailyData = reorderedWeekdays.map(() => {
+                    // Выбираем случайное количество категорий (2-5) для этого дня
+                    const numCategories = Math.floor(Math.random() * 4) + 2;
+
+                    // Генерируем уникальные цвета для этого дня
+                    const uniqueColors = generateUniqueColors(numCategories);
+
+                    // Перемешиваем массив категорий и берем первые numCategories элементов
+                    const shuffledCategories = [...allCategories]
+                      .sort(() => Math.random() - 0.5)
+                      .slice(0, numCategories)
+                      .map((label, index) => ({
+                        id: label.toLowerCase(),
+                        label,
+                        color: uniqueColors[index], // Используем предварительно сгенерированный уникальный цвет
+                      }));
+
+                    // Общее время в минутах (2-6 часов)
+                    const totalMinutes = (Math.floor(Math.random() * 4) + 2) * 60;
+
+                    // Распределяем время по категориям
+                    let remainingMinutes = totalMinutes;
+                    const categoryTimes = shuffledCategories.map((_, index) => {
+                      if (index === shuffledCategories.length - 1) {
+                        return remainingMinutes;
+                      }
+                      const minutes = Math.floor(Math.random() * remainingMinutes * 0.6);
+                      remainingMinutes -= minutes;
+                      return minutes;
+                    });
+
+                    return {
+                      total: totalMinutes,
+                      categories: shuffledCategories.map((cat, index) => ({
+                        ...cat,
+                        minutes: categoryTimes[index],
+                      })),
+                    };
+                  });
+
+                  return reorderedWeekdays.map((day, dayIndex) => {
+                    const dayData = dailyData[dayIndex];
+                    const hours = Math.floor(dayData.total / 60);
+                    const minutes = dayData.total % 60;
+
+                    return (
+                      <div key={day} className={statsStyles.timeBar}>
+                        <div className={statsStyles.timeBarHeader}>
+                          <div className={statsStyles.timeBarDay}>{day}</div>
+                          <div className={statsStyles.timeBarTotal}>
+                            {t('stats.timeAnalysis.hours', { hours, minutes })}
+                          </div>
+                        </div>
+                        <div className={statsStyles.stackedBar}>
+                          {dayData.categories.map((category) => {
+                            const percentage = (category.minutes / dayData.total) * 100;
+                            const hours = Math.floor(category.minutes / 60);
+                            const minutes = category.minutes % 60;
+
+                            return (
+                              <div
+                                key={category.id}
+                                className={statsStyles.stackedSegment}
+                                style={{
+                                  width: `${percentage}%`,
+                                  backgroundColor: category.color,
+                                }}
+                                title={`${category.label}: ${t('stats.timeAnalysis.hours', {
+                                  hours,
+                                  minutes,
+                                })} (${Math.round(percentage)}%)`}
+                              >
+                                {percentage > 15 && (
+                                  <div className={statsStyles.segmentTooltip}>
+                                    {Math.round(percentage)}%
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className={statsStyles.timeBarLegend}>
+                          {dayData.categories.map((category) => (
+                            <div key={category.id} className={statsStyles.legendItem}>
+                              <div
+                                className={statsStyles.legendColor}
+                                style={{ backgroundColor: category.color }}
+                              />
+                              {category.label}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+
+              <div className={statsStyles.sectionWrapper}>
                 <div className={statsStyles.completedTasksHeader}>
                   <div className={statsStyles.completedTasksTitle}>
                     <span className={statsStyles.completedTasksIcon}>✓</span>
@@ -513,271 +778,6 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                   />
                   {t('stats.legend.more')}
                 </div>
-              </div>
-
-              <div className={statsStyles.sectionWrapper}>
-                <div className={statsStyles.productivityTitle}>
-                  <span>🧠</span>
-                  {t('stats.productivity.title')}
-                </div>
-                {(() => {
-                  // Генерируем случайное время для пика продуктивности (10:00-14:00)
-                  const peakHour = Math.floor(Math.random() * 4) + 10; // 10-13
-                  const peakMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
-
-                  return (
-                    <>
-                      <div className={statsStyles.peakTimeWrapper}>
-                        <div className={statsStyles.peakTimeLabel}>
-                          {t('stats.productivity.peakTime')}
-                        </div>
-                        <div className={statsStyles.peakTimeRange}>
-                          {t('stats.productivity.timeRange', {
-                            start: `${String(peakHour).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
-                            end: `${String((peakHour + 2) % 24).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
-                          })}
-                        </div>
-                      </div>
-
-                      <div className={statsStyles.clockContainer}>
-                        <div className={statsStyles.clockFace}>
-                          <div className={statsStyles.clockMarkers}>
-                            {[...Array(24)].map((_, i) => (
-                              <div
-                                key={i}
-                                className={statsStyles.clockMarker}
-                                style={{
-                                  transform: `rotate(${i * 15}deg)`,
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber0}`}>
-                            0
-                          </div>
-                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber6}`}>
-                            6
-                          </div>
-                          <div
-                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber12}`}
-                          >
-                            12
-                          </div>
-                          <div
-                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber18}`}
-                          >
-                            18
-                          </div>
-                          <div
-                            className={statsStyles.clockSector}
-                            style={{
-                              clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
-                                100 +
-                                95 *
-                                  Math.sin(
-                                    ((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 -
-                                      Math.PI / 2
-                                  )
-                              } A 95,95 0 ${
-                                ((peakHour + 2) % 24) - peakHour > 12 ? 1 : 0
-                              },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
-                                100 +
-                                95 *
-                                  Math.sin(
-                                    ((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) /
-                                      180 -
-                                      Math.PI / 2
-                                  )
-                              } Z')`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </>
-                  );
-                })()}
-
-                <div className={statsStyles.dailyComparison}>
-                  <div className={statsStyles.dailyComparisonTitle}>
-                    {t('stats.productivity.dailyComparison')}
-                  </div>
-                  <div className={statsStyles.dailyList}>
-                    {(() => {
-                      // Генерируем данные о продуктивности по дням недели
-                      const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
-                      // Переупорядочиваем дни, чтобы начинались с понедельника
-                      const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
-
-                      const dailyData = reorderedWeekdays.map(() => {
-                        const tasks = Math.floor(Math.random() * 10) + 5;
-                        // Генерируем случайное время для каждого дня
-                        const startHour = Math.floor(Math.random() * 8) + 9; // 9-16
-                        const startMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
-                        const durationHours = Math.floor(Math.random() * 3) + 2; // 2-4 часа
-
-                        return {
-                          tasks,
-                          timeRange: {
-                            start: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
-                            end: `${String((startHour + durationHours) % 24).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
-                          },
-                        };
-                      });
-
-                      return reorderedWeekdays.map((day, index) => (
-                        <div key={day} className={statsStyles.dailyItem}>
-                          <div className={statsStyles.dailyDay}>{day}</div>
-                          <div className={statsStyles.dailyTimeRange}>
-                            {dailyData[index].timeRange.start} - {dailyData[index].timeRange.end}
-                          </div>
-                        </div>
-                      ));
-                    })()}
-                  </div>
-                </div>
-              </div>
-
-              <div className={statsStyles.sectionWrapper}>
-                <div className={statsStyles.timeAnalysisTitle}>
-                  <span>⏱️</span>
-                  {t('stats.timeAnalysis.title')}
-                </div>
-
-                {(() => {
-                  // Функция для генерации массива уникальных цветов
-                  const generateUniqueColors = (count: number) => {
-                    const colors: string[] = [];
-                    const hueStep = 360 / count; // Равномерно распределяем оттенки
-
-                    for (let i = 0; i < count; i++) {
-                      // Добавляем небольшую случайность к базовому оттенку
-                      const hue = (i * hueStep + Math.random() * 20 - 10) % 360;
-                      // Более сбалансированные параметры для насыщенности и яркости
-                      colors.push(`hsl(${hue}, 65%, 65%)`);
-                    }
-
-                    return colors;
-                  };
-
-                  // Список возможных категорий
-                  const allCategories = [
-                    'Work',
-                    'Study',
-                    'Personal',
-                    'Health',
-                    'Shopping',
-                    'Family',
-                    'Friends',
-                    'Hobby',
-                    'Sport',
-                    'Reading',
-                    'Learning',
-                    'Projects',
-                    'Meetings',
-                    'Planning',
-                    'Rest',
-                  ];
-
-                  // Генерируем данные для каждого дня
-                  const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
-                  const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
-
-                  const dailyData = reorderedWeekdays.map(() => {
-                    // Выбираем случайное количество категорий (2-5) для этого дня
-                    const numCategories = Math.floor(Math.random() * 4) + 2;
-
-                    // Генерируем уникальные цвета для этого дня
-                    const uniqueColors = generateUniqueColors(numCategories);
-
-                    // Перемешиваем массив категорий и берем первые numCategories элементов
-                    const shuffledCategories = [...allCategories]
-                      .sort(() => Math.random() - 0.5)
-                      .slice(0, numCategories)
-                      .map((label, index) => ({
-                        id: label.toLowerCase(),
-                        label,
-                        color: uniqueColors[index], // Используем предварительно сгенерированный уникальный цвет
-                      }));
-
-                    // Общее время в минутах (2-6 часов)
-                    const totalMinutes = (Math.floor(Math.random() * 4) + 2) * 60;
-
-                    // Распределяем время по категориям
-                    let remainingMinutes = totalMinutes;
-                    const categoryTimes = shuffledCategories.map((_, index) => {
-                      if (index === shuffledCategories.length - 1) {
-                        return remainingMinutes;
-                      }
-                      const minutes = Math.floor(Math.random() * remainingMinutes * 0.6);
-                      remainingMinutes -= minutes;
-                      return minutes;
-                    });
-
-                    return {
-                      total: totalMinutes,
-                      categories: shuffledCategories.map((cat, index) => ({
-                        ...cat,
-                        minutes: categoryTimes[index],
-                      })),
-                    };
-                  });
-
-                  return reorderedWeekdays.map((day, dayIndex) => {
-                    const dayData = dailyData[dayIndex];
-                    const hours = Math.floor(dayData.total / 60);
-                    const minutes = dayData.total % 60;
-
-                    return (
-                      <div key={day} className={statsStyles.timeBar}>
-                        <div className={statsStyles.timeBarHeader}>
-                          <div className={statsStyles.timeBarDay}>{day}</div>
-                          <div className={statsStyles.timeBarTotal}>
-                            {t('stats.timeAnalysis.hours', { hours, minutes })}
-                          </div>
-                        </div>
-                        <div className={statsStyles.stackedBar}>
-                          {dayData.categories.map((category) => {
-                            const percentage = (category.minutes / dayData.total) * 100;
-                            const hours = Math.floor(category.minutes / 60);
-                            const minutes = category.minutes % 60;
-
-                            return (
-                              <div
-                                key={category.id}
-                                className={statsStyles.stackedSegment}
-                                style={{
-                                  width: `${percentage}%`,
-                                  backgroundColor: category.color,
-                                }}
-                                title={`${category.label}: ${t('stats.timeAnalysis.hours', {
-                                  hours,
-                                  minutes,
-                                })} (${Math.round(percentage)}%)`}
-                              >
-                                {percentage > 15 && (
-                                  <div className={statsStyles.segmentTooltip}>
-                                    {Math.round(percentage)}%
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className={statsStyles.timeBarLegend}>
-                          {dayData.categories.map((category) => (
-                            <div key={category.id} className={statsStyles.legendItem}>
-                              <div
-                                className={statsStyles.legendColor}
-                                style={{ backgroundColor: category.color }}
-                              />
-                              {category.label}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  });
-                })()}
               </div>
             </div>
           )}
