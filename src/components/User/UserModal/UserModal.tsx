@@ -111,6 +111,55 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
           {showStatistics && (
             <div>
               <div className={statsStyles.sectionWrapper}>
+                <div className={statsStyles.streakHeader}>
+                  <span>🔥</span>
+                  {t('stats.streaks.title')}
+                </div>
+                <div className={statsStyles.streakBars}>
+                  {(() => {
+                    // Генерируем случайные значения для стриков
+                    const bestStreak = Math.floor(Math.random() * 30) + 15; // 15-45 дней
+                    const currentStreak = Math.floor(Math.random() * bestStreak); // 0-bestStreak дней
+
+                    return (
+                      <>
+                        {/* Текущий стрик */}
+                        <div className={statsStyles.streakBar}>
+                          <div className={statsStyles.streakLabel}>
+                            {t('stats.streaks.current')}
+                            <div className={statsStyles.streakValue}>
+                              <span>{currentStreak}</span>
+                              <span>{t('stats.streaks.days')}</span>
+                            </div>
+                          </div>
+                          <div className={statsStyles.streakProgress}>
+                            <div
+                              className={statsStyles.streakFill}
+                              style={{ width: `${(currentStreak / bestStreak) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Максимальный стрик */}
+                        <div className={statsStyles.streakBar}>
+                          <div className={statsStyles.streakLabel}>
+                            {t('stats.streaks.best')}
+                            <div className={statsStyles.streakValue}>
+                              <span>{bestStreak}</span>
+                              <span>{t('stats.streaks.days')}</span>
+                            </div>
+                          </div>
+                          <div className={statsStyles.streakProgress}>
+                            <div className={statsStyles.streakFill} style={{ width: '100%' }} />
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              <div className={statsStyles.sectionWrapper}>
                 <div className={statsStyles.completedTasksHeader}>
                   <div className={statsStyles.completedTasksTitle}>
                     <span className={statsStyles.completedTasksIcon}>✓</span>

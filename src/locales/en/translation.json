@@ -143,6 +143,12 @@
     "legend": {
       "less": "Less tasks completed",
       "more": "More tasks completed"
+    },
+    "streaks": {
+      "title": "Task Streaks",
+      "current": "Current streak",
+      "best": "Best streak",
+      "days": "days"
     }
   },
   "weather": {
