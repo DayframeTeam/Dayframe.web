@@ -137,7 +137,7 @@
     "yearlyProgress": "Monthly progress",
     "byCategory": "By category",
     "byPriority": "By priority",
-    "timeSpent": "Time spent on tasks",
+    "timeSpent": "Time spent on completed tasks",
     "activity": "Activity",
     "tasksCompleted": "tasks completed",
     "legend": {
