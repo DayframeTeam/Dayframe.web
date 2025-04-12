@@ -149,13 +149,27 @@
       "current": "Текущая серия",
       "best": "Лучшая серия",
       "days": "дней"
+    },
+    "productivity": {
+      "title": "Продуктивность",
+      "peakTime": "Самое продуктивное время за все дни",
+      "timeRange": "{{start}} - {{end}}",
+      "dailyComparison": "Самое продуктивное время в дне",
+      "mostProductive": "Самый продуктивный день",
+      "tasksCompleted": "выполненных задач"
+    },
+    "timeAnalysis": {
+      "title": "Среднее время на задачи",
+      "totalTime": "Общее время",
+      "perDay": "Время в день",
+      "byCategory": "Время по категориям",
+      "hours": "{{hours}}ч {{minutes}}м"
     }
   },
   "weather": {
     "location": "{{location}}",
     "detectLocation": "Определить местоположение",
     "loading": "Загрузка погоды...",
-    "forecast": "(прогноз)",
     "errors": {
       "permissionDenied": "⚠️ Доступ к местоположению запрещен. Пожалуйста, разрешите доступ в настройках браузера",
       "positionUnavailable": "⚠️ Не удалось определить местоположение",

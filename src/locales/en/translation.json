@@ -149,13 +149,27 @@
       "current": "Current streak",
       "best": "Best streak",
       "days": "days"
+    },
+    "productivity": {
+      "title": "Productivity",
+      "peakTime": "Peak productivity time of all days",
+      "timeRange": "{{start}} - {{end}}",
+      "dailyComparison": "Most productive time of the day",
+      "mostProductive": "Most productive day",
+      "tasksCompleted": "tasks completed"
+    },
+    "timeAnalysis": {
+      "title": "Average time per tasks",
+      "totalTime": "Total time",
+      "perDay": "Time per day",
+      "byCategory": "Time by category",
+      "hours": "{{hours}}h {{minutes}}m"
     }
   },
   "weather": {
     "location": "{{location}}",
     "detectLocation": "Detect location",
     "loading": "Loading weather...",
-    "forecast": "(forecast)",
     "errors": {
       "permissionDenied": "⚠️ Location access denied. Please allow access in browser settings",
       "positionUnavailable": "⚠️ Could not determine location",

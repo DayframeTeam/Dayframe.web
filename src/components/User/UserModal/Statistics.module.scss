@@ -377,6 +377,7 @@
 .activityLegend {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
   margin-top: 1rem;
   padding: 0.5rem;
@@ -472,4 +473,220 @@
   100% {
     transform: translateX(100%);
   }
+}
+
+.productivityTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clockContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.clockFace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.clockMarkers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.clockMarker {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background: var(--text-secondary);
+  transform-origin: 50% 100px;
+  left: calc(50% - 1px);
+  top: 0;
+}
+
+.clockHand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.hourHand {
+  width: 4px;
+  height: 60px;
+  margin-left: -2px;
+}
+
+.minuteHand {
+  width: 3px;
+  height: 80px;
+  margin-left: -1.5px;
+}
+
+.peakTimeWrapper {
+  margin: 1rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.peakTimeLabel {
+  text-align: center;
+  font-size: var(--font-size-secondary);
+}
+
+.peakTimeRange {
+  text-align: center;
+  font-size: var(--font-size-secondary);
+  font-weight: 500;
+}
+
+.dailyComparison {
+  margin-top: 2rem;
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 16px;
+}
+
+.dailyComparisonTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.dailyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dailyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.dailyDay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-size-secondary);
+}
+
+.dailyTaskCount {
+  font-weight: 500;
+  color: var(--accent);
+  min-width: 2rem;
+  text-align: right;
+}
+
+.dailyTimeRange {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.timeAnalysis {
+  margin-top: 2rem;
+}
+
+.timeAnalysisTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeBar {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.timeBarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.timeBarDay {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.timeBarTotal {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.stackedBar {
+  height: 24px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.stackedSegment {
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.segmentTooltip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.timeBarLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
 }
