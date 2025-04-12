@@ -123,7 +123,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
                   <div className={statsStyles.completedTasksChart}>
                     <div className={statsStyles.completedTasksChartTitle}>
-                      <span>{t('stats.monthlyProgress')}</span>
+                      <span>{t('stats.yearlyProgress')}</span>
                       <span className={statsStyles.year}>2024</span>
                     </div>
                     <div className={statsStyles.chartBars}>
