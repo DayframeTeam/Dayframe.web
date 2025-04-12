@@ -56,7 +56,7 @@ export const LevelIndicator = memo(({ exp, size = undefined }: LevelIndicatorPro
           r={radius}
           fill="none"
           strokeWidth="8"
-          stroke={colors.accent}
+          stroke={exp ? colors.accent : 'var(--bg-tertiary)'}
         />
       </svg>
       <div className={styles.expCircle}>

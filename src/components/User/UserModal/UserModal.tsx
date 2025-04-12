@@ -49,6 +49,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
     currentMonth.getFullYear() === maxDate.getFullYear();
 
   const progressRef = useRef<HTMLDivElement>(null);
+  const currentStreakFillRef = useRef<HTMLDivElement>(null);
+  const currentStreakValueRef = useRef<HTMLDivElement>(null);
 
   const currentLevel = user ? calculateLevel(user.exp) : 0;
   const nextLevelExp = calculateNextLevelExp(currentLevel);
@@ -67,6 +69,56 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
       });
     }
   }, [isOpen, progressPercent, user]);
+
+  useEffect(() => {
+    if (showStatistics) {
+      // Анимация для текущего стрика
+      if (currentStreakFillRef.current) {
+        const currentStreakFill = currentStreakFillRef.current;
+        const targetWidth = currentStreakFill.style.width;
+        currentStreakFill.style.width = '0%';
+
+        animate(currentStreakFill, {
+          width: {
+            from: '0%',
+            to: targetWidth,
+            duration: 800,
+            ease: 'outQuad',
+          },
+        });
+      }
+
+      // Анимация для значения текущего стрика
+      if (currentStreakValueRef.current) {
+        const currentStreakValue = currentStreakValueRef.current;
+        const targetValue = currentStreakValue.textContent;
+        const targetNumber = parseInt(targetValue || '0');
+        currentStreakValue.textContent = '0';
+
+        // Используем CSS-анимацию для числового значения
+        currentStreakValue.style.transition = 'none';
+        currentStreakValue.style.opacity = '0';
+
+        setTimeout(() => {
+          currentStreakValue.style.transition = 'opacity 0.3s ease';
+          currentStreakValue.style.opacity = '1';
+
+          let currentNumber = 0;
+          const step = targetNumber / 20; // 20 шагов анимации
+          const interval = 800 / 20; // 800ms / 20 шагов
+
+          const numberInterval = setInterval(() => {
+            currentNumber += step;
+            if (currentNumber >= targetNumber) {
+              currentNumber = targetNumber;
+              clearInterval(numberInterval);
+            }
+            currentStreakValue.textContent = Math.floor(currentNumber).toString();
+          }, interval);
+        }, 50);
+      }
+    }
+  }, [showStatistics]);
 
   if (!user) return null;
 
@@ -144,13 +196,14 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                           <div className={statsStyles.streakLabel}>
                             {t('stats.streaks.current')}
                             <div className={statsStyles.streakValue}>
-                              <span>{currentStreak}</span>
+                              <span ref={currentStreakValueRef}>{currentStreak}</span>
                               <span>{t('stats.streaks.days')}</span>
                             </div>
                           </div>
                           <div className={statsStyles.streakProgress}>
                             <div
                               className={statsStyles.streakFill}
+                              ref={currentStreakFillRef}
                               style={{ width: `${(currentStreak / bestStreak) * 100}%` }}
                             />
                           </div>
