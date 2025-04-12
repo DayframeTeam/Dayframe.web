@@ -1,5 +1,5 @@
 .statisticsSection {
-  margin-top: 20px;
+  margin-top: 1rem;
   padding: 16px;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .statisticsContent {
-  margin-top: 24px;
+  margin-top: 1rem;
 }
 
 // Completed Tasks Section
@@ -49,7 +49,7 @@
 }
 
 .completedTasksHeader {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .completedTasksTitle {
@@ -169,12 +169,13 @@
   background: var(--bg-primary);
   border-radius: var(--border-radius-primary);
   padding: 16px;
+  margin-bottom: 0.5rem;
 }
 
 .breakdownTitle {
   font-size: var(--font-size-secondary);
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  margin-bottom: 0.5rem;
 }
 
 .breakdownItems {
