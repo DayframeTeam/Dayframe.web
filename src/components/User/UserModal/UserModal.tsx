@@ -473,33 +473,49 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       <div className={statsStyles.clockContainer}>
                         <div className={statsStyles.clockFace}>
                           <div className={statsStyles.clockMarkers}>
-                            {[...Array(12)].map((_, i) => (
+                            {[...Array(24)].map((_, i) => (
                               <div
                                 key={i}
                                 className={statsStyles.clockMarker}
                                 style={{
-                                  transform: `rotate(${i * 30}deg)`,
+                                  transform: `rotate(${i * 15}deg)`,
                                 }}
                               />
                             ))}
                           </div>
+                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber0}`}>
+                            0
+                          </div>
+                          <div className={`${statsStyles.clockNumber} ${statsStyles.clockNumber6}`}>
+                            6
+                          </div>
+                          <div
+                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber12}`}
+                          >
+                            12
+                          </div>
+                          <div
+                            className={`${statsStyles.clockNumber} ${statsStyles.clockNumber18}`}
+                          >
+                            18
+                          </div>
                           <div
                             className={statsStyles.clockSector}
                             style={{
-                              clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 30 * Math.PI) / 180 - Math.PI / 2)},${
+                              clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
                                 100 +
                                 95 *
                                   Math.sin(
-                                    ((peakHour + peakMinute / 60) * 30 * Math.PI) / 180 -
+                                    ((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 -
                                       Math.PI / 2
                                   )
                               } A 95,95 0 ${
                                 ((peakHour + 2) % 24) - peakHour > 12 ? 1 : 0
-                              },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 30 * Math.PI) / 180 - Math.PI / 2)},${
+                              },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
                                 100 +
                                 95 *
                                   Math.sin(
-                                    ((((peakHour + 2) % 24) + peakMinute / 60) * 30 * Math.PI) /
+                                    ((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) /
                                       180 -
                                       Math.PI / 2
                                   )

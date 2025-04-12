@@ -491,9 +491,9 @@
 }
 
 .clockFace {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
 }
 
@@ -511,6 +511,37 @@
   transform-origin: 50% 100px;
   left: calc(50% - 1px);
   top: 0;
+}
+
+.clockNumber {
+  position: absolute;
+  font-size: 14px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.clockNumber0 {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clockNumber6 {
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.clockNumber12 {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clockNumber18 {
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .clockSector {
