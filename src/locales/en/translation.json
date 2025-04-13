@@ -70,6 +70,14 @@
       }
     }
   },
+  "templates": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "quests": "Quests",
+    "custom": "Selected days",
+    "noTasks": "No template tasks",
+    "activeToggle": "Turn on/off template task"
+  },
   "ui": {
     "select": {
       "placeholder": "Select..."
@@ -178,6 +186,12 @@
       "noCity": "⚠️ Could not determine city",
       "fetchError": "⚠️ Error fetching location data",
       "unknown": "⚠️ Unknown error"
+    }
+  },
+  "FAQ": {
+    "FAQ": "Information",
+    "quests": {
+      "description": "Quests are tasks you create yourself — just like in a game. Ask the Telegram bot to pick one for you and get your quest of the day!"
     }
   }
 }

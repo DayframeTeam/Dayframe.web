@@ -48,7 +48,7 @@ export type TemplateTask = {
   is_done: boolean; // Активен ли шаблон (можно временно выключить) базово включен
   special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
 
-  repeat_rule: RepeatRule; // Правило повторения: daily | weekly | [дни недели]
+  repeat_rule: RepeatRule; // Правило повторения: daily | weekly | quests | [дни недели]
   start_date?: string; // Начало действия шаблона (UTC) (опционально)
   end_date?: string; // Конец действия шаблона (UTC) (опционально)
 
@@ -58,6 +58,7 @@ export type TemplateTask = {
 export type RepeatRule =
   | 'daily' // Каждый день
   | 'weekly' // Каждую неделю
+  | 'quests' // Квесты
   | number[]; // Конкретные дни недели (например, [1, 3, 5] = Пн, Ср, Пт)
 
 export type Subtask = {

@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  background-color: var(--bg-secondary);
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  cursor: default;
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-primary);
+  font-weight: var(--font-weight-big);
+
+  &.selected {
+    background-color: var(--accent);
+    color: var(--text-on-accent);
+  }
+
+  &.selectable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-tertiary);
+    }
+
+    &.selected:hover {
+      background-color: var(--accent-muted);
+    }
+  }
+}
+
+.label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-secondary);
+  margin-right: 0.5rem;
+}

@@ -2,9 +2,9 @@
   position: relative;
   background: var(--bg-secondary);
   padding: 1rem;
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius-task);
   box-shadow: 0 1px 3px var(--shadow-color);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--bg-secondary);
   display: flex;
   flex-direction: column;
   gap: 0.4rem;

@@ -1,0 +1,47 @@
+.item {
+  display: flex;
+  width: 100%;
+}
+
+.info {
+  width: 100%;
+  background-color: var(--bg-primary);
+  padding: 1rem;
+  border-top-left-radius: var(--border-radius-task);
+  border-bottom-left-radius: var(--border-radius-task);
+  border-left: 4px solid var(--bg-primary);
+}
+
+.metaAndTiming {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.meta,
+.timing {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
+
+  span {
+    font-size: var(--font-size-secondary);
+  }
+}
+
+.templatesubtaskToggle {
+  border: none;
+  width: 100%;
+  background-color: var(--bg-primary);
+
+  &:hover {
+    background-color: var(--bg-primary);
+  }
+}
+
+.repeatDays {
+  margin-top: 0.5rem;
+}

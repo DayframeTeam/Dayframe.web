@@ -1,0 +1,14 @@
+.btn {
+  width: 25px;
+  padding: 0.2rem;
+  background-color: inherit;
+  color: var(--text-primary);
+  border: 4px solid var(--bg-secondary);
+  border-top-right-radius: var(--border-radius-task);
+  border-bottom-right-radius: var(--border-radius-task);
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bg-tertiary);
+  }
+}
