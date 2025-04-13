@@ -1,0 +1,34 @@
+.dayWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.dayWrapperInner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--border-radius-task);
+  border: 4px solid var(--bg-primary);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-primary);
+  padding: 1rem;
+  width: 100%;
+}
+
+.taskToggleBtn {
+  border: none;
+  border-radius: 0;
+  background-color: var(--bg-primary);
+}
+
+.tasksList {
+  background-color: var(--bg-primary);
+}

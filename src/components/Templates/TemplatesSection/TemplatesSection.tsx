@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { TemplateTask } from '../../../types/dbTypes';
 import { TemplateTasksSection } from '../TemplateTasksSection/TemplateTasksSection';
+import { TemplatesDaysSection } from '../TemplatesDays/TemplatesDaysSection/TemplatesDaysSection';
 
 type TemplatesSectionProps = {
   templates: TemplateTask[];
@@ -25,10 +26,11 @@ export const TemplatesSection = memo(({ templates }: TemplatesSectionProps) => {
   });
   return (
     <section>
-      <TemplateTasksSection type='daily' templateTasks={daily} />
-      <TemplateTasksSection type='weekly' templateTasks={weekly} />
-      <TemplateTasksSection type='custom' templateTasks={custom} />
-      <TemplateTasksSection type='quests' templateTasks={quests} />
+      <TemplateTasksSection type="daily" templateTasks={daily} />
+      <TemplateTasksSection type="weekly" templateTasks={weekly} />
+      <TemplateTasksSection type="custom" templateTasks={custom} />
+      <TemplatesDaysSection />
+      <TemplateTasksSection type="quests" templateTasks={quests} />
     </section>
   );
 });
