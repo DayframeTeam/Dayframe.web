@@ -11,7 +11,7 @@
 .modal {
   background: var(--bg-primary);
   color: var(--text-primary);
-  border-radius: 1rem;
+  border-radius: var(--border-radius-primary);
   box-shadow: 0 10px 40px var(--shadow-color);
   width: 100%;
   max-width: 600px;

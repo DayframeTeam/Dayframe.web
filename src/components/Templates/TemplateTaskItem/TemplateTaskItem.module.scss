@@ -5,11 +5,11 @@
 
 .info {
   width: 100%;
-  background-color: var(--bg-primary);
   padding: 1rem;
   border-top-left-radius: var(--border-radius-task);
   border-bottom-left-radius: var(--border-radius-task);
   border-left: 4px solid var(--bg-primary);
+  background-color: var(--bg-secondary);
 }
 
 .metaAndTiming {

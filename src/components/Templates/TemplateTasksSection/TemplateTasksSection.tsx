@@ -8,10 +8,10 @@ import { InfoIcon, PlusIcon } from 'lucide-react';
 import { QuestsInfoModal } from '../QuestsInfoModal/QuestsInfoModal';
 
 const TEMPLATE_TYPE_COLORS = new Map<RepeatRule | 'custom', string>([
-  ['daily', 'var(--select-color-1'],
-  ['weekly', 'var(--select-color-0'],
+  ['daily', 'var(--border-color)'],
+  ['weekly', 'var(--border-color)'],
   ['quests', '#FF9800'], // Orange
-  ['custom', 'var(--select-color-3)'],
+  ['custom', 'var(--border-color)'],
 ]);
 
 type TemplateTasksSectionProps = {

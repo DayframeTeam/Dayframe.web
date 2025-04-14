@@ -31,7 +31,6 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
         style={{
           borderLeftColor: `var(--select-color-${colorIndex})`,
           paddingBottom: hasSubtasks ? 0 : undefined,
-          backgroundColor: isTaskTemplate ?'var(--bg-primary)' : 'var(--bg-secondary)' ,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -145,7 +144,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </ul>
         )}
       </div>
-      <CustomEditBtn onClick={() => {}} borderColor={isTaskTemplate ? 'var(--bg-primary)' : 'var(--bg-secondary)'} />
+      <CustomEditBtn onClick={() => {}} borderColor={'var(--bg-secondary)'} />
     </div>
   );
 });
