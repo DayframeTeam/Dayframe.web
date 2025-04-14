@@ -3,6 +3,7 @@ import { Badge } from '../Badge/Badge';
 import styles from './SelectInput.module.scss';
 import shared from '../shared.module.scss';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 export type Option = {
   label: string;
@@ -54,7 +55,7 @@ export function SelectInput({ id, label, options, value, onChange }: Props) {
           <ul className={styles.dropdown}>
             {options.map((opt) => (
               <li
-                key={inputId + '-' + opt.value}
+                key={nanoid()}
                 onMouseDown={() => {
                   onChange(opt.value);
                   setOpen(false);

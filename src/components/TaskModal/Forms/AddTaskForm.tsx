@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { memo, useState } from 'react';
 import shared from '../UI/shared.module.scss';
 import { SubtaskLocal, TaskLocal } from '../types';
-import { nanoid } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 import { SelectInput } from '../../ui/SelectInput/SelectInput';
 import { TaskTimeFields } from '../UI/TaskTimeFields';
 
@@ -94,7 +94,6 @@ export const AddTaskForm = memo(({ date }: { date?: string }) => {
       id: 0,
       title: '',
       position: localTask.subtasks.length,
-      special_id: nanoid(),
       user_id: localTask.user_id,
       created_at: '',
       is_deleted: false,

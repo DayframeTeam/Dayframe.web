@@ -14,7 +14,7 @@ export const TemplatesSection = memo(({ templates }: TemplatesSectionProps) => {
   const quests: TemplateTask[] = [];
 
   templates.forEach((template) => {
-    if (template.repeat_rule === 'daily') {
+    if (template.repeat_rule.length === 7) {
       daily.push(template);
     } else if (template.repeat_rule === 'weekly') {
       weekly.push(template);

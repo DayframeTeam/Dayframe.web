@@ -15,6 +15,7 @@ import { Button } from '../../ui/Button/Button';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { Badge } from '../../ui/Badge/Badge';
 import { animate } from 'animejs';
+import { nanoid } from 'nanoid';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -152,7 +153,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
           <div className={styles.examplesTitle}>{t('user.levelExamples')}</div>
           <div className={styles.examplesList}>
             {LEVEL_EXAMPLES.map((example) => (
-              <div key={example.level} className={styles.exampleItem}>
+              <div key={nanoid()} className={styles.exampleItem}>
                 <LevelIndicator exp={example.exp} />
               </div>
             ))}
@@ -257,7 +258,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                           <div className={statsStyles.clockMarkers}>
                             {[...Array(24)].map((_, i) => (
                               <div
-                                key={i}
+                                key={nanoid()}
                                 className={statsStyles.clockMarker}
                                 style={{
                                   transform: `rotate(${i * 15}deg)`,
@@ -338,7 +339,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       });
 
                       return reorderedWeekdays.map((day, index) => (
-                        <div key={day} className={statsStyles.dailyItem}>
+                        <div key={nanoid()} className={statsStyles.dailyItem}>
                           <div className={statsStyles.dailyDay}>{day}</div>
                           <div className={statsStyles.dailyTimeRange}>
                             {dailyData[index].timeRange.start} - {dailyData[index].timeRange.end}
@@ -441,7 +442,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     const minutes = dayData.total % 60;
 
                     return (
-                      <div key={day} className={statsStyles.timeBar}>
+                      <div key={nanoid()} className={statsStyles.timeBar}>
                         <div className={statsStyles.timeBarHeader}>
                           <div className={statsStyles.timeBarDay}>{day}</div>
                           <div className={statsStyles.timeBarTotal}>
@@ -456,7 +457,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
                             return (
                               <div
-                                key={category.id}
+                                key={nanoid()}
                                 className={statsStyles.stackedSegment}
                                 style={{
                                   width: `${percentage}%`,
@@ -478,7 +479,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                         </div>
                         <div className={statsStyles.timeBarLegend}>
                           {dayData.categories.map((category) => (
-                            <div key={category.id} className={statsStyles.legendItem}>
+                            <div key={nanoid()} className={statsStyles.legendItem}>
                               <div
                                 className={statsStyles.legendColor}
                                 style={{ backgroundColor: category.color }}
@@ -542,7 +543,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                           const monthLabel = t(`monthNamesShort.${monthDate.getMonth()}`);
 
                           return (
-                            <div key={index + 1} className={statsStyles.chartBarWrapper}>
+                            <div key={nanoid()} className={statsStyles.chartBarWrapper}>
                               <div
                                 className={statsStyles.chartBar}
                                 style={{ height: `${heightPx}px` }}
@@ -692,7 +693,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
                 <div className={statsStyles.calendarGrid}>
                   {(t('weekdaysShort', { returnObjects: true }) as string[]).map((day: string) => (
-                    <div key={day} className={statsStyles.weekdayHeader}>
+                    <div key={nanoid()} className={statsStyles.weekdayHeader}>
                       {day}
                     </div>
                   ))}
@@ -733,14 +734,14 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       <>
                         {emptyCells.map((_, index) => (
                           <div
-                            key={`empty-${firstDay.getTime()}-${index}`}
+                            key={nanoid()}
                             className={`${statsStyles.calendarDay} ${statsStyles.emptyDay}`}
                           />
                         ))}
 
                         {days.map((day) => (
                           <div
-                            key={`${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${day.day}`}
+                            key={nanoid()}
                             className={statsStyles.calendarDay}
                             style={{
                               backgroundColor: `hsl(120, 50%, ${90 - day.intensity * 0.4}%)`,

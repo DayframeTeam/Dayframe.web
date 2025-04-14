@@ -1,5 +1,6 @@
 import styles from './HeaderNav.module.scss';
 import clsx from 'clsx';
+import { nanoid } from 'nanoid';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ export function HeaderNav() {
     <nav className={styles.nav}>
       {navItems.map((item) => (
         <NavLink
-          key={item.to}
+          key={nanoid()}
           to={item.to}
           className={({ isActive }) => clsx(styles.item, isActive && styles.active)}
         >

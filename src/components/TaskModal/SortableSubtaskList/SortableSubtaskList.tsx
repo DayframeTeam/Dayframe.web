@@ -6,6 +6,7 @@ import SortableSubtaskItem from '../SortableSubtaskItem/SortableSubtaskItem';
 import { useTranslation } from 'react-i18next';
 import { SubtaskLocal, TaskLocal } from '../types';
 import shared from '../UI/shared.module.scss';
+import { nanoid } from 'nanoid';
 
 type SortableSubtaskListProps = {
   localTask: TaskLocal;
@@ -65,7 +66,7 @@ export const SortableSubtaskList = memo(
           >
             {sortedSubtasks.map((subtask) => (
               <SortableSubtaskItem
-                key={subtask.uniqueKey}
+                key={nanoid()}
                 subtask={subtask}
                 onTitleChange={onSubtaskTitleChange}
                 onDelete={onSubtaskDelete}

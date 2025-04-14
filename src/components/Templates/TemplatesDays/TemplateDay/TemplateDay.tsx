@@ -8,6 +8,7 @@ import { CustomEditBtn } from '../../../ui/CustomEditBtn/CustomEditBtn';
 import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
 import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
 import { DayModal } from '../DayModal/DayModal';
+import { nanoid } from 'nanoid';
 
 type TemplateDayProps = {
   day: Day;
@@ -54,12 +55,7 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
             </span>
           </Button>
         </div>
-        {day.repeat_days && (
-          <SelectedDays
-            selectedDays={day.repeat_days}
-            selectable={false}
-          />
-        )}
+        {day.repeat_days && <SelectedDays selectedDays={day.repeat_days} selectable={false} />}
         {hasTasks && (
           <Button
             className={styles.taskToggleBtn}
@@ -73,7 +69,7 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
         {hasTasks && showTasks && (
           <div className={styles.tasksList}>
             {day.tasks.map((task) => (
-              <TemplateTaskItem key={task.id} templateTask={task} />
+              <TemplateTaskItem key={nanoid()} templateTask={task} />
             ))}
           </div>
         )}

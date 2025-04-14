@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { TaskSection } from '../../TaskSection/TaskSection';
 import { Modal } from '../../Modal/Modal';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 type Props = Readonly<{
   date: string; // 'YYYY-MM-DD'
@@ -51,7 +52,7 @@ export function DaySticker({ date, isToday = false, tasks = [] }: Props) {
         <div className={styles.events}>
           {sortedTasks.map((task) => (
             <div
-              key={task.id}
+              key={nanoid()}
               className={styles.event}
               style={{
                 borderLeftColor: `var(--select-color-${getPriorityColorIndex(task.priority)})`,

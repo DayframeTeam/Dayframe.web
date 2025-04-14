@@ -3,6 +3,7 @@ import styles from './CalendarGrid.module.scss';
 import type { Task } from '../../../types/dbTypes';
 import { formatDateToISO, toLocalDateString } from '../../../utils/dateUtils';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 type Props = Readonly<{
   daysInMonth: number;
@@ -31,14 +32,14 @@ export function CalendarGrid({ daysInMonth, currentDay, year, month, tasks }: Pr
     <div className={styles.grid}>
       {/* Заголовки дней недели */}
       {weekdays.map((day) => (
-        <div key={day} className={styles.weekDayHeader}>
+        <div key={nanoid()} className={styles.weekDayHeader}>
           {day}
         </div>
       ))}
 
       {/* Пустые ячейки для выравнивания */}
       {emptyDays.map((_, index) => (
-        <div key={`empty-${index}`} className={styles.emptyCell} />
+        <div key={nanoid()} className={styles.emptyCell} />
       ))}
 
       {/* Дни месяца */}
@@ -51,7 +52,7 @@ export function CalendarGrid({ daysInMonth, currentDay, year, month, tasks }: Pr
 
         return (
           <DaySticker
-            key={day}
+            key={nanoid()}
             date={dateString}
             isToday={day === currentDay}
             tasks={tasksForDay}

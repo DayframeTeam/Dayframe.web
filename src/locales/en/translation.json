@@ -78,7 +78,7 @@
   },
   "templates": {
     "daily": "Every day",
-    "weekly": "Every week",
+    "weekly": "Once a week (no specific day)",
     "quests": "Quests",
     "custom": "Selected days",
     "noTasks": "No template tasks",

@@ -9,6 +9,7 @@ import { calculateDuration, formatTime } from '../../../utils/dateUtils';
 import { Button } from '../../ui/Button/Button';
 import { ToggleSwitch } from '../../ui/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../ui/SeleectedDays/SeleectedDays';
+import { nanoid } from 'nanoid';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -112,7 +113,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </div>
         )}
         {isTaskTemplate &&
-          templateTask.repeat_rule !== 'daily' &&
+          templateTask.repeat_rule.length !== 7 &&
           templateTask.repeat_rule !== 'weekly' &&
           templateTask.repeat_rule !== 'quests' && (
             <SelectedDays
@@ -135,7 +136,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           <ul style={{ marginTop: '0', paddingInlineStart: '1rem' }}>
             {templateTask.subtasks.map((s) => (
               <li
-                key={s.id}
+                key={nanoid()}
                 style={{ fontSize: 'var(--font-size-secondary)', marginBottom: '0.5rem' }}
               >
                 {s.title}

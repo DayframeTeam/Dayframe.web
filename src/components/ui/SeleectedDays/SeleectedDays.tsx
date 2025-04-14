@@ -1,6 +1,7 @@
 import { memo, useState, useEffect } from 'react';
 import styles from './SeleectedDays.module.scss';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 type SelectedDaysProps = {
   selectedDays: number[]; // Array of numbers from 1 to 7 representing days of the week
@@ -49,7 +50,7 @@ export const SelectedDays = memo(
 
             return (
               <div
-                key={dayNumber}
+                key={nanoid()}
                 className={`${styles.day} ${isSelected ? styles.selected : ''} ${selectable ? styles.selectable : ''}`}
                 onClick={() => handleDayClick(dayNumber)}
                 title={dayName}

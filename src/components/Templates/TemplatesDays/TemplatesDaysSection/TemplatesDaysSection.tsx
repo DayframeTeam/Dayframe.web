@@ -6,6 +6,7 @@ import { Day } from '../../../../types/dbTypes';
 import { TemplateDay } from '../TemplateDay/TemplateDay';
 import { useState } from 'react';
 import { DayModal } from '../DayModal/DayModal';
+import { nanoid } from 'nanoid';
 
 export const TemplatesDaysSection = () => {
   const { t } = useTranslation();
@@ -312,7 +313,7 @@ export const TemplatesDaysSection = () => {
       {/* Display mock days */}
       <div className={styles.daysList}>
         {mockDays.map((day) => (
-          <TemplateDay key={day.id} day={day} />
+          <TemplateDay key={nanoid()} day={day} />
         ))}
       </div>
 

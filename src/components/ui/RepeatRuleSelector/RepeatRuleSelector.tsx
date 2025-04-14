@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './RepeatRuleSelector.module.scss';
 import clsx from 'clsx';
 import shared from '../shared.module.scss';
+import { nanoid } from 'nanoid';
 
 export type RepeatRule = 'daily' | 'weekly' | number[];
 
@@ -38,7 +39,7 @@ export default function RepeatRuleSelector({ value, onChange }: Props) {
       <div className={styles.modes}>
         {['daily', 'weekly', 'custom'].map((m) => (
           <button
-            key={m}
+            key={nanoid()}
             onClick={() => handleModeChange(m as any)}
             className={clsx(styles.modeBtn, { [styles.active]: mode === m })}
           >
@@ -53,7 +54,7 @@ export default function RepeatRuleSelector({ value, onChange }: Props) {
         <div className={styles.days}>
           {days.map((day, idx) => (
             <button
-              key={idx}
+              key={nanoid()}
               onClick={() => toggleDay(idx)}
               className={clsx(styles.dayBtn, {
                 [styles.selected]: selectedDays.includes(idx),

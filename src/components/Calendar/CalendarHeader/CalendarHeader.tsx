@@ -2,6 +2,7 @@ import { memo, useState, useRef, useEffect } from 'react';
 import { Button } from '../../ui/Button/Button';
 import styles from './CalendarHeader.module.scss';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 type Props = Readonly<{
   monthLabel: string;
@@ -54,14 +55,18 @@ export const CalendarHeader = memo(
           ←
         </Button>
         <div className={styles.monthSelector} ref={dropdownRef}>
-          <Button className={styles.monthLabel}  variant="secondary" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <Button
+            className={styles.monthLabel}
+            variant="secondary"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
             {monthLabel}
           </Button>
           {isDropdownOpen && (
             <div className={styles.dropdown}>
               {monthNames.map((month, index) => (
                 <div
-                  key={month}
+                  key={nanoid()}
                   className={`${styles.monthOption} 
                     ${index === currentMonthIndex ? styles.selected : ''} 
                     ${index === realCurrentMonth ? styles.current : ''}`}

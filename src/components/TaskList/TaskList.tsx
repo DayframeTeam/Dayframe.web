@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Task } from '../../types/dbTypes';
 import TaskItem from '../TaskItem/TaskItem';
 import styles from './TaskList.module.scss';
+import { nanoid } from 'nanoid';
 
 type Props = Readonly<{
   tasks: Task[];
@@ -27,7 +28,7 @@ export default function TaskList({ tasks }: Props) {
     <div className={styles.taskListWrapper}>
       <ul className={styles.taskList}>
         {sortedTasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
+          <TaskItem key={nanoid()} task={task} />
         ))}
       </ul>
     </div>

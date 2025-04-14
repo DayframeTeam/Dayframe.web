@@ -22,11 +22,11 @@ type BaseTaskFields = {
   end_time: string | undefined; // Время окончания, формат 'HH:mm:ss' (опционально)
   user_id: number; // Внешний ключ к пользователю
   created_at: string; // Время создания задачи (ISO timestamp в UTC)
+  special_id: string | undefined; // Уникальный ID чтобы не дублировать задачи из шаблонов
 };
 
 export type Task = BaseTaskFields & {
   is_done: boolean; // Статус: false — запланировано, true — выполнено
-  special_id: string | undefined; // Уникальный frontend ID (например, для виртуального отображения в календаре)
   task_date: string | undefined; // Дата задачи (в UTC, ISO строка) (опционально)
 
   subtasks: Subtask[]; //TODO: чисто для фронта
@@ -34,7 +34,6 @@ export type Task = BaseTaskFields & {
 
 export type TemplateTask = BaseTaskFields & {
   is_active: boolean; // Активен ли шаблон (можно временно выключить) базово включен
-  special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
   repeat_rule: RepeatRule; // Правило повторения: daily | weekly | quests | [дни недели]
   start_active_date: string | undefined; // Начало действия шаблона (UTC) (опционально)
   end_active_date: string | undefined; // Конец действия шаблона (UTC) (опционально)
@@ -43,7 +42,6 @@ export type TemplateTask = BaseTaskFields & {
 };
 
 export type RepeatRule =
-  | 'daily' // Каждый день
   | 'weekly' // Каждую неделю
   | 'quests' // Квесты
   | number[]; // Конкретные дни недели (например, [1, 3, 5] = Пн, Ср, Пт)
@@ -57,13 +55,11 @@ type BaseSubtaskFields = {
 };
 
 export type Subtask = BaseSubtaskFields & {
-  special_id: string | undefined; // Уникальный frontend ID (например, для виртуального отображения в календаре)
   is_done: boolean; // Выполнена или нет
   parent_task_id: number; // ID родительской задачи (Task.id)
 };
 
 export type TemplateSubtask = BaseSubtaskFields & {
-  special_id: string; // Уникальный frontend ID (например, для виртуального отображения в календаре)
   template_task_id: number; // К какому шаблону относится
 };
 
