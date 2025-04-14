@@ -1,4 +1,10 @@
 {
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "create": "Create",
+    "creating": "Creating..."
+  },
   "taskSection": {
     "today": "Tasks for today",
     "dateTasks": "Tasks for {{date}}",
@@ -79,7 +85,12 @@
     "activeToggle": "Turn on/off template task",
     "days": {
       "title": "Template days",
-      "add": "Add template day"
+      "add": "Add template day",
+      "edit": "Edit template day",
+      "name": "Day name",
+      "namePlaceholder": "Enter day name",
+      "repeatDays": "Repeat by days",
+      "nameRequired": "Day name is required"
     }
   },
   "ui": {

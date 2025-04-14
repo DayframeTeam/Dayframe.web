@@ -7,6 +7,7 @@ import { PlusIcon } from 'lucide-react';
 import { CustomEditBtn } from '../../../ui/CustomEditBtn/CustomEditBtn';
 import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
 import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
+import { DayModal } from '../DayModal/DayModal';
 
 type TemplateDayProps = {
   day: Day;
@@ -15,15 +16,28 @@ type TemplateDayProps = {
 export const TemplateDay = memo(({ day }: TemplateDayProps) => {
   const { t } = useTranslation();
   const [showTasks, setShowTasks] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasTasks = day.tasks.length > 0;
+
+  const handleEditClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className={styles.dayWrapper}>
-      <div className={styles.dayWrapperInner}>
+      <div
+        className={styles.dayWrapperInner}
+        style={{
+          paddingBottom: hasTasks ? 0 : undefined,
+        }}
+      >
         <div className={styles.dayHeader}>
           <div>
             <span style={{ fontWeight: 'var(--font-weight-big)' }}>{day.name}</span>
-
           </div>
 
           <Button size="small" variant="secondary" onClick={() => {}}>
@@ -41,12 +55,11 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
           </Button>
         </div>
         {day.repeat_days && (
-              <SelectedDays
-                className={styles.repeatDays}
-                selectedDays={day.repeat_days}
-                selectable={false}
-              />
-            )}
+          <SelectedDays
+            selectedDays={day.repeat_days}
+            selectable={false}
+          />
+        )}
         {hasTasks && (
           <Button
             className={styles.taskToggleBtn}
@@ -65,7 +78,8 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
           </div>
         )}
       </div>
-      <CustomEditBtn borderColor="var(--bg-primary)" onClick={() => {}} />
+      <CustomEditBtn borderColor="var(--bg-primary)" onClick={handleEditClick} />
+      <DayModal isOpen={isModalOpen} onClose={handleCloseModal} day={day} />
     </div>
   );
 });

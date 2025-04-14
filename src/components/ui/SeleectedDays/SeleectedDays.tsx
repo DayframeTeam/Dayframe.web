@@ -40,23 +40,25 @@ export const SelectedDays = memo(
     return (
       <div className={`${styles.wrapper} ${className}`}>
         {label && <span className={styles.label}>{label}</span>}
-        {reorderedDayNames.map((dayName, index) => {
-          // Map index to the correct day number (1-7)
-          // 0 -> 1 (Monday), 1 -> 2 (Tuesday), ..., 6 -> 7 (Sunday)
-          const dayNumber = index + 1;
-          const isSelected = days.includes(dayNumber);
+        <div className={styles.daysWrapper}>
+          {reorderedDayNames.map((dayName, index) => {
+            // Map index to the correct day number (1-7)
+            // 0 -> 1 (Monday), 1 -> 2 (Tuesday), ..., 6 -> 7 (Sunday)
+            const dayNumber = index + 1;
+            const isSelected = days.includes(dayNumber);
 
-          return (
-            <div
-              key={dayNumber}
-              className={`${styles.day} ${isSelected ? styles.selected : ''} ${selectable ? styles.selectable : ''}`}
-              onClick={() => handleDayClick(dayNumber)}
-              title={dayName}
-            >
-              {dayName}
-            </div>
-          );
-        })}
+            return (
+              <div
+                key={dayNumber}
+                className={`${styles.day} ${isSelected ? styles.selected : ''} ${selectable ? styles.selectable : ''}`}
+                onClick={() => handleDayClick(dayNumber)}
+                title={dayName}
+              >
+                {dayName}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

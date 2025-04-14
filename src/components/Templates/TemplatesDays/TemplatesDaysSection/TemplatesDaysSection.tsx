@@ -4,9 +4,12 @@ import styles from './TemplatesDaysSection.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Day } from '../../../../types/dbTypes';
 import { TemplateDay } from '../TemplateDay/TemplateDay';
+import { useState } from 'react';
+import { DayModal } from '../DayModal/DayModal';
 
 export const TemplatesDaysSection = () => {
   const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Mock data for days
   const mockDays: Day[] = [
@@ -274,6 +277,14 @@ export const TemplatesDaysSection = () => {
     },
   ];
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
@@ -283,7 +294,7 @@ export const TemplatesDaysSection = () => {
           </h3>
         </div>
 
-        <Button size="small" variant="secondary" onClick={() => {}}>
+        <Button size="small" variant="secondary" onClick={handleOpenModal}>
           <span
             style={{
               display: 'flex',
@@ -304,6 +315,8 @@ export const TemplatesDaysSection = () => {
           <TemplateDay key={day.id} day={day} />
         ))}
       </div>
+
+      <DayModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
