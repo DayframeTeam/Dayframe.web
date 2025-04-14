@@ -35,10 +35,11 @@
 .templatesubtaskToggle {
   border: none;
   width: 100%;
-  background-color: var(--bg-primary);
+  background-color: inherit;
 
   &:hover {
-    background-color: var(--bg-primary);
+    background-color: inherit;
+    color: var(--accent);
   }
 }
 

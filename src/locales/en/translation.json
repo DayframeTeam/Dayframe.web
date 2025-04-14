@@ -76,7 +76,11 @@
     "quests": "Quests",
     "custom": "Selected days",
     "noTasks": "No template tasks",
-    "activeToggle": "Turn on/off template task"
+    "activeToggle": "Turn on/off template task",
+    "days": {
+      "title": "Template days",
+      "add": "Add template day"
+    }
   },
   "ui": {
     "select": {

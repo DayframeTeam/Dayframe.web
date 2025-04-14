@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import styles from './TemplateTaskItem.module.scss';
-import { TemplateTask as TemplateTaskType } from '../../../types/dbTypes';
+import { DayTask, TemplateTask as TemplateTaskType } from '../../../types/dbTypes';
 import { CustomEditBtn } from '../../ui/CustomEditBtn/CustomEditBtn';
 import { Badge } from '../../ui/Badge/Badge';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import { ToggleSwitch } from '../../ui/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../ui/SeleectedDays/SeleectedDays';
 
 type TemplateTaskItemProps = {
-  templateTask: TemplateTaskType;
+  templateTask: TemplateTaskType | DayTask;
 };
 
 export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) => {
@@ -19,7 +19,10 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
   const colorIndex = getPriorityColorIndex(templateTask.priority);
   const hasSubtasks = templateTask.subtasks && templateTask.subtasks.length > 0;
   const [showSubtasks, setShowSubtasks] = useState(false);
-  const [isActive, setIsActive] = useState(!templateTask.is_done);
+
+  const isTaskTemplate = 'repeat_rule' in templateTask;
+
+  const [isActive, setIsActive] = useState(isTaskTemplate ? !templateTask.is_active : true);
 
   return (
     <div className={styles.item} style={{ opacity: isActive ? 1 : 0.5 }}>
@@ -28,6 +31,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
         style={{
           borderLeftColor: `var(--select-color-${colorIndex})`,
           paddingBottom: hasSubtasks ? 0 : undefined,
+          backgroundColor: isTaskTemplate ?'var(--bg-primary)' : 'var(--bg-secondary)' ,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -37,11 +41,13 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
               <div title={t('task.exp')} style={{ fontSize: 'var(--font-size-secondary)' }}>
                 +{templateTask.exp}⚡
               </div>
-              <ToggleSwitch
-                checked={isActive}
-                onChange={() => setIsActive(!isActive)}
-                title={t('templates.activeToggle')}
-              />
+              {isTaskTemplate && (
+                <ToggleSwitch
+                  checked={isActive}
+                  onChange={() => setIsActive(!isActive)}
+                  title={t('templates.activeToggle')}
+                />
+              )}
             </div>
           )}
         </div>
@@ -56,7 +62,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           {templateTask.description}
         </div>
         <div className={styles.metaAndTiming}>
-          {(templateTask.start_time || templateTask.end_time || templateTask.duration) && (
+          {(templateTask.start_time || templateTask.end_time) && (
             <div className={styles.timing}>
               {templateTask.start_time && (
                 <span title={t('task.timing.start')}>
@@ -96,17 +102,18 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
             )}
           </div>
         </div>
-        {templateTask.start_date && (
+        {isTaskTemplate && templateTask.start_active_date && (
           <div className={styles.range}>
-            {t('task.repeat.from')}: {templateTask.start_date}
+            {t('task.repeat.from')}: {templateTask.start_active_date}
           </div>
         )}
-        {templateTask.end_date && (
+        {isTaskTemplate && templateTask.end_active_date && (
           <div className={styles.range}>
-            {t('task.repeat.to')}: {templateTask.end_date}
+            {t('task.repeat.to')}: {templateTask.end_active_date}
           </div>
         )}
-        {templateTask.repeat_rule !== 'daily' &&
+        {isTaskTemplate &&
+          templateTask.repeat_rule !== 'daily' &&
           templateTask.repeat_rule !== 'weekly' &&
           templateTask.repeat_rule !== 'quests' && (
             <SelectedDays
@@ -126,7 +133,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </Button>
         )}
         {hasSubtasks && showSubtasks && (
-          <ul style={{ marginTop: '0' }}>
+          <ul style={{ marginTop: '0', paddingInlineStart: '1rem' }}>
             {templateTask.subtasks.map((s) => (
               <li
                 key={s.id}
@@ -138,7 +145,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </ul>
         )}
       </div>
-      <CustomEditBtn onClick={() => {}} borderColor={'var(--bg-primary)'} />
+      <CustomEditBtn onClick={() => {}} borderColor={isTaskTemplate ? 'var(--bg-primary)' : 'var(--bg-secondary)'} />
     </div>
   );
 });

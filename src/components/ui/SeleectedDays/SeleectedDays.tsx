@@ -34,10 +34,15 @@ export const SelectedDays = memo(
     // Get day names from translations
     const dayNames = t('weekdaysShort', { returnObjects: true }) as string[];
 
+    // Reorder days to start from Monday (index 1) instead of Sunday (index 0)
+    const reorderedDayNames = [...dayNames.slice(1), dayNames[0]];
+
     return (
       <div className={`${styles.wrapper} ${className}`}>
         {label && <span className={styles.label}>{label}</span>}
-        {dayNames.map((dayName, index) => {
+        {reorderedDayNames.map((dayName, index) => {
+          // Map index to the correct day number (1-7)
+          // 0 -> 1 (Monday), 1 -> 2 (Tuesday), ..., 6 -> 7 (Sunday)
           const dayNumber = index + 1;
           const isSelected = days.includes(dayNumber);
 

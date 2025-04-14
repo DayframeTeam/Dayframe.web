@@ -5,6 +5,7 @@ import { Button } from '../../../ui/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from 'lucide-react';
 import { CustomEditBtn } from '../../../ui/CustomEditBtn/CustomEditBtn';
+import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
 
 type TemplateDayProps = {
   day: Day;
@@ -47,8 +48,7 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
         {hasTasks && showTasks && (
           <div className={styles.tasksList}>
             {day.tasks.map((task) => (
-              <span key={task.id}>{task.title}</span>
-              // <TemplateTaskItem key={task.id} templateTask={task} />
+              <TemplateTaskItem key={task.id} templateTask={task} />
             ))}
           </div>
         )}

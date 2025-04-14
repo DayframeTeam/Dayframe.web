@@ -86,14 +86,6 @@ export default function TaskItem({ task }: Props) {
               id={`${prefix}-${task.id}`}
               checked={task.is_done}
               disabled
-              // disabled={isUpdating}
-              // onChange={(checked) => {
-              //   if (isUpdating) return;
-              //   setIsUpdating(true);
-              //   dispatch(updateTaskStatus({ id: task.id, is_done: checked })).finally(() =>
-              //     setIsUpdating(false)
-              //   );
-              // }}
             />
           )}
 
@@ -190,7 +182,7 @@ export default function TaskItem({ task }: Props) {
           </div>
         )} */}
 
-        {isTemplate && (
+        {/* {isTemplate && (
           <>
             <div className={styles.repeat}>
               🔁 {t('task.repeat.label')}: {repeatLabel}
@@ -206,7 +198,7 @@ export default function TaskItem({ task }: Props) {
               </div>
             )}
           </>
-        )}
+        )} */}
       </div>
       {hasSubtasks && (
         <div className={styles.subtaskToggle}>
