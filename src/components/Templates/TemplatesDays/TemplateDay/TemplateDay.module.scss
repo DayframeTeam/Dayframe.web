@@ -12,13 +12,13 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   overflow: hidden;
+  background-color: var(--bg-primary);
 }
 
 .dayHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--bg-primary);
   padding: 0 1rem 0 calc(4px + 1rem);
   width: 100%;
 }
@@ -41,4 +41,8 @@
   gap: 0.5rem;
   padding: 1rem;
   padding-left: 32px;
+}
+
+.repeatDays {
+  margin-left: 1rem;
 }

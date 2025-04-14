@@ -2,6 +2,8 @@
   display: flex;
   align-items: center;
   gap: 0.2rem;
+  width: max-content;
+  background-color: inherit;
 }
 
 .day {
@@ -10,7 +12,7 @@
   justify-content: center;
   width: 2.2rem;
   height: 2.2rem;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
   font-size: var(--font-size-secondary);
   color: var(--text-secondary);
   cursor: default;

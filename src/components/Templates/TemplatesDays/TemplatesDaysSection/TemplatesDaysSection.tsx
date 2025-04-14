@@ -14,6 +14,7 @@ export const TemplatesDaysSection = () => {
       id: 1,
       name: 'Work Day',
       user_id: 1,
+      repeat_days: [1, 2, 3, 4, 5],
       tasks: [
         {
           id: 101,
@@ -105,6 +106,7 @@ export const TemplatesDaysSection = () => {
       id: 2,
       name: 'Weekend Day',
       user_id: 1,
+      repeat_days: [6, 7],
       tasks: [
         {
           id: 201,
@@ -196,6 +198,7 @@ export const TemplatesDaysSection = () => {
       id: 3,
       name: 'Study Day',
       user_id: 1,
+      repeat_days: undefined,
       tasks: [
         {
           id: 301,

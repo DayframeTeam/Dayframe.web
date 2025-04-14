@@ -71,6 +71,7 @@ export type Day = {
   id: number;
   name: string;
   user_id: number;
+  repeat_days: number[] | undefined;
 
   tasks: DayTask[]; //TODO: чисто для фронта
 };
@@ -83,4 +84,4 @@ export type DayTask = BaseTaskFields & {
 
 export type DayTaskSubtask = BaseSubtaskFields & {
   day_task_id: number;
-}
+};

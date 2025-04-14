@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { PlusIcon } from 'lucide-react';
 import { CustomEditBtn } from '../../../ui/CustomEditBtn/CustomEditBtn';
 import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
+import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
 
 type TemplateDayProps = {
   day: Day;
@@ -20,7 +21,11 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
     <div className={styles.dayWrapper}>
       <div className={styles.dayWrapperInner}>
         <div className={styles.dayHeader}>
-          <span style={{ fontWeight: 'var(--font-weight-big)' }}>{day.name}</span>
+          <div>
+            <span style={{ fontWeight: 'var(--font-weight-big)' }}>{day.name}</span>
+
+          </div>
+
           <Button size="small" variant="secondary" onClick={() => {}}>
             <span
               style={{
@@ -35,6 +40,13 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
             </span>
           </Button>
         </div>
+        {day.repeat_days && (
+              <SelectedDays
+                className={styles.repeatDays}
+                selectedDays={day.repeat_days}
+                selectable={false}
+              />
+            )}
         {hasTasks && (
           <Button
             className={styles.taskToggleBtn}
