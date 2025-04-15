@@ -165,7 +165,7 @@ export default function TaskItem({ task }: Props) {
               {task.category && <Badge label={'# ' + task.category} title={t('task.category')} />}
               {task.priority && (
                 <Badge
-                  label={'🎯 ' + t(`task.priorityType.${task.priority}`)}
+                  label={t(`task.priorityType.${task.priority}`)}
                   num={colorIndex}
                   title={t('task.priority')}
                 />

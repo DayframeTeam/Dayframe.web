@@ -130,6 +130,7 @@
   gap: 0.4rem;
   min-width: 70px;
   flex-shrink: 0;
+  height: 24px;
 }
 
 // .subtaskToggleBtn {
@@ -167,6 +168,7 @@
   color: var(--subtask-progress-incomplete);
   white-space: nowrap;
   font-size: var(--font-size-secondary);
+  height: 100%;
 }
 
 .date {

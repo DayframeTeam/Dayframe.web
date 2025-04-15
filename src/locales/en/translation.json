@@ -57,10 +57,10 @@
     },
     "priority": "Priority",
     "priorityType": {
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High",
-      "none": "No priority"
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "none": "no priority"
     },
     "category": "Category",
     "subtasks": {

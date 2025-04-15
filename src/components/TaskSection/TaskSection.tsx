@@ -61,7 +61,6 @@ export const TaskSection = memo(({ date, tasks }: Props) => {
           <span
             style={{
               display: 'flex',
-              alignItems: 'center',
               gap: '0.2rem',
               fontSize: 'var(--font-size-secondary)',
             }}
