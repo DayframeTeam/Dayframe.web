@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { Button } from '../ui/Button/Button';
 import { TaskModal } from '../TaskModal/TaskModal';
+import { CustomEditBtn } from '../ui/CustomEditBtn/CustomEditBtn';
 
 type Props = {
   task: Task;
@@ -26,13 +27,6 @@ export default function TaskItem({ task }: Props) {
   const [isUpdating, setIsUpdating] = useState(false);
   const prefix = isTemplate ? 'template' : 'task';
   const colorIndex = getPriorityColorIndex(task.priority);
-  const repeatLabel = isTemplate
-    ? Array.isArray(task.repeat_rule)
-      ? task.repeat_rule.map((d) => ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'][d]).join(', ')
-      : task.repeat_rule === 'daily'
-        ? t('task.repeat.daily')
-        : t('task.repeat.weekly')
-    : null;
 
   const hasSubtasks =
     !isTemplate && 'subtasks' in task && task.subtasks && task.subtasks.length > 0;
@@ -64,71 +58,74 @@ export default function TaskItem({ task }: Props) {
 
   return (
     <li
-      className={clsx(styles.taskItem, !isTemplate && task.is_done && styles.completed)}
+      className={clsx(!isTemplate && task.is_done && styles.completed)}
       style={{
-        borderLeftColor: `var(--select-color-${colorIndex})`,
-        paddingBottom: hasSubtasks ? 0 : undefined,
+        display: 'flex',
+        width: '100%',
       }}
     >
       <div
-        className={styles.wrapper}
-        onClick={() => {
-          if (isTemplate || isUpdating) return;
-          setIsUpdating(true);
-          dispatch(updateTaskStatus({ id: task.id, is_done: !task.is_done })).finally(() =>
-            setIsUpdating(false)
-          );
+        className={styles.taskItem}
+        style={{
+          borderLeftColor: `var(--select-color-${colorIndex})`,
+          paddingBottom: hasSubtasks ? 0 : undefined,
         }}
       >
-        <div className={styles.header}>
-          {!isTemplate && (
-            <Checkbox
-              id={`${prefix}-${task.id}`}
-              checked={task.is_done}
-              disabled
-            />
-          )}
-
-          <div className={styles.titleBlock}>
-            <span
-              title={task.title}
-              className={clsx(styles.title, !isTemplate && task.is_done && styles.completedText)}
-            >
-              {task.title}
-            </span>
-
-            {hasSubtasks && (
-              <div className={styles.subtaskSummary} title={t('task.subtasks.progress')}>
-                <div className={styles.subtaskProgress}>
-                  <div
-                    className={styles.subtaskProgressBar}
-                    style={{
-                      width: `${progressPercent * 100}%`,
-                      background: progressColor,
-                    }}
-                  />
-                </div>
-                <div className={styles.subtaskText} style={{ color: progressColor }}>
-                  {completedCount}/{task.subtasks.length}
-                </div>
-              </div>
+        <div
+          className={styles.wrapper}
+          onClick={() => {
+            if (isTemplate || isUpdating) return;
+            setIsUpdating(true);
+            dispatch(updateTaskStatus({ id: task.id, is_done: !task.is_done })).finally(() =>
+              setIsUpdating(false)
+            );
+          }}
+        >
+          <div className={styles.header}>
+            {!isTemplate && (
+              <Checkbox id={`${prefix}-${task.id}`} checked={task.is_done} disabled />
             )}
 
-            {task.exp > 0 && (
-              <div title={t('task.exp')} className={styles.xp}>
-                +{task.exp}⚡{showXPAnim && <span className={styles.xpAnim}>+{task.exp}⚡</span>}
-              </div>
+            <div className={styles.titleBlock}>
+              <span
+                title={task.title}
+                className={clsx(styles.title, !isTemplate && task.is_done && styles.completedText)}
+              >
+                {task.title}
+              </span>
+
+              {hasSubtasks && (
+                <div className={styles.subtaskSummary} title={t('task.subtasks.progress')}>
+                  <div className={styles.subtaskProgress}>
+                    <div
+                      className={styles.subtaskProgressBar}
+                      style={{
+                        width: `${progressPercent * 100}%`,
+                        background: progressColor,
+                      }}
+                    />
+                  </div>
+                  <div className={styles.subtaskText} style={{ color: progressColor }}>
+                    {completedCount}/{task.subtasks.length}
+                  </div>
+                </div>
+              )}
+
+              {task.exp > 0 && (
+                <div title={t('task.exp')} className={styles.xp}>
+                  +{task.exp}⚡{showXPAnim && <span className={styles.xpAnim}>+{task.exp}⚡</span>}
+                </div>
+              )}
+            </div>
+
+            {isTemplate && (
+              <Badge label={task.is_done ? t('task.status.active') : t('task.status.inactive')} />
             )}
           </div>
 
-          {isTemplate && (
-            <Badge label={task.is_done ? t('task.status.active') : t('task.status.inactive')} />
-          )}
-        </div>
-
-        <div className={styles.descriptionBlock}>
-          {task.description && <div className={styles.description}>{task.description}</div>}
-          <div onClick={(e) => e.stopPropagation()}>
+          <div className={styles.descriptionBlock}>
+            {task.description && <div className={styles.description}>{task.description}</div>}
+            {/* <div onClick={(e) => e.stopPropagation()}>
             <Button
               className={styles.editButton}
               onClick={() => setIsEditing(true)}
@@ -137,52 +134,52 @@ export default function TaskItem({ task }: Props) {
             >
               ✏️ {t('task.edit')}
             </Button>
+          </div> */}
           </div>
-        </div>
 
-        <div className={styles.metaAndTiming}>
-          {(task.start_time || task.end_time || task.duration) && (
-            <div className={styles.timing}>
-              {task.start_time && (
-                <span title={t('task.timing.start')}>
-                  {t('task.timing.from')}{' '}
-                  <span style={{ fontWeight: 600 }}>{formatTime(task.start_time)}</span>
-                </span>
-              )}
-              {task.end_time && (
-                <span title={t('task.timing.end')}>
-                  {t('task.timing.to')}{' '}
-                  <span style={{ fontWeight: 600 }}>{formatTime(task.end_time)}</span>
-                </span>
-              )}
-              {task.start_time && task.end_time && (
-                <span title={t('task.timing.duration')}>
-                  ⏳ {calculateDuration(task.start_time, task.end_time)}
-                  {' ' + t('time.hour') + ':' + t('time.minute')}
-                </span>
+          <div className={styles.metaAndTiming}>
+            {(task.start_time || task.end_time) && (
+              <div className={styles.timing}>
+                {task.start_time && (
+                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.start')}>
+                    {t('task.timing.from')}{' '}
+                    <span style={{ fontWeight: 'var(--font-weight-big)', fontSize: 'var(--font-size-secondary)' }}>{formatTime(task.start_time)}</span>
+                  </span>
+                )}
+                {task.end_time && (
+                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.end')}>
+                    {t('task.timing.to')}{' '}
+                    <span style={{ fontWeight: 'var(--font-weight-big)', fontSize: 'var(--font-size-secondary)'   }}>{formatTime(task.end_time)}</span>
+                  </span>
+                )}
+                {task.start_time && task.end_time && (
+                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.duration')}>
+                    {'\u00A0 '}⏳{calculateDuration(task.start_time, task.end_time)}
+                    {' ' + t('time.hour') + ':' + t('time.minute')}
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className={styles.meta}>
+              {task.category && <Badge label={'# ' + task.category} title={t('task.category')} />}
+              {task.priority && (
+                <Badge
+                  label={'🎯 ' + t(`task.priorityType.${task.priority}`)}
+                  num={colorIndex}
+                  title={t('task.priority')}
+                />
               )}
             </div>
-          )}
-
-          <div className={styles.meta}>
-            {task.category && <Badge label={'# ' + task.category} title={t('task.category')} />}
-            {task.priority && (
-              <Badge
-                label={'🎯 ' + t(`task.priorityType.${task.priority}`)}
-                num={colorIndex}
-                title={t('task.priority')}
-              />
-            )}
           </div>
-        </div>
 
-        {/* {!isTemplate && task.task_date && (
+          {/* {!isTemplate && task.task_date && (
           <div className={styles.date}>
             📅 {t('task.date')}: {toLocalDateString(task.task_date)}
           </div>
         )} */}
 
-        {/* {isTemplate && (
+          {/* {isTemplate && (
           <>
             <div className={styles.repeat}>
               🔁 {t('task.repeat.label')}: {repeatLabel}
@@ -199,9 +196,8 @@ export default function TaskItem({ task }: Props) {
             )}
           </>
         )} */}
-      </div>
-      {hasSubtasks && (
-        <div className={styles.subtaskToggle}>
+        </div>
+        {hasSubtasks && (
           <Button
             className={styles.subtaskToggleBtn}
             onClick={() => setShowSubtasks((prev) => !prev)}
@@ -210,20 +206,18 @@ export default function TaskItem({ task }: Props) {
           >
             {showSubtasks ? '▲' : '▼'}
           </Button>
-        </div>
-      )}
-      {hasSubtasks && showSubtasks && (
-        <SubtaskList
-          subtasks={task.subtasks.map((s) => ({
-            ...s,
-            is_done: task.is_done ? true : s.is_done,
-          }))}
-        />
-      )}
-
-      {isEditing && (
-        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
-      )}
+        )}
+        {hasSubtasks && showSubtasks && (
+          <SubtaskList
+            subtasks={task.subtasks.map((s) => ({
+              ...s,
+              is_done: task.is_done ? true : s.is_done,
+            }))}
+          />
+        )}
+      </div>
+      <CustomEditBtn onClick={() => setIsEditing(true)} />
+      <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
     </li>
   );
 }

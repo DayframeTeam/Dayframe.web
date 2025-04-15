@@ -22,7 +22,7 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
   return (
     <div
       className={styles.wrapper}
-      style={{ borderColor: type === 'quests' ? '#FF9800' : 'var(--border-color)' }}
+      // style={{ borderColor: type === 'quests' ? '#FF9800' : 'var(--border-color)' }}
     >
       <div className={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

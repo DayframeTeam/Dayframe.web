@@ -29,8 +29,8 @@ export const TemplatesSection = memo(({ templates }: TemplatesSectionProps) => {
       <TemplateTasksSection type={[1, 2, 3, 4, 5, 6, 7]} templateTasks={daily} />
       <TemplateTasksSection type="weekly" templateTasks={weekly} />
       <TemplateTasksSection type={[1]} templateTasks={custom} />
-      <TemplatesDaysSection />
       <TemplateTasksSection type="quests" templateTasks={quests} />
+      <TemplatesDaysSection />
     </section>
   );
 });

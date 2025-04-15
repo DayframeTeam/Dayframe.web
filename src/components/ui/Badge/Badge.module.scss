@@ -10,4 +10,8 @@
   line-height: 1;
   vertical-align: middle;
   cursor: default;
+  max-width: 124px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

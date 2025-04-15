@@ -61,7 +61,8 @@
   font-size: var(--font-size-tertiary);
   line-height: 1.2;
   max-height: 2.4em;
-  text-overflow: ellipsis;
+  overflow-y: hidden;
+  // text-overflow: ellipsis;
   white-space: normal;
   word-break: break-word;
   border-left: 4px solid;
