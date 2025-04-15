@@ -77,7 +77,8 @@ export const TaskSection = memo(({ date, tasks }: Props) => {
         <TaskModal
           isOpen={isAdding}
           onClose={() => setIsAdding(false)}
-          date={isToday ? undefined : date}
+          type="Task"
+          task_date={isToday ? undefined : date}
         />
       )}
     </section>

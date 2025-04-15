@@ -9,6 +9,7 @@ import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
 import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
 import { DayModal } from '../DayModal/DayModal';
 import { nanoid } from 'nanoid';
+import { TaskModal } from '../../../TaskModal/TaskModal';
 
 type TemplateDayProps = {
   day: Day;
@@ -19,6 +20,7 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
   const [showTasks, setShowTasks] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const hasTasks = day.tasks.length > 0;
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -76,6 +78,7 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
       </div>
       <CustomEditBtn borderColor="var(--bg-primary)" onClick={handleEditClick} />
       <DayModal isOpen={isModalOpen} onClose={handleCloseModal} day={day} />
+      <TaskModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} type="DayTask" />
     </div>
   );
 });

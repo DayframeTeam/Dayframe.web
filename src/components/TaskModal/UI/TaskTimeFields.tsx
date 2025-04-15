@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { TextInput } from '../../ui/TextInput/TextInput';
 import { DatePicker } from '../../ui/DatePicker/DatePicker';
 import shared from './shared.module.scss';
-import { TaskLocal } from '../types';
+import { DayTask, Task, TemplateTask } from '../../../types/dbTypes';
 
 type TaskTimeFieldsProps = {
-  localTask: TaskLocal;
-  handleTaskChange: (updates: Partial<TaskLocal>) => void;
+  localTask: Task | TemplateTask | DayTask;
+  handleTaskChange: (updates: Partial<Task | TemplateTask | DayTask>) => void;
 };
 
 export const TaskTimeFields = memo(({ localTask, handleTaskChange }: TaskTimeFieldsProps) => {
@@ -29,15 +29,17 @@ export const TaskTimeFields = memo(({ localTask, handleTaskChange }: TaskTimeFie
         type="time"
       />
       <div style={{ margin: '0.5rem 0' }}></div>
-      <DatePicker
-        value={localTask.task_date ? new Date(localTask.task_date) : null}
-        label={t('task.date')}
-        onChange={(date) =>
-          handleTaskChange({
-            task_date: date ? date.toISOString() : undefined,
-          })
-        }
-      />
+      {'task_date' in localTask && (
+        <DatePicker
+          value={localTask.task_date ? new Date(localTask.task_date) : null}
+          label={t('task.date')}
+          onChange={(date) =>
+            handleTaskChange({
+              task_date: date ? date.toISOString() : undefined,
+            })
+          }
+        />
+      )}
     </div>
   );
 });

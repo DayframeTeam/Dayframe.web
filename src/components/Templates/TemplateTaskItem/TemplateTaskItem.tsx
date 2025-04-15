@@ -10,6 +10,7 @@ import { Button } from '../../ui/Button/Button';
 import { ToggleSwitch } from '../../ui/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../ui/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
+import { TaskModal } from '../../TaskModal/TaskModal';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -20,7 +21,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
   const colorIndex = getPriorityColorIndex(templateTask.priority);
   const hasSubtasks = templateTask.subtasks && templateTask.subtasks.length > 0;
   const [showSubtasks, setShowSubtasks] = useState(false);
-
+  const [isEditing, setIsEditing] = useState(false);
   const isTaskTemplate = 'repeat_rule' in templateTask;
 
   const [isActive, setIsActive] = useState(isTaskTemplate ? !templateTask.is_active : true);
@@ -145,7 +146,13 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </ul>
         )}
       </div>
-      <CustomEditBtn onClick={() => {}} borderColor={'var(--bg-secondary)'} />
+      <CustomEditBtn onClick={() => setIsEditing(true)} borderColor={'var(--bg-secondary)'} />
+      <TaskModal
+        isOpen={isEditing}
+        onClose={() => setIsEditing(false)}
+        type="TemplateTask"
+        task={templateTask}
+      />
     </div>
   );
 });

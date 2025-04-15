@@ -31,7 +31,7 @@
     "showAdvanced": "Advanced settings",
     "hideAdvanced": "Hide settings",
     "alert": {
-      "title": "Task title is required",
+      "titleRequired": "Task title is required",
       "updateError": "Update error"
     },
     "status": {
@@ -52,6 +52,7 @@
       "to": "Until",
       "daily": "Daily",
       "weekly": "Weekly",
+      "quest": "Quest",
       "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     },
     "priority": "Priority",
@@ -91,6 +92,9 @@
       "namePlaceholder": "Enter day name",
       "repeatDays": "Repeat by days",
       "nameRequired": "Day name is required"
+    },
+    "alert": {
+      "repeatRuleRequired": "Repeat rule is required"
     }
   },
   "ui": {

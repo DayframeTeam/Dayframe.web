@@ -7,15 +7,17 @@ import { Button } from '../../ui/Button/Button';
 import { InfoIcon, PlusIcon } from 'lucide-react';
 import { QuestsInfoModal } from '../QuestsInfoModal/QuestsInfoModal';
 import { nanoid } from 'nanoid';
+import { TaskModal } from '../../TaskModal/TaskModal';
 
 type TemplateTasksSectionProps = {
-  type: RepeatRule | 'custom' | 'daily';
+  type: RepeatRule;
   templateTasks: TemplateTask[];
 };
 
 export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasksSectionProps) => {
   const { t } = useTranslation();
   const [isQuestsInfoOpen, setIsQuestsInfoOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
@@ -25,7 +27,10 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
       <div className={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <h3 style={{ margin: '0.5rem 0', paddingLeft: 'calc(1rem + 4px)' }}>
-            {t(`templates.${type}`)}
+            {type === 'quests' && t('templates.quests')}
+            {type === 'weekly' && t('templates.weekly')}
+            {Array.isArray(type) && type.length === 7 && t('templates.daily')}
+            {Array.isArray(type) && type.length !== 7 && t('templates.custom')}
           </h3>
           {type === 'quests' && (
             <Button size="small" variant="secondary" onClick={() => setIsQuestsInfoOpen(true)}>
@@ -34,7 +39,7 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
           )}
         </div>
 
-        <Button size="small" variant="secondary" onClick={() => {}}>
+        <Button size="small" variant="secondary" onClick={() => setIsOpen(true)}>
           <span
             style={{
               display: 'flex',
@@ -48,6 +53,12 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
           </span>
         </Button>
       </div>
+      <TaskModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        type="TemplateTask"
+        repeat_rule={type}
+      />
 
       {templateTasks.length > 0 ? (
         templateTasks.map((task) => <TemplateTaskItem key={nanoid()} templateTask={task} />)

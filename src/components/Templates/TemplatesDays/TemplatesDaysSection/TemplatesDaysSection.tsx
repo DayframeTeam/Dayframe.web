@@ -31,6 +31,7 @@ export const TemplatesDaysSection = () => {
           end_time: '09:30:00',
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
+          special_id: '101',
           day_id: 1,
           subtasks: [
             {
@@ -40,6 +41,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 101,
+              is_deleted: false,
             },
             {
               id: 1002,
@@ -48,6 +50,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 101,
+              is_deleted: false,
             },
           ],
         },
@@ -64,6 +67,7 @@ export const TemplatesDaysSection = () => {
           created_at: '2023-01-01T00:00:00Z',
           day_id: 1,
           subtasks: [],
+          special_id: '102',
         },
         {
           id: 103,
@@ -77,6 +81,7 @@ export const TemplatesDaysSection = () => {
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
           day_id: 1,
+          special_id: '103',
           subtasks: [
             {
               id: 1003,
@@ -85,6 +90,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 103,
+              is_deleted: false,
             },
             {
               id: 1004,
@@ -93,6 +99,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 103,
+              is_deleted: false,
             },
             {
               id: 1005,
@@ -101,6 +108,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 103,
+              is_deleted: false,
             },
           ],
         },
@@ -124,6 +132,7 @@ export const TemplatesDaysSection = () => {
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
           day_id: 2,
+          special_id: '201',
           subtasks: [
             {
               id: 2001,
@@ -132,6 +141,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 201,
+              is_deleted: false,
             },
             {
               id: 2002,
@@ -140,6 +150,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 201,
+              is_deleted: false,
             },
             {
               id: 2003,
@@ -148,6 +159,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 201,
+              is_deleted: false,
             },
           ],
         },
@@ -163,6 +175,7 @@ export const TemplatesDaysSection = () => {
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
           day_id: 2,
+          special_id: '202',
           subtasks: [
             {
               id: 2004,
@@ -171,6 +184,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 202,
+              is_deleted: false,
             },
             {
               id: 2005,
@@ -179,6 +193,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 202,
+              is_deleted: false,
             },
           ],
         },
@@ -195,6 +210,7 @@ export const TemplatesDaysSection = () => {
           created_at: '2023-01-01T00:00:00Z',
           day_id: 2,
           subtasks: [],
+          special_id: '203',
         },
       ],
     },
@@ -216,6 +232,7 @@ export const TemplatesDaysSection = () => {
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
           day_id: 3,
+          special_id: '301',
           subtasks: [
             {
               id: 3001,
@@ -224,6 +241,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 301,
+              is_deleted: false,
             },
             {
               id: 3002,
@@ -232,6 +250,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 301,
+              is_deleted: false,
             },
             {
               id: 3003,
@@ -240,6 +259,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 301,
+              is_deleted: false,
             },
           ],
         },
@@ -255,6 +275,7 @@ export const TemplatesDaysSection = () => {
           user_id: 1,
           created_at: '2023-01-01T00:00:00Z',
           day_id: 3,
+          special_id: '302',
           subtasks: [
             {
               id: 3004,
@@ -263,6 +284,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 302,
+              is_deleted: false,
             },
             {
               id: 3005,
@@ -271,6 +293,7 @@ export const TemplatesDaysSection = () => {
               user_id: 1,
               created_at: '2023-01-01T00:00:00Z',
               day_task_id: 302,
+              is_deleted: false,
             },
           ],
         },

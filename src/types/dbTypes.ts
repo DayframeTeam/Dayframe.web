@@ -17,7 +17,7 @@ type BaseTaskFields = {
   description: string | undefined; // Описание задачи (опционально)
   category: string | undefined; // Категория задачи (выбирается пользователем) (опционально)
   priority: 'low' | 'medium' | 'high' | undefined; // Приоритет задачи (опционально)
-  exp: 0 | 1 | 5 | 10 | 20 | 50; // Кол-во XP за выполнение
+  exp: 0 | 1 | 5 | 10 | 20 | 50 | undefined; // Кол-во XP за выполнение TODO:: undefined только на фронте чтобы не менять опыт за уже выполненные задачи
   start_time: string | undefined; // Время начала (локальное), формат 'HH:mm:ss' (опционально)
   end_time: string | undefined; // Время окончания, формат 'HH:mm:ss' (опционально)
   user_id: number; // Внешний ключ к пользователю
@@ -52,6 +52,8 @@ type BaseSubtaskFields = {
   position: number; // Позиция в списке (для drag-and-drop)
   user_id: number; // Внешний ключ к пользователю
   created_at: string; // Когда была создана (ISO UTC)
+
+  is_deleted: boolean; //TODO: чисто для фронта
 };
 
 export type Subtask = BaseSubtaskFields & {

@@ -1,42 +1,20 @@
-.modes {
+.dayButton {
   display: flex;
-  gap: 0.5rem;
-}
-
-.modeBtn {
-  padding: 0.4em 0.8em;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-primary);
-  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
   font-size: var(--font-size-secondary);
-  color: var(--text-primary);
-  transition: 0.2s;
-
-  &.active {
-    background: var(--accent);
-    color: var(--text-on-accent);
-  }
-}
-
-.days {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.dayBtn {
-  padding: 0.3em 0.6em;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
   border-radius: var(--border-radius-primary);
-  font-size: var(--font-size-secondary);
-  color: var(--text-primary);
-  cursor: pointer;
+  font-weight: var(--font-weight-big);
 
   &.selected {
-    background: var(--accent-muted);
+    background-color: var(--accent);
     color: var(--text-on-accent);
-    font-weight: var(--font-weight-big);
+  }
+
+  &:hover {
+    background-color: var(--accent-muted);
   }
 }

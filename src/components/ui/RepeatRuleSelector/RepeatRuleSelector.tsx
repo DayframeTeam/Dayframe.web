@@ -1,69 +1,102 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { RepeatRule } from '../../../types/dbTypes';
+import { SelectedDays } from '../SeleectedDays/SeleectedDays';
 import styles from './RepeatRuleSelector.module.scss';
-import clsx from 'clsx';
-import shared from '../shared.module.scss';
-import { nanoid } from 'nanoid';
-
-export type RepeatRule = 'daily' | 'weekly' | number[];
+import { useTranslation } from 'react-i18next';
+import { Badge } from '../Badge/Badge';
+import shared from '../../TaskModal/UI/shared.module.scss';
+import { Button } from '../Button/Button';
 
 type Props = {
   value: RepeatRule;
-  onChange: (rule: RepeatRule) => void;
+  onChange?: (value: RepeatRule) => void;
+  selectable?: boolean;
 };
 
-const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+export default function RepeatRuleSelector({ value, onChange, selectable = false }: Props) {
+  const { t } = useTranslation();
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
+  const [selectedOption, setSelectedOption] = useState<'weekly' | 'quests' | null>(null);
 
-export default function RepeatRuleSelector({ value, onChange }: Props) {
-  const [mode, setMode] = useState<'daily' | 'weekly' | 'custom'>(
-    typeof value === 'string' ? value : 'custom'
-  );
+  // Initialize state based on the value prop
+  useEffect(() => {
+    if (Array.isArray(value)) {
+      setSelectedDays(value);
+      setSelectedOption(null);
+    } else {
+      setSelectedDays([]);
+      setSelectedOption(value);
+    }
+  }, [value]);
 
-  const selectedDays: number[] = Array.isArray(value) ? value : [];
+  // Handle day selection
+  const handleDaysChange = (days: number[]) => {
+    // If days are selected, clear any selected option
+    if (days.length > 0) {
+      setSelectedOption(null);
+    }
 
-  const toggleDay = (dayIndex: number) => {
-    const newDays = selectedDays.includes(dayIndex)
-      ? selectedDays.filter((d) => d !== dayIndex)
-      : [...selectedDays, dayIndex];
-    onChange(newDays);
+    setSelectedDays(days);
+    if (onChange) {
+      onChange(days);
+    }
   };
 
-  const handleModeChange = (newMode: 'daily' | 'weekly' | 'custom') => {
-    setMode(newMode);
-    if (newMode === 'daily') onChange('daily');
-    else if (newMode === 'weekly') onChange('weekly');
-    else onChange([]);
+  // Handle option selection
+  const handleOptionChange = (option: 'weekly' | 'quests') => {
+    // If an option is selected, clear selected days
+    setSelectedOption(option);
+    setSelectedDays([]);
+
+    if (onChange) {
+      onChange(option);
+    }
   };
+
+  // Determine if we're in days selection mode
+  const isDaysMode = Array.isArray(value);
 
   return (
-    <div className={shared.wrapper}>
-      <div className={styles.modes}>
-        {['daily', 'weekly', 'custom'].map((m) => (
-          <button
-            key={nanoid()}
-            onClick={() => handleModeChange(m as any)}
-            className={clsx(styles.modeBtn, { [styles.active]: mode === m })}
-          >
-            {m === 'daily' && 'Ежедневно'}
-            {m === 'weekly' && 'Еженедельно'}
-            {m === 'custom' && 'По дням'}
-          </button>
-        ))}
-      </div>
-
-      {mode === 'custom' && (
-        <div className={styles.days}>
-          {days.map((day, idx) => (
-            <button
-              key={nanoid()}
-              onClick={() => toggleDay(idx)}
-              className={clsx(styles.dayBtn, {
-                [styles.selected]: selectedDays.includes(idx),
-              })}
+    <div className={shared.categoryWrapper}>
+      {selectable ? (
+        <>
+          <SelectedDays
+            selectedDays={selectedDays}
+            selectable={true}
+            onChange={handleDaysChange}
+            label={t('templates.days.repeatDays')}
+          />
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <Button
+              variant="secondary"
+              className={`${styles.dayButton} ${selectedOption === 'weekly' ? styles.selected : ''}`}
+              onClick={() => handleOptionChange('weekly')}
             >
-              {day}
-            </button>
-          ))}
-        </div>
+              {t('task.repeat.weekly')}
+            </Button>
+            <Button
+              variant="secondary"
+              className={`${styles.dayButton} ${selectedOption === 'quests' ? styles.selected : ''}`}
+              onClick={() => handleOptionChange('quests')}
+            >
+              {t('task.repeat.quest')}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          {isDaysMode ? (
+            <SelectedDays
+              selectedDays={value as number[]}
+              selectable={false}
+              label={t('templates.days.repeatDays')}
+            />
+          ) : (
+            <div className={styles.selectedOption}>
+              <Badge label={t(value)} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

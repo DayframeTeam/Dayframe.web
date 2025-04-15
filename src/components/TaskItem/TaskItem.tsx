@@ -222,7 +222,7 @@ export default function TaskItem({ task }: Props) {
       )}
 
       {isEditing && (
-        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} task={task} />
+        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
       )}
     </li>
   );
