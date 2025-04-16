@@ -1,27 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../ui/Button/Button';
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-
-  const applyTheme = (dark: boolean) => {
-    const root = document.body;
-    root.classList.toggle('theme-dark', dark);
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-  };
-
-  useEffect(() => {
+  const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
-    setIsDark(shouldUseDark);
-    applyTheme(shouldUseDark);
-  }, []);
+    return saved === 'dark' || (!saved && prefersDark);
+  });
 
   const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    applyTheme(newTheme);
+    const next = !isDark;
+    setIsDark(next);
+    document.body.classList.toggle('theme-dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
   };
 
   return (
