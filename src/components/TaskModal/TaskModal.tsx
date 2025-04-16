@@ -4,6 +4,7 @@ import { DayTask, RepeatRule, Task, TemplateTask } from '../../types/dbTypes';
 import { memo } from 'react';
 import { nanoid } from 'nanoid';
 import { TaskForm } from './TaskForm';
+import { TaskService, taskService } from '../../entities/task/taskService';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -15,6 +16,8 @@ type Props = Readonly<{
   day_id?: number;
 }>;
 
+type AnyService = TaskService;
+
 export const TaskModal = memo(
   ({ isOpen, onClose, type, task, task_date, repeat_rule, day_id }: Props) => {
     const { t } = useTranslation();
@@ -22,6 +25,26 @@ export const TaskModal = memo(
     let taskCopy: Task | TemplateTask | DayTask | undefined;
     let handleSubmit = undefined;
     let handleDelete = undefined;
+
+    // Функция для получения соответствующего сервиса для типа задачи
+    const getTaskService = (task: Task | TemplateTask | DayTask): AnyService => {
+      // if ('is_done' in task && 'task_date' in task) {
+      //   // Для обычных задач
+      //   return taskService;
+      // }
+      // else if ('is_active' in task && 'repeat_rule' in task) {
+      //   // Для шаблонных задач - пока используем тот же сервис
+      //   // TODO: реализовать отдельный сервис для шаблонов
+      //   return taskService;
+      // } else if ('day_id' in task) {
+      //   // Для дневных задач - пока используем тот же сервис
+      //   // TODO: реализовать отдельный сервис для дневных задач
+      //   return taskService;
+      // }
+      // // По умолчанию возвращаем основной сервис задач
+      // return taskService;
+      return taskService;
+    };
 
     if (isEdit) {
       taskCopy = {
@@ -34,9 +57,15 @@ export const TaskModal = memo(
         console.log('Я редактирую ', type, task);
       };
 
-      handleDelete = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
+      handleDelete = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
         e.preventDefault();
-        console.log('Я удаляю ', type, task);
+        try {
+          await getTaskService(task).deleteTask(task.id);
+          console.log('Задача успешно удалена:', task);
+          onClose(); // Закрываем модальное окно после успешного создания
+        } catch (error) {
+          console.error('Ошибка при удалении задачи:', error);
+        }
       };
     } else {
       if (type === 'Task') {
@@ -57,9 +86,15 @@ export const TaskModal = memo(
           subtasks: [],
         };
 
-        handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
+        handleSubmit = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
           e.preventDefault();
-          console.log('Я создаю ', type, task);
+          try {
+            await taskService.createTask(task as Partial<Task>);
+            console.log('Задача успешно создана:', task);
+            onClose(); // Закрываем модальное окно после успешного создания
+          } catch (error) {
+            console.error('Ошибка при создании задачи:', error);
+          }
         };
       } else if (type === 'TemplateTask') {
         taskCopy = {

@@ -4,6 +4,7 @@ import { TextInput } from '../../ui/TextInput/TextInput';
 import { DatePicker } from '../../ui/DatePicker/DatePicker';
 import shared from './shared.module.scss';
 import { DayTask, Task, TemplateTask } from '../../../types/dbTypes';
+import { formatDateToLocalYYYYMMDD } from '../../../utils/dateUtils';
 
 type TaskTimeFieldsProps = {
   localTask: Task | TemplateTask | DayTask;
@@ -35,7 +36,7 @@ export const TaskTimeFields = memo(({ localTask, handleTaskChange }: TaskTimeFie
           label={t('task.date')}
           onChange={(date) =>
             handleTaskChange({
-              task_date: date ? date.toISOString() : undefined,
+              task_date: date ? formatDateToLocalYYYYMMDD(date) : undefined,
             })
           }
         />

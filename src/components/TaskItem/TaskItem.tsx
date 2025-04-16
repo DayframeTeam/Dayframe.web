@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Task, TemplateTask } from '../../types/dbTypes';
+import { useRef, useState } from 'react';
+import type { Task } from '../../types/dbTypes';
 import { getPriorityColorIndex } from '../../utils/getPriorityColorIndex';
 import { formatTime, calculateDuration } from '../../utils/dateUtils';
 import styles from './TaskItem.module.scss';
@@ -8,23 +8,20 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox } from '../../components/ui/Checkbox/Checkbox';
 import { Badge } from '../../components/ui/Badge/Badge';
 import SubtaskList from '../ui/SubtaskList/SubtaskList';
-import { updateTaskStatus } from '../../features/tasks/tasksThunks';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
 import { Button } from '../ui/Button/Button';
 import { TaskModal } from '../TaskModal/TaskModal';
 import { CustomEditBtn } from '../ui/CustomEditBtn/CustomEditBtn';
+import { taskService } from '../../entities/task/taskService';
+import { userService } from '../../entities/user/userService';
 
-type Props = {
+type Props = Readonly<{
   task: Task;
-};
+}>;
 
 export default function TaskItem({ task }: Props) {
   const isTemplate = 'repeat_rule' in task;
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const [isUpdating, setIsUpdating] = useState(false);
   const prefix = isTemplate ? 'template' : 'task';
   const colorIndex = getPriorityColorIndex(task.priority);
 
@@ -42,19 +39,32 @@ export default function TaskItem({ task }: Props) {
       : 'var(--subtask-progress-incomplete)';
 
   const [showXPAnim, setShowXPAnim] = useState(false);
-  const wasDoneRef = useRef(task.is_done);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const animTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    // Если задача только что была выполнена (is_done поменялось с false на true)
-    if (!wasDoneRef.current && task.is_done && task.exp > 0) {
-      setShowXPAnim(true);
-      setTimeout(() => setShowXPAnim(false), 1000);
+  const handleUpdateTaskStatus = async () => {
+    try {
+      setIsLoading(true);
+      const newStatus = !task.is_done;
+      await taskService.updateTaskStatus(task.id, newStatus);
+  
+      if (newStatus && task.exp && task.exp > 0) {
+        setShowXPAnim(true);
+  
+        if (animTimeout.current) clearTimeout(animTimeout.current);
+        animTimeout.current = setTimeout(() => {
+          setShowXPAnim(false);
+        }, 1000);
+      }
+  
+      await userService.fetchAndStoreCurrentUser();
+    } catch (err) {
+      console.error('XP update error:', err);
+    } finally {
+      setIsLoading(false);
     }
-
-    // Обновляем реф для следующего сравнения
-    wasDoneRef.current = task.is_done;
-  }, [task.is_done, task.exp]);
+  };
 
   return (
     <li
@@ -71,16 +81,7 @@ export default function TaskItem({ task }: Props) {
           paddingBottom: hasSubtasks ? 0 : undefined,
         }}
       >
-        <div
-          className={styles.wrapper}
-          onClick={() => {
-            if (isTemplate || isUpdating) return;
-            setIsUpdating(true);
-            dispatch(updateTaskStatus({ id: task.id, is_done: !task.is_done })).finally(() =>
-              setIsUpdating(false)
-            );
-          }}
-        >
+        <button className={styles.wrapper} onClick={handleUpdateTaskStatus} disabled={isLoading}>
           <div className={styles.header}>
             {!isTemplate && (
               <Checkbox id={`${prefix}-${task.id}`} checked={task.is_done} disabled />
@@ -111,7 +112,7 @@ export default function TaskItem({ task }: Props) {
                 </div>
               )}
 
-              {task.exp > 0 && (
+              {task.exp !== undefined && task.exp > 0 && (
                 <div title={t('task.exp')} className={styles.xp}>
                   +{task.exp}⚡{showXPAnim && <span className={styles.xpAnim}>+{task.exp}⚡</span>}
                 </div>
@@ -141,19 +142,42 @@ export default function TaskItem({ task }: Props) {
             {(task.start_time || task.end_time) && (
               <div className={styles.timing}>
                 {task.start_time && (
-                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.start')}>
+                  <span
+                    style={{ fontSize: 'var(--font-size-secondary)' }}
+                    title={t('task.timing.start')}
+                  >
                     {t('task.timing.from')}{' '}
-                    <span style={{ fontWeight: 'var(--font-weight-big)', fontSize: 'var(--font-size-secondary)' }}>{formatTime(task.start_time)}</span>
+                    <span
+                      style={{
+                        fontWeight: 'var(--font-weight-big)',
+                        fontSize: 'var(--font-size-secondary)',
+                      }}
+                    >
+                      {formatTime(task.start_time)}
+                    </span>
                   </span>
                 )}
                 {task.end_time && (
-                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.end')}>
+                  <span
+                    style={{ fontSize: 'var(--font-size-secondary)' }}
+                    title={t('task.timing.end')}
+                  >
                     {t('task.timing.to')}{' '}
-                    <span style={{ fontWeight: 'var(--font-weight-big)', fontSize: 'var(--font-size-secondary)'   }}>{formatTime(task.end_time)}</span>
+                    <span
+                      style={{
+                        fontWeight: 'var(--font-weight-big)',
+                        fontSize: 'var(--font-size-secondary)',
+                      }}
+                    >
+                      {formatTime(task.end_time)}
+                    </span>
                   </span>
                 )}
                 {task.start_time && task.end_time && (
-                  <span style={{ fontSize: 'var(--font-size-secondary)' }} title={t('task.timing.duration')}>
+                  <span
+                    style={{ fontSize: 'var(--font-size-secondary)' }}
+                    title={t('task.timing.duration')}
+                  >
                     {'\u00A0 '}⏳{calculateDuration(task.start_time, task.end_time)}
                     {' ' + t('time.hour') + ':' + t('time.minute')}
                   </span>
@@ -196,7 +220,7 @@ export default function TaskItem({ task }: Props) {
             )}
           </>
         )} */}
-        </div>
+        </button>
         {hasSubtasks && (
           <Button
             className={styles.subtaskToggleBtn}

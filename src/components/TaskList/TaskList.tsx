@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { Task } from '../../types/dbTypes';
 import TaskItem from '../TaskItem/TaskItem';
 import styles from './TaskList.module.scss';
-import { nanoid } from 'nanoid';
+import { memo } from 'react';
 
 type Props = Readonly<{
   tasks: Task[];
 }>;
 
-export default function TaskList({ tasks }: Props) {
+export const TaskList = memo(({ tasks }: Props) => {
   const { t } = useTranslation();
 
   if (tasks.length === 0) {
@@ -28,9 +28,9 @@ export default function TaskList({ tasks }: Props) {
     <div className={styles.taskListWrapper}>
       <ul className={styles.taskList}>
         {sortedTasks.map((task) => (
-          <TaskItem key={nanoid()} task={task} />
+          <TaskItem key={task.special_id} task={task} />
         ))}
       </ul>
     </div>
   );
-}
+});

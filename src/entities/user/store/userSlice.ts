@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { User } from '../../types/dbTypes';
+import type { User } from '../../../types/dbTypes';
 
 const userSlice = createSlice({
   name: 'user',

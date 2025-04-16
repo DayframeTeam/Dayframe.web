@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../store';
 import { Subtask } from '../../../../types/dbTypes';
 import { Checkbox } from '../../Checkbox/Checkbox';
-import { updateSubtaskStatus } from '../../../../features/subtasks/subtasksThunks';
 import styles from './SubtaskList.module.scss';
 import clsx from 'clsx';
 
@@ -18,9 +17,9 @@ function SubtaskItem({ subtask }: Props) {
   const toggleStatus = () => {
     if (isUpdating) return;
     setIsUpdating(true);
-    dispatch(updateSubtaskStatus({ id: subtask.id, is_done: !subtask.is_done })).finally(() =>
-      setIsUpdating(false)
-    );
+    // dispatch(updateSubtaskStatus({ id: subtask.id, is_done: !subtask.is_done })).finally(() =>
+    //   setIsUpdating(false)
+    // );
   };
 
   return (

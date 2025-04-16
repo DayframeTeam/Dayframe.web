@@ -1,15 +1,21 @@
-import { useRef } from 'react';
-import { useAppDispatch } from '../hooks/storeHooks';
-import { fetchTasks } from '../features/tasks/tasksThunks';
-import { fetchUser } from '../features/user/userThunks';
+import { useState, useEffect } from 'react';
+import { userService } from '../entities/user/userService';
+import { taskService } from '../entities/task/taskService';
 
 export const InitialDataLoader = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useAppDispatch();
-  const hasLoaded = useRef(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!hasLoaded.current) {
-    hasLoaded.current = true;
-    dispatch(fetchUser()).then(() => dispatch(fetchTasks()));
+  useEffect(() => {
+    userService
+      .fetchAndStoreCurrentUser()
+      .then(() => taskService.fetchAndStoreAll())
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <div>Загрузка данных...</div>;
   }
 
   return <>{children}</>;

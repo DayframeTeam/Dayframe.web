@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import TaskList from '../TaskList/TaskList';
+import { TaskList } from '../TaskList/TaskList';
 import type { Task } from '../../types/dbTypes';
 import { PlusIcon } from 'lucide-react';
 import { Button } from '../ui/Button/Button';
