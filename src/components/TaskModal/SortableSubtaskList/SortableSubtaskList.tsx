@@ -1,24 +1,26 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Button } from '../../ui/Button/Button';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import SortableSubtaskItem from '../SortableSubtaskItem/SortableSubtaskItem';
 import { useTranslation } from 'react-i18next';
-import { SubtaskLocal, TaskLocal } from '../types';
 import shared from '../UI/shared.module.scss';
+import { DayTaskSubtask, Subtask, TemplateSubtask } from '../../../types/dbTypes';
 import { nanoid } from 'nanoid';
 
+type AnySubtask = Subtask | TemplateSubtask | DayTaskSubtask;
+
 type SortableSubtaskListProps = {
-  localTask: TaskLocal;
+  subtasks: AnySubtask[];
   onSubtaskAdd: () => void;
-  onSubtaskDelete: (uniqueKey: string) => void;
-  onSubtaskTitleChange: (uniqueKey: string, newTitle: string) => void;
-  onSubtasksReorder: (reorderedSubtasks: SubtaskLocal[]) => void;
+  onSubtaskDelete: (special_id: string) => void;
+  onSubtaskTitleChange: (special_id: string, newTitle: string) => void;
+  onSubtasksReorder: (reorderedSubtasks: AnySubtask[]) => void;
 };
 
 export const SortableSubtaskList = memo(
   ({
-    localTask,
+    subtasks,
     onSubtaskAdd,
     onSubtaskDelete,
     onSubtaskTitleChange,
@@ -26,27 +28,45 @@ export const SortableSubtaskList = memo(
   }: SortableSubtaskListProps) => {
     const { t } = useTranslation();
 
-    const sortedSubtasks = (localTask.subtasks as SubtaskLocal[])
+    const sortedSubtasks = subtasks
       .filter((s) => !s.is_deleted)
       .sort((a, b) => a.position - b.position);
 
-    const handleDragEnd = (event: DragEndEvent) => {
-      const { active, over } = event;
-      if (!over || active.id === over.id) return;
+    // Memoize these callbacks to prevent rerenders of child components
+    const handleTitleChange = useCallback(
+      (special_id: string, newTitle: string) => {
+        onSubtaskTitleChange(special_id, newTitle);
+      },
+      [onSubtaskTitleChange]
+    );
 
-      const oldIndex = sortedSubtasks.findIndex((s) => s.uniqueKey === active.id);
-      const newIndex = sortedSubtasks.findIndex((s) => s.uniqueKey === over.id);
-      if (oldIndex === -1 || newIndex === -1) return;
+    const handleDelete = useCallback(
+      (special_id: string) => {
+        onSubtaskDelete(special_id);
+      },
+      [onSubtaskDelete]
+    );
 
-      const reordered = [...sortedSubtasks];
-      const [moved] = reordered.splice(oldIndex, 1);
-      reordered.splice(newIndex, 0, moved);
+    const handleDragEnd = useCallback(
+      (event: DragEndEvent) => {
+        const { active, over } = event;
+        if (!over || active.id === over.id) return;
 
-      const updated = reordered.map((s, idx) => ({ ...s, position: idx }));
-      const untouched = (localTask.subtasks as SubtaskLocal[]).filter((s) => s.is_deleted);
+        const oldIndex = sortedSubtasks.findIndex((s) => s.special_id === active.id);
+        const newIndex = sortedSubtasks.findIndex((s) => s.special_id === over.id);
+        if (oldIndex === -1 || newIndex === -1) return;
 
-      onSubtasksReorder([...updated, ...untouched]);
-    };
+        const reordered = [...sortedSubtasks];
+        const [moved] = reordered.splice(oldIndex, 1);
+        reordered.splice(newIndex, 0, moved);
+
+        const updated = reordered.map((s, idx) => ({ ...s, position: idx }));
+        const untouched = subtasks.filter((s) => s.is_deleted);
+
+        onSubtasksReorder([...updated, ...untouched]);
+      },
+      [sortedSubtasks, subtasks, onSubtasksReorder]
+    );
 
     return (
       <div className={shared.categoryWrapper} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -61,15 +81,15 @@ export const SortableSubtaskList = memo(
 
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext
-            items={sortedSubtasks.map((s) => s.uniqueKey)}
+            items={sortedSubtasks.map((s) => s.special_id)}
             strategy={verticalListSortingStrategy}
           >
             {sortedSubtasks.map((subtask) => (
               <SortableSubtaskItem
-                key={nanoid()}
+                key={subtask.special_id}
                 subtask={subtask}
-                onTitleChange={onSubtaskTitleChange}
-                onDelete={onSubtaskDelete}
+                onTitleChange={handleTitleChange}
+                onDelete={handleDelete}
               />
             ))}
           </SortableContext>

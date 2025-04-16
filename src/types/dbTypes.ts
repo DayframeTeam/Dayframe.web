@@ -52,7 +52,7 @@ type BaseSubtaskFields = {
   position: number; // Позиция в списке (для drag-and-drop)
   user_id: number; // Внешний ключ к пользователю
   created_at: string; // Когда была создана (ISO UTC)
-
+  special_id: string;
   is_deleted: boolean; //TODO: чисто для фронта
 };
 

@@ -29,14 +29,14 @@ export const TaskModal = memo(
         exp: undefined,
       };
 
-      handleSubmit = (e: React.FormEvent) => {
+      handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
         e.preventDefault();
-        console.log('Я редактирую ', type);
+        console.log('Я редактирую ', type, task);
       };
 
-      handleDelete = (e: React.FormEvent) => {
+      handleDelete = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
         e.preventDefault();
-        console.log('Я удаляю ', type);
+        console.log('Я удаляю ', type, task);
       };
     } else {
       if (type === 'Task') {
@@ -57,9 +57,9 @@ export const TaskModal = memo(
           subtasks: [],
         };
 
-        handleSubmit = (e: React.FormEvent) => {
+        handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
           e.preventDefault();
-          console.log('Я создаю Task');
+          console.log('Я создаю ', type, task);
         };
       } else if (type === 'TemplateTask') {
         taskCopy = {
@@ -81,9 +81,9 @@ export const TaskModal = memo(
           subtasks: [],
         };
 
-        handleSubmit = (e: React.FormEvent) => {
+        handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
           e.preventDefault();
-          console.log('Я создаю TemplateTask');
+          console.log('Я создаю ', type, task);
         };
       } else if (type === 'DayTask') {
         taskCopy = {
@@ -102,9 +102,9 @@ export const TaskModal = memo(
           subtasks: [],
         };
 
-        handleSubmit = (e: React.FormEvent) => {
+        handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
           e.preventDefault();
-          console.log('Я создаю DayTask');
+          console.log('Я создаю ', type, task);
         };
       }
     }

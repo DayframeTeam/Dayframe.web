@@ -66,7 +66,7 @@ export const TaskSection = memo(({ date, tasks }: Props) => {
             }}
           >
             <PlusIcon />
-            {t('task.add')}
+            {/* {t(' ')} */}
           </span>
         </Button>
       </div>

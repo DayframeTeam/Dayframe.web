@@ -47,13 +47,12 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
             <span
               style={{
                 display: 'flex',
-                alignItems: 'center',
                 gap: '0.2rem',
                 fontSize: 'var(--font-size-secondary)',
               }}
             >
               <PlusIcon />
-              {t('task.add')}
+              {/* {t('task.add')} */}
             </span>
           </Button>
         </div>

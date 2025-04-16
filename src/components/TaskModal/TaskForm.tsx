@@ -1,5 +1,12 @@
 import { memo, useEffect, useState } from 'react';
-import { DayTask, Task, TemplateTask } from '../../types/dbTypes';
+import {
+  DayTask,
+  DayTaskSubtask,
+  Subtask,
+  Task,
+  TemplateSubtask,
+  TemplateTask,
+} from '../../types/dbTypes';
 import shared from './UI/shared.module.scss';
 import { useTranslation } from 'react-i18next';
 import { TaskBasicFields } from './UI/TaskBasicFields';
@@ -9,13 +16,17 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
 import { TaskTimeFields } from './UI/TaskTimeFields';
 import RepeatRuleSelector from '../ui/RepeatRuleSelector/RepeatRuleSelector';
+import { nanoid } from 'nanoid';
+import { SortableSubtaskList } from './SortableSubtaskList/SortableSubtaskList';
 
 type TaskFormProps = {
   task: Task | TemplateTask | DayTask;
   isEdit: boolean;
-  handleSubmit: (e: React.FormEvent) => void;
-  handleDelete?: (e: React.FormEvent) => void;
+  handleSubmit: (e: React.FormEvent, task: Task | TemplateTask | DayTask) => void;
+  handleDelete?: (e: React.FormEvent, task: Task | TemplateTask | DayTask) => void;
 };
+
+type AnySubtask = Subtask | TemplateSubtask | DayTaskSubtask;
 
 // Using 'any' here to bypass complex type errors with the extended task structure.
 // This is a pragmatic solution when dealing with union types that have modified subtasks
@@ -31,7 +42,6 @@ export const TaskForm = memo(({ task, isEdit, handleSubmit, handleDelete }: Task
     ...task,
     subtasks: task.subtasks.map((s) => ({
       ...s,
-      is_deleted: false,
     })),
   });
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
@@ -47,6 +57,100 @@ export const TaskForm = memo(({ task, isEdit, handleSubmit, handleDelete }: Task
     { label: '20 ⚡', value: 20 },
     { label: '50 ⚡', value: 50 },
   ];
+
+  const cleanupDeletedSubtasks = (taskToClean: ExtendedTask): ExtendedTask => {
+    return {
+      ...taskToClean,
+      subtasks: taskToClean.subtasks.filter((s: AnySubtask) => !(s.is_deleted && s.id === 0)),
+    };
+  };
+
+  const handleSubtaskTitleChange = (special_id: string, newTitle: string) => {
+    setLocalTask((prev: ExtendedTask) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((s: AnySubtask) =>
+        s.special_id === special_id ? { ...s, title: newTitle } : s
+      ),
+    }));
+  };
+
+  const handleSubtaskDelete = (special_id: string) => {
+    setLocalTask((prev: ExtendedTask) => {
+      // Сначала помечаем подзадачу как удаленную
+      const withDeleted = {
+        ...prev,
+        subtasks: prev.subtasks.map((s: AnySubtask) =>
+          s.special_id === special_id ? { ...s, is_deleted: true } : s
+        ),
+      };
+
+      // Очищаем удаленные подзадачи с id === 0
+      const cleaned = cleanupDeletedSubtasks(withDeleted);
+
+      // Пересчитываем позиции для оставшихся неудаленных подзадач
+      const reordered = {
+        ...cleaned,
+        subtasks: cleaned.subtasks
+          .filter((s: AnySubtask) => !s.is_deleted)
+          .map((s: AnySubtask, index: number) => ({
+            ...s,
+            position: index,
+          }))
+          .concat(cleaned.subtasks.filter((s: AnySubtask) => s.is_deleted)),
+      };
+
+      return reordered;
+    });
+  };
+
+  const handleSubtaskAdd = () => {
+    // Common subtask fields
+    const commonFields = {
+      id: 0,
+      title: '',
+      position: localTask.subtasks.length,
+      user_id: localTask.user_id,
+      created_at: '',
+      is_deleted: false,
+      special_id: nanoid(),
+    };
+
+    let newSubtask: AnySubtask;
+
+    // Create the appropriate subtask type based on the parent task type
+    if ('task_date' in localTask) {
+      // Regular Task
+      newSubtask = {
+        ...commonFields,
+        is_done: false,
+        parent_task_id: localTask.id,
+      } as Subtask;
+    } else if ('repeat_rule' in localTask) {
+      // Template Task
+      newSubtask = {
+        ...commonFields,
+        template_task_id: localTask.id,
+      } as TemplateSubtask;
+    } else {
+      // Day Task
+      newSubtask = {
+        ...commonFields,
+        day_task_id: localTask.id,
+      } as DayTaskSubtask;
+    }
+
+    setLocalTask((prev: ExtendedTask) => ({
+      ...prev,
+      subtasks: [...prev.subtasks, newSubtask],
+    }));
+  };
+
+  const handleSubtaskReorder = (reorderedSubtasks: AnySubtask[]) => {
+    setLocalTask((prev: ExtendedTask) => ({
+      ...prev,
+      subtasks: reorderedSubtasks,
+    }));
+  };
 
   // Функция для сравнения задач
   const compareTasks = (
@@ -104,27 +208,26 @@ export const TaskForm = memo(({ task, isEdit, handleSubmit, handleDelete }: Task
 
     // Сравниваем подзадачи
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (original.subtasks.length !== current.subtasks.filter((s: any) => !s.is_deleted).length) {
+    const nonDeletedSubtasks = current.subtasks.filter((s: any) => !s.is_deleted);
+    if (original.subtasks.length !== nonDeletedSubtasks.length) {
       return true;
     }
 
-    // Сравниваем каждую подзадачу
-    let nonDeletedIndex = 0;
-    for (let i = 0; i < current.subtasks.length; i++) {
-      const subtask = current.subtasks[i];
-      if (subtask.is_deleted) continue;
+    // Создаем массивы для сравнения с сортировкой по позиции
+    const originalSorted = [...original.subtasks].sort((a, b) => a.position - b.position);
+    const currentSorted = [...nonDeletedSubtasks].sort((a, b) => a.position - b.position);
 
-      if (nonDeletedIndex >= original.subtasks.length) return true;
-      const originalSubtask = original.subtasks[nonDeletedIndex];
+    // Сравниваем подзадачи после сортировки
+    for (let i = 0; i < originalSorted.length; i++) {
+      const origSubtask = originalSorted[i];
+      const currSubtask = currentSorted[i];
 
       if (
-        subtask.title !== originalSubtask.title ||
-        subtask.position !== originalSubtask.position
+        origSubtask.title !== currSubtask.title ||
+        origSubtask.position !== currSubtask.position
       ) {
         return true;
       }
-
-      nonDeletedIndex++;
     }
 
     return false;
@@ -156,10 +259,10 @@ export const TaskForm = memo(({ task, isEdit, handleSubmit, handleDelete }: Task
     <form
       onSubmit={(e) => {
         if (isDeleted && handleDelete) {
-          handleDelete(e);
+          handleDelete(e, localTask);
         } else {
           if (baseValidation()) {
-            handleSubmit(e);
+            handleSubmit(e, localTask);
           } else {
             e.preventDefault();
           }
@@ -215,13 +318,15 @@ export const TaskForm = memo(({ task, isEdit, handleSubmit, handleDelete }: Task
                 onChange={(value) => handleTaskChange({ repeat_rule: value })}
               />
             )}
-            {/* <SortableSubtaskList
-          localTask={localTask}
-          onSubtaskAdd={handleSubtaskAdd}
-          onSubtaskDelete={handleSubtaskDelete}
-          onSubtaskTitleChange={handleSubtaskTitleChange}
-          onSubtasksReorder={handleSubtaskReorder}
-        /> */}
+            {localTask.subtasks && Array.isArray(localTask.subtasks) && (
+              <SortableSubtaskList
+                subtasks={localTask.subtasks}
+                onSubtaskAdd={handleSubtaskAdd}
+                onSubtaskDelete={handleSubtaskDelete}
+                onSubtaskTitleChange={handleSubtaskTitleChange}
+                onSubtasksReorder={handleSubtaskReorder}
+              />
+            )}
           </div>
         </>
       )}
