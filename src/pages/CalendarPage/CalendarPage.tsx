@@ -1,8 +1,12 @@
-import Calendar from '../../components/Calendar/Calendar';
+import React from 'react';
+import { Calendar } from '../../components/Calendar/Calendar';
+import { selectAllTasks } from '../../entities/task/store/tasksSlice';
 import { useAppSelector } from '../../hooks/storeHooks';
 
-export default function CalendarPage() {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+export const CalendarPage: React.FC = React.memo(() => {
+  const tasks = useAppSelector(selectAllTasks);
 
   return <Calendar tasks={tasks} />;
-}
+});
+
+CalendarPage.displayName = 'CalendarPage';

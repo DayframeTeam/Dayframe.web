@@ -124,6 +124,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
   if (!user) return null;
 
   return (
+    isOpen && (
     <Modal isOpen={isOpen} onClose={onClose} title={t('user.expDetails')}>
       <div className={styles.content}>
         <div className={styles.levelInfo}>
@@ -785,5 +786,6 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
         </div>
       </div>
     </Modal>
+    )
   );
 };

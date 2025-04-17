@@ -1,14 +1,21 @@
 import { useAppSelector } from '../../hooks/storeHooks';
-import { Task } from '../../types/dbTypes';
-import { toLocalDateString } from '../../utils/dateUtils';
 import { TaskSection } from '../../components/TaskSection/TaskSection';
+import { toLocalDateString } from '../../utils/dateUtils';
+import { selectAllTasks } from '../../entities/task/store/tasksSlice';
+import React from 'react';
 
-export default function TodayPage() {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+export const TodayPage: React.FC = React.memo(() => {
   const today = new Date().toLocaleDateString('sv-SE');
-  const todayTasks: Task[] = tasks.filter(
+
+  // Получаем все задачи через адаптер
+  const allTasks = useAppSelector(selectAllTasks);
+
+  // Фильтруем только задачи на сегодня
+  const todayTasks = allTasks.filter(
     (task) => !task.task_date || toLocalDateString(task.task_date) === today
   );
 
-  return <TaskSection date={today} tasks={todayTasks} />;
-}
+  return <TaskSection date={today} taskIds={todayTasks.map((task) => task.special_id)} />;
+});
+
+TodayPage.displayName = 'TodayPage';

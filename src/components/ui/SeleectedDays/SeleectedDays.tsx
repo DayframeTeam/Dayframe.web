@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { memo } from 'react';
 import styles from './SeleectedDays.module.scss';
 import { useTranslation } from 'react-i18next';
 import { nanoid } from 'nanoid';
@@ -14,22 +14,15 @@ type SelectedDaysProps = {
 
 export const SelectedDays = memo(
   ({ selectedDays, selectable = false, onChange, label, className = '' }: SelectedDaysProps) => {
-    const [days, setDays] = useState<number[]>(selectedDays);
     const { t } = useTranslation();
-
-    // Update internal state when props change
-    useEffect(() => {
-      setDays(selectedDays);
-    }, [selectedDays]);
 
     const handleDayClick = (day: number) => {
       if (!selectable || !onChange) return;
 
-      const newDays = days.includes(day)
-        ? days.filter((d) => d !== day)
-        : [...days, day].sort((a, b) => a - b);
+      const newDays = selectedDays.includes(day)
+        ? selectedDays.filter((d) => d !== day)
+        : [...selectedDays, day].sort((a, b) => a - b);
 
-      setDays(newDays);
       onChange(newDays);
     };
 
@@ -47,7 +40,7 @@ export const SelectedDays = memo(
             // Map index to the correct day number (1-7)
             // 0 -> 1 (Monday), 1 -> 2 (Tuesday), ..., 6 -> 7 (Sunday)
             const dayNumber = index + 1;
-            const isSelected = days.includes(dayNumber);
+            const isSelected = selectedDays.includes(dayNumber);
 
             return (
               <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './Modal.module.scss';
 
@@ -11,14 +11,14 @@ type ModalProps = {
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   const [mouseDownOnBackdrop, setMouseDownOnBackdrop] = useState(false);
-
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+  console.log('Modal');
+  // useEffect(() => {
+  //   const handleEsc = (e: KeyboardEvent) => {
+  //     if (e.key === 'Escape') onClose();
+  //   };
+  //   document.addEventListener('keydown', handleEsc);
+  //   return () => document.removeEventListener('keydown', handleEsc);
+  // }, [onClose]);
 
   if (!isOpen) return null;
 
@@ -73,3 +73,4 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
     document.body
   );
 };
+Modal.displayName = 'Modal';

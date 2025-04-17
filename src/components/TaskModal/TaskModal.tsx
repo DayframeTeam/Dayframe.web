@@ -28,10 +28,10 @@ export const TaskModal = memo(
 
     // Функция для получения соответствующего сервиса для типа задачи
     const getTaskService = (task: Task | TemplateTask | DayTask): AnyService => {
-      // if ('is_done' in task && 'task_date' in task) {
-      //   // Для обычных задач
-      //   return taskService;
-      // }
+      if ('is_done' in task && 'task_date' in task) {
+        // Для обычных задач
+        return taskService;
+      }
       // else if ('is_active' in task && 'repeat_rule' in task) {
       //   // Для шаблонных задач - пока используем тот же сервис
       //   // TODO: реализовать отдельный сервис для шаблонов
@@ -52,19 +52,23 @@ export const TaskModal = memo(
         exp: undefined,
       };
 
-      handleSubmit = (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
+      handleSubmit = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
         e.preventDefault();
-        console.log('Я редактирую ', type, task);
+        try {
+          await getTaskService(task).updateTask(task.id, task as Partial<Task>);
+          onClose(); // Закрываем модальное окно после успешного создания
+        } catch (error) {
+          console.error('Ошибка при редактировании:', error);
+        }
       };
 
       handleDelete = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
         e.preventDefault();
         try {
           await getTaskService(task).deleteTask(task.id);
-          console.log('Задача успешно удалена:', task);
           onClose(); // Закрываем модальное окно после успешного создания
         } catch (error) {
-          console.error('Ошибка при удалении задачи:', error);
+          console.error('Ошибка при удалении:', error);
         }
       };
     } else {
@@ -90,7 +94,6 @@ export const TaskModal = memo(
           e.preventDefault();
           try {
             await taskService.createTask(task as Partial<Task>);
-            console.log('Задача успешно создана:', task);
             onClose(); // Закрываем модальное окно после успешного создания
           } catch (error) {
             console.error('Ошибка при создании задачи:', error);
@@ -149,14 +152,16 @@ export const TaskModal = memo(
     }
 
     return (
-      <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? t('task.edit') : t('task.add')}>
-        <TaskForm
-          task={taskCopy}
-          isEdit={isEdit}
-          handleSubmit={handleSubmit}
-          handleDelete={handleDelete}
-        />
-      </Modal>
+      isOpen && (
+        <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? t('task.edit') : t('task.add')}>
+          <TaskForm
+            task={taskCopy}
+            isEdit={isEdit}
+            handleSubmit={handleSubmit}
+            handleDelete={handleDelete}
+          />
+        </Modal>
+      )
     );
   }
 );

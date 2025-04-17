@@ -1,10 +1,11 @@
 import styles from './PageContainer.module.scss';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import TodayPage from '../../pages/TodayPage/TodayPage.tsx';
-import CalendarPage from '../../pages/CalendarPage/CalendarPage.tsx';
+import { TodayPage } from '../../pages/TodayPage/TodayPage.tsx';
+import { CalendarPage } from '../../pages/CalendarPage/CalendarPage.tsx';
 import { TemplatesPage } from '../../pages/TemplatesPage/TemplatesPage.tsx';
 
 export function PageContainer() {
+  console.log('PageContainer');
   return (
     <div className={styles.container}>
       <Routes>

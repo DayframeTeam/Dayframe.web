@@ -16,13 +16,15 @@ export const DayModal = memo(({ isOpen, onClose, day }: DayModalProps) => {
   const isEdit = !!day;
 
   return (
+    isOpen && (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       title={isEdit ? t('templates.days.edit') : t('templates.days.add')}
     >
-      {isEdit ? <DayEditModal day={day} /> : <DayAddModal />}
-    </Modal>
+        {isEdit ? <DayEditModal day={day} /> : <DayAddModal />}
+      </Modal>
+    )
   );
 });
 

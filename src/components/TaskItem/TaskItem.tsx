@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from '../../components/ui/Checkbox/Checkbox';
 import { Badge } from '../../components/ui/Badge/Badge';
-import SubtaskList from '../ui/SubtaskList/SubtaskList';
+import { SubtaskList } from '../ui/SubtaskList/SubtaskList';
 import { Button } from '../ui/Button/Button';
 import { TaskModal } from '../TaskModal/TaskModal';
 import { CustomEditBtn } from '../ui/CustomEditBtn/CustomEditBtn';
@@ -24,7 +24,7 @@ export default function TaskItem({ task }: Props) {
   const { t } = useTranslation();
   const prefix = isTemplate ? 'template' : 'task';
   const colorIndex = getPriorityColorIndex(task.priority);
-
+  console.log('TaskItem');
   const hasSubtasks =
     !isTemplate && 'subtasks' in task && task.subtasks && task.subtasks.length > 0;
   const completedCount = task.is_done
@@ -44,20 +44,23 @@ export default function TaskItem({ task }: Props) {
   const animTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleUpdateTaskStatus = async () => {
+    console.log('handleUpdateTaskStatus');
     try {
       setIsLoading(true);
       const newStatus = !task.is_done;
+
+      // Обновляем статус по special_id
       await taskService.updateTaskStatus(task.id, newStatus);
-  
+
       if (newStatus && task.exp && task.exp > 0) {
         setShowXPAnim(true);
-  
+
         if (animTimeout.current) clearTimeout(animTimeout.current);
         animTimeout.current = setTimeout(() => {
           setShowXPAnim(false);
         }, 1000);
       }
-  
+
       await userService.fetchAndStoreCurrentUser();
     } catch (err) {
       console.error('XP update error:', err);
@@ -126,16 +129,6 @@ export default function TaskItem({ task }: Props) {
 
           <div className={styles.descriptionBlock}>
             {task.description && <div className={styles.description}>{task.description}</div>}
-            {/* <div onClick={(e) => e.stopPropagation()}>
-            <Button
-              className={styles.editButton}
-              onClick={() => setIsEditing(true)}
-              size="small"
-              variant="secondary"
-            >
-              ✏️ {t('task.edit')}
-            </Button>
-          </div> */}
           </div>
 
           <div className={styles.metaAndTiming}>
@@ -232,16 +225,13 @@ export default function TaskItem({ task }: Props) {
           </Button>
         )}
         {hasSubtasks && showSubtasks && (
-          <SubtaskList
-            subtasks={task.subtasks.map((s) => ({
-              ...s,
-              is_done: task.is_done ? true : s.is_done,
-            }))}
-          />
+          <SubtaskList task={task}/>
         )}
       </div>
       <CustomEditBtn onClick={() => setIsEditing(true)} />
-      <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
+      {isEditing && (
+        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
+      )}
     </li>
   );
 }

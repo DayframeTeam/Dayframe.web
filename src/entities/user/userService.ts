@@ -13,16 +13,12 @@ export const userService = {
   /**
    * Fetch current user from the server and update the store
    */
-  async fetchAndStoreCurrentUser(): Promise<User> {
+  async fetchAndStoreCurrentUser(): Promise<void> {
     try {
       const response = await api.get<User>(`${url}/me`);
 
-      // Update store
       store.dispatch(setUser(response.data));
-
-      return response.data;
     } catch (error) {
-      // Handle error
       const appError = handleApiError(error, 'userService.fetchAndStoreCurrentUser');
       console.error(appError.message);
       throw appError;

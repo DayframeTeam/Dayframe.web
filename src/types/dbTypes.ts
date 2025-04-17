@@ -22,7 +22,7 @@ type BaseTaskFields = {
   end_time: string | undefined; // Время окончания, формат 'HH:mm:ss' (опционально)
   user_id: number; // Внешний ключ к пользователю
   created_at: string; // Время создания задачи (ISO timestamp в UTC)
-  special_id: string | undefined; // Уникальный ID чтобы не дублировать задачи из шаблонов
+  special_id: string; // Уникальный ID чтобы не дублировать задачи из шаблонов
 };
 
 export type Task = BaseTaskFields & {

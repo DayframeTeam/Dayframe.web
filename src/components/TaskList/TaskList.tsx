@@ -10,7 +10,7 @@ type Props = Readonly<{
 
 export const TaskList = memo(({ tasks }: Props) => {
   const { t } = useTranslation();
-
+  console.log('TaskList');
   if (tasks.length === 0) {
     return <p style={{ color: 'var(--text-muted)' }}>{t('taskSection.empty')}</p>;
   }

@@ -8,22 +8,27 @@ import { TaskModal } from '../TaskModal/TaskModal';
 import { WeatherDisplay } from '../WeatherDisplay';
 import { LocationSettings } from '../LocationSettings';
 import { formatDateDayMonth } from '../../utils/dateUtils';
+import { useAppSelector } from '../../hooks/storeHooks';
 
 type Props = Readonly<{
   date: string; // в формате 'YYYY-MM-DD'
-  tasks: Task[];
+  taskIds: string[];
 }>;
 
-export const TaskSection = memo(({ date, tasks }: Props) => {
+export const TaskSection = memo(({ date, taskIds }: Props) => {
   const { t } = useTranslation();
   const today = new Date().toLocaleDateString('sv-SE');
   const isToday = date === today;
   const [isAdding, setIsAdding] = useState(false);
   const [location, setLocation] = useState<string>('');
-
+  const allTasks = useAppSelector((state) => state.tasks.entities);
+  const tasks = taskIds
+    .map((id) => allTasks[id])
+    .filter((t): t is Task => !!t);
+  
   // Проверяем, является ли дата прошедшей
   const isPastDate = new Date(date) < new Date(new Date().setHours(0, 0, 0, 0));
-
+  console.log('TaskSection');
   // Load saved location from localStorage on component mount
   useEffect(() => {
     const savedLocation = localStorage.getItem('weatherLocation');

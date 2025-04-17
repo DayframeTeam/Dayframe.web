@@ -1,35 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import type { Task } from '../../../types/dbTypes';
+import type { RootState } from '../../../store';
+
+const tasksAdapter = createEntityAdapter<Task, string>({
+  selectId: (task) => task.special_id,
+  sortComparer: (a, b) => (a.start_time || '').localeCompare(b.start_time || ''),
+});
 
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: {
-    tasks: [] as Task[],
+  initialState: tasksAdapter.getInitialState({
     isLoading: false,
     error: null as string | null,
-  },
+  }),
   reducers: {
-    setTasks(state, action: PayloadAction<Task[]>) {
-      state.tasks = action.payload;
-    },
-    updateOneTask(state, action: PayloadAction<Task>) {
-      const index = state.tasks.findIndex((t) => t.id === action.payload.id);
-      if (index !== -1) {
-        const updatedTask = {
-          ...action.payload,
-          subtasks: [...(action.payload.subtasks || [])].sort((a, b) => a.position - b.position),
-        };
-        state.tasks[index] = updatedTask;
-      }
-    },
-    deleteTask(state, action: PayloadAction<number>) {
-      state.tasks = state.tasks.filter((t) => t.id !== action.payload);
-    },
-    addTask(state, action: PayloadAction<Task>) {
-      state.tasks.push(action.payload);
-    },
-  }
+    setTasks: tasksAdapter.setAll,
+    addTask: tasksAdapter.addOne,
+    updateOneTask: tasksAdapter.updateOne,
+    deleteTask: tasksAdapter.removeOne,
+  },
 });
 
-export const { setTasks, updateOneTask, deleteTask, addTask } = tasksSlice.actions;
+export const { setTasks, addTask, updateOneTask, deleteTask } = tasksSlice.actions;
+
 export default tasksSlice.reducer;
+
+export const {
+  selectAll: selectAllTasks,
+  selectById: selectTaskById,
+  selectIds: selectTaskIds,
+} = tasksAdapter.getSelectors((state: RootState) => state.tasks);
