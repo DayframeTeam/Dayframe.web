@@ -1,9 +1,8 @@
-import React from 'react';
 import { Calendar } from '../../modules/Calendar/Calendar';
 
-export const CalendarPage: React.FC = React.memo(() => {
+export const CalendarPage = () => {
   console.log('CalendarPage');
   return <Calendar />;
-});
+};
 
 CalendarPage.displayName = 'CalendarPage';
