@@ -12,27 +12,28 @@ import { Button } from '../../../../shared/UI/Button/Button';
 import { TaskModal } from '../../TaskModal/TaskModal';
 import { CustomEditBtn } from '../../../../shared/UI/CustomEditBtn/CustomEditBtn';
 import { taskService } from '../../../../entities/task/taskService';
-import { userService } from '../../../../entities/user/userService';
 
 type Props = Readonly<{
   task: Task;
 }>;
 
 export default function TaskItem({ task }: Props) {
-  const isTemplate = 'repeat_rule' in task;
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
-  const prefix = isTemplate ? 'template' : 'task';
   const colorIndex = getPriorityColorIndex(task.priority);
   console.log('TaskItem');
-  const hasSubtasks =
-    !isTemplate && 'subtasks' in task && task.subtasks && task.subtasks.length > 0;
-  const completedCount = task.is_done
-    ? task.subtasks.length
-    : hasSubtasks
-      ? task.subtasks.filter((s) => s.is_done).length
-      : 0;
-  const progressPercent = completedCount / task.subtasks.length;
+
+  // Проверяем наличие подзадач
+  const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+
+  // Вычисляем прогресс выполнения подзадач
+  const completedCount = hasSubtasks
+    ? task.is_done
+      ? task.subtasks.length
+      : task.subtasks.filter((s) => s.is_done).length
+    : 0;
+
+  const progressPercent = hasSubtasks ? completedCount / task.subtasks.length : 0;
   const progressColor =
     progressPercent === 1
       ? 'var(--subtask-progress-complete)'
@@ -44,14 +45,14 @@ export default function TaskItem({ task }: Props) {
   const animTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleUpdateTaskStatus = async () => {
-    console.log('handleUpdateTaskStatus');
     try {
       setIsLoading(true);
       const newStatus = !task.is_done;
       console.log('newStatus', newStatus);
-      // Обновляем статус по special_id
+      // Обновляем статус задачи
       await taskService.updateTaskStatus(task.id, newStatus);
 
+      // Показываем анимацию XP только при выполнении задачи с опытом
       if (newStatus && task.exp && task.exp > 0) {
         setShowXPAnim(true);
 
@@ -60,40 +61,27 @@ export default function TaskItem({ task }: Props) {
           setShowXPAnim(false);
         }, 1000);
       }
-
-      // await userService.fetchAndStoreCurrentUser();
     } catch (err) {
-      console.error('XP update error:', err);
+      console.error('Task status update error:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <li
-      className={clsx(!isTemplate && task.is_done && styles.completed)}
-      style={{
-        display: 'flex',
-        width: '100%',
-      }}
-    >
+    <li className={clsx(styles.taskListItem, task.is_done && styles.completed)}>
       <div
-        className={styles.taskItem}
-        style={{
-          borderLeftColor: `var(--select-color-${colorIndex})`,
-          paddingBottom: hasSubtasks ? 0 : undefined,
-        }}
+        className={clsx(styles.taskItem, hasSubtasks && styles.noPaddingBottom)}
+        style={{ borderLeftColor: `var(--select-color-${colorIndex})` }}
       >
         <button className={styles.wrapper} onClick={handleUpdateTaskStatus} disabled={isLoading}>
           <div className={styles.header}>
-            {!isTemplate && (
-              <Checkbox id={`${prefix}-${task.id}`} checked={task.is_done} disabled />
-            )}
+            <Checkbox id={`task-${task.id}`} checked={task.is_done} disabled />
 
             <div className={styles.titleBlock}>
               <span
                 title={task.title}
-                className={clsx(styles.title, !isTemplate && task.is_done && styles.completedText)}
+                className={clsx(styles.title, task.is_done && styles.completedText)}
               >
                 {task.title}
               </span>
@@ -103,10 +91,7 @@ export default function TaskItem({ task }: Props) {
                   <div className={styles.subtaskProgress}>
                     <div
                       className={styles.subtaskProgressBar}
-                      style={{
-                        width: `${progressPercent * 100}%`,
-                        background: progressColor,
-                      }}
+                      style={{ width: `${progressPercent * 100}%`, background: progressColor }}
                     />
                   </div>
                   <div className={styles.subtaskText} style={{ color: progressColor }}>
@@ -121,56 +106,31 @@ export default function TaskItem({ task }: Props) {
                 </div>
               )}
             </div>
-
-            {isTemplate && (
-              <Badge label={task.is_done ? t('task.status.active') : t('task.status.inactive')} />
-            )}
           </div>
 
-          <div className={styles.descriptionBlock}>
-            {task.description && <div className={styles.description}>{task.description}</div>}
-          </div>
+          {task.description && (
+            <div className={styles.descriptionBlock}>
+              <div className={styles.description}>{task.description}</div>
+            </div>
+          )}
 
           <div className={styles.metaAndTiming}>
             {(task.start_time || task.end_time) && (
               <div className={styles.timing}>
                 {task.start_time && (
-                  <span
-                    style={{ fontSize: 'var(--font-size-secondary)' }}
-                    title={t('task.timing.start')}
-                  >
+                  <span className={styles.timeLabel} title={t('task.timing.start')}>
                     {t('task.timing.from')}{' '}
-                    <span
-                      style={{
-                        fontWeight: 'var(--font-weight-big)',
-                        fontSize: 'var(--font-size-secondary)',
-                      }}
-                    >
-                      {formatTime(task.start_time)}
-                    </span>
+                    <span className={styles.timeValue}>{formatTime(task.start_time)}</span>
                   </span>
                 )}
                 {task.end_time && (
-                  <span
-                    style={{ fontSize: 'var(--font-size-secondary)' }}
-                    title={t('task.timing.end')}
-                  >
+                  <span className={styles.timeLabel} title={t('task.timing.end')}>
                     {t('task.timing.to')}{' '}
-                    <span
-                      style={{
-                        fontWeight: 'var(--font-weight-big)',
-                        fontSize: 'var(--font-size-secondary)',
-                      }}
-                    >
-                      {formatTime(task.end_time)}
-                    </span>
+                    <span className={styles.timeValue}>{formatTime(task.end_time)}</span>
                   </span>
                 )}
                 {task.start_time && task.end_time && (
-                  <span
-                    style={{ fontSize: 'var(--font-size-secondary)' }}
-                    title={t('task.timing.duration')}
-                  >
+                  <span className={styles.durationText} title={t('task.timing.duration')}>
                     {'\u00A0 '}⏳{calculateDuration(task.start_time, task.end_time)}
                     {' ' + t('time.hour') + ':' + t('time.minute')}
                   </span>
@@ -189,31 +149,8 @@ export default function TaskItem({ task }: Props) {
               )}
             </div>
           </div>
-
-          {/* {!isTemplate && task.task_date && (
-          <div className={styles.date}>
-            📅 {t('task.date')}: {toLocalDateString(task.task_date)}
-          </div>
-        )} */}
-
-          {/* {isTemplate && (
-          <>
-            <div className={styles.repeat}>
-              🔁 {t('task.repeat.label')}: {repeatLabel}
-            </div>
-            {task.start_date && (
-              <div className={styles.range}>
-                {t('task.repeat.from')}: {task.start_date}
-              </div>
-            )}
-            {task.end_date && (
-              <div className={styles.range}>
-                {t('task.repeat.to')}: {task.end_date}
-              </div>
-            )}
-          </>
-        )} */}
         </button>
+
         {hasSubtasks && (
           <Button
             className={styles.subtaskToggleBtn}
@@ -224,9 +161,12 @@ export default function TaskItem({ task }: Props) {
             {showSubtasks ? '▲' : '▼'}
           </Button>
         )}
+
         {hasSubtasks && showSubtasks && <SubtaskList task={task} />}
       </div>
+
       <CustomEditBtn onClick={() => setIsEditing(true)} />
+
       {isEditing && (
         <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} type="Task" task={task} />
       )}

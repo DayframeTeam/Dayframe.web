@@ -12,6 +12,10 @@
   flex-direction: column;
   gap: 0.4rem;
   overflow: hidden;
+
+  &.noPaddingBottom {
+    padding-bottom: 0;
+  }
 }
 
 .wrapper {
@@ -33,17 +37,17 @@
   flex-shrink: 0;
   user-select: none;
   font-size: var(--font-size-secondary);
-}
 
-.xpAnim {
-  position: absolute;
-  top: -1rem;
-  right: 0;
-  font-weight: var(--font-weight-big);
-  color: var(--subtask-progress-complete);
-  animation: popCelebration 1.2s ease-out forwards;
-  pointer-events: none;
-  user-select: none;
+  .xpAnim {
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    font-weight: var(--font-weight-big);
+    color: var(--subtask-progress-complete);
+    animation: popCelebration 1.2s ease-out forwards;
+    pointer-events: none;
+    user-select: none;
+  }
 }
 
 @keyframes popCelebration {
@@ -99,6 +103,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+
+  &.completedText {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+  }
 }
 
 .descriptionBlock {
@@ -115,13 +124,13 @@
   word-break: break-word;
 }
 
-.completed {
-  opacity: 0.5;
-}
+.taskListItem {
+  display: flex;
+  width: 100%;
 
-.completedText {
-  text-decoration: line-through;
-  color: var(--text-secondary);
+  &.completed {
+    opacity: 0.5;
+  }
 }
 
 .subtaskSummary {
@@ -133,18 +142,18 @@
   height: 24px;
 }
 
-// .subtaskToggleBtn {
-//   background: var(--bg-primary) !important;
-//   border: 0.2rem solid var(--bg-secondary) !important;
-//   border-left: none !important;
-//   border-top: none !important;
-//   border-radius: 0 !important;
-//   border-bottom-left-radius:  var(--border-radius-primary) !important;
-//   width: 100%;
-//   &:hover {
-//     background: var(--bg-tertiary) !important;
-//   }
-// }
+.subtaskToggleBtn {
+  border: 0.2rem solid var(--bg-secondary) !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-radius: 0 !important;
+  border-bottom-left-radius: var(--border-radius-primary) !important;
+  width: 100%;
+
+  &:hover {
+    background: var(--bg-tertiary) !important;
+  }
+}
 
 .subtaskProgress {
   width: 120px;
@@ -156,12 +165,12 @@
   @media (max-width: 600px) {
     width: 50px;
   }
-}
 
-.subtaskProgressBar {
-  height: 100%;
-  transition: width 0.3s ease;
-  background: var(--subtask-progress-incomplete);
+  .subtaskProgressBar {
+    height: 100%;
+    transition: width 0.3s ease;
+    background: var(--subtask-progress-incomplete);
+  }
 }
 
 .subtaskText {
@@ -169,10 +178,6 @@
   white-space: nowrap;
   font-size: var(--font-size-secondary);
   height: 100%;
-}
-
-.date {
-  margin-top: 8px;
 }
 
 .editButton {
@@ -193,6 +198,19 @@
   justify-content: flex-start;
   gap: 0.2rem;
   margin-top: 0;
+
+  .timeLabel {
+    font-size: var(--font-size-secondary);
+  }
+
+  .timeValue {
+    font-weight: var(--font-weight-big);
+    font-size: var(--font-size-secondary);
+  }
+
+  .durationText {
+    font-size: var(--font-size-secondary);
+  }
 }
 
 .meta {
