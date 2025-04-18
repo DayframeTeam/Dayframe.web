@@ -13,7 +13,13 @@ const userSlice = createSlice({
       state.user = action.payload;
     },
     setUserExp(state, action: PayloadAction<number>) {
-      state.user!.exp = action.payload;
+      if (state.user) {
+        // Create a new user object to ensure Redux detects the change
+        state.user = {
+          ...state.user,
+          exp: action.payload,
+        };
+      }
     },
   },
 });

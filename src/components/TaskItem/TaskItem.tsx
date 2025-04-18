@@ -61,7 +61,7 @@ export default function TaskItem({ task }: Props) {
         }, 1000);
       }
 
-      await userService.fetchAndStoreCurrentUser();
+      // await userService.fetchAndStoreCurrentUser();
     } catch (err) {
       console.error('XP update error:', err);
     } finally {

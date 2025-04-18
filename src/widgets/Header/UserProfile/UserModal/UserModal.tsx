@@ -69,7 +69,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
         },
       });
     }
-  }, [isOpen, progressPercent, user]);
+  }, [isOpen, progressPercent, user?.exp]);
 
   useEffect(() => {
     if (showStatistics) {
@@ -743,7 +743,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
                       return (
                         <>
-                          {emptyCells.map((_, index) => (
+                          {emptyCells.map(() => (
                             <div
                               key={nanoid()}
                               className={`${statsStyles.calendarDay} ${statsStyles.emptyDay}`}
