@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../shared/UI/Button/Button';
+import { Button } from '../../../shared/UI/Button/Button';
 import { MapPinIcon, Loader2Icon } from 'lucide-react';
 
 type Props = {

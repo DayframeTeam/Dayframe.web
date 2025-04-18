@@ -1,8 +1,9 @@
-import { Header } from '../modules/Header/Header.tsx';
-import { HeaderNav } from '../modules/Header/HeaderNav/HeaderNav.tsx';
-import { PageContainer } from '../pages/PageContainer/PageContainer.tsx';
-import { HeaderDropdown } from '../modules/Header/HeaderDropdown/HeaderDropdown.tsx';
-import { UserProfile } from '../modules/Header/UserProfile/UserProfile.tsx';
+import { Header } from "./modules/Header/Header";
+import { HeaderDropdown } from "./modules/Header/HeaderDropdown/HeaderDropdown";
+import { HeaderNav } from "./modules/Header/HeaderNav/HeaderNav";
+import { UserProfile } from "./modules/Header/UserProfile/UserProfile";
+import { PageContainer } from "./pages/PageContainer/PageContainer";
+
 
 function App() {
   const saved = localStorage.getItem('theme');

@@ -10,7 +10,7 @@ import { Button } from '../../../shared/UI/Button/Button';
 import { ToggleSwitch } from '../../../shared/UI/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../../widgets/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
-import { TaskModal } from '../../../components/TaskModal/TaskModal';
+import { TaskModal } from '../../TaskSection/TaskModal/TaskModal';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -96,7 +96,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
             )}
             {templateTask.priority && (
               <Badge
-                label={'🎯 ' + t(`task.priorityType.${templateTask.priority}`)}
+                label={t(`task.priorityType.${templateTask.priority}`)}
                 num={colorIndex}
                 title={t('task.priority')}
               />

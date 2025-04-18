@@ -12,7 +12,7 @@ import {
   calculateNextLevelExp,
   getLevelColorScheme,
 } from '../../../../utils/levelUtils';
-import { Modal } from '../../../../components/Modal/Modal';
+import { Modal } from '../../../../shared/Modal/Modal';
 import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';

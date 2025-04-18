@@ -1,15 +1,14 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './Modal.module.scss';
 
 type ModalProps = {
-  isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
 };
 
-export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+export const Modal = memo(({ onClose, title, children }: ModalProps) => {
   const [mouseDownOnBackdrop, setMouseDownOnBackdrop] = useState(false);
   console.log('Modal');
   // useEffect(() => {
@@ -20,37 +19,38 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   //   return () => document.removeEventListener('keydown', handleEsc);
   // }, [onClose]);
 
-  if (!isOpen) return null;
-
   /**
    * Если пользователь нажал мышь именно на backdrop (не на дочерних элементах),
    * сохраняем флаг в стейте. При mouseup проверим, всё ли прошло на backdrop.
    */
-  const handleMouseDownBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDownBackdrop = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       setMouseDownOnBackdrop(true);
     } else {
       setMouseDownOnBackdrop(false);
     }
-  };
+  }, []);
 
   /**
    * Если mouseDown был на backdrop и mouseUp тоже на backdrop, закрываем окно.
    */
-  const handleMouseUpBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (mouseDownOnBackdrop && e.target === e.currentTarget) {
-      onClose();
-    }
-    setMouseDownOnBackdrop(false);
-  };
+  const handleMouseUpBackdrop = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (mouseDownOnBackdrop && e.target === e.currentTarget) {
+        onClose();
+      }
+      setMouseDownOnBackdrop(false);
+    },
+    [mouseDownOnBackdrop, onClose]
+  );
 
   /**
    * Внутри самой модалки останавливаем всплытие mousedown/mouseup,
    * чтобы оно не срабатывало на backdrop.
    */
-  const stopPropagation = (e: React.MouseEvent) => {
+  const stopPropagation = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-  };
+  }, []);
 
   return ReactDOM.createPortal(
     <div
@@ -72,5 +72,6 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
     </div>,
     document.body
   );
-};
+});
+
 Modal.displayName = 'Modal';

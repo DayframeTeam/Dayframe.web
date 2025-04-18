@@ -6,16 +6,16 @@ import {
   Task,
   TemplateSubtask,
   TemplateTask,
-} from '../../types/dbTypes';
-import shared from '../../shared/UI/shared.module.scss';
+} from '../../../types/dbTypes';
+import shared from '../../../shared/UI/shared.module.scss';
 import { useTranslation } from 'react-i18next';
 import { TaskBasicFields } from './UI/TaskBasicFields';
-import { SelectInput } from '../../shared/UI/SelectInput/SelectInput';
-import { Button } from '../../shared/UI/Button/Button';
+import { SelectInput } from '../../../shared/UI/SelectInput/SelectInput';
+import { Button } from '../../../shared/UI/Button/Button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import clsx from 'clsx';
 import { TaskTimeFields } from './UI/TaskTimeFields';
-import RepeatRuleSelector from '../../widgets/RepeatRuleSelector/RepeatRuleSelector';
+import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
 import { nanoid } from 'nanoid';
 import { SortableSubtaskList } from './SortableSubtaskList/SortableSubtaskList';
 

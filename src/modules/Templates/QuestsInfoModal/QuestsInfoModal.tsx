@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Modal } from '../../../components/Modal/Modal';
+import { Modal } from '../../../shared/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import styles from './QuestsInfoModal.module.scss';
 

@@ -1,8 +1,8 @@
 import { memo, ReactNode } from 'react';
-import { TextInput } from '../../../shared/UI/TextInput/TextInput';
-import { SelectInput } from '../../../shared/UI/SelectInput/SelectInput';
+import { TextInput } from '../../../../shared/UI/TextInput/TextInput';
+import { SelectInput } from '../../../../shared/UI/SelectInput/SelectInput';
 import { useTranslation } from 'react-i18next';
-import shared from '../../../shared/UI/shared.module.scss';
+import shared from '../../../../shared/UI/shared.module.scss';
 
 type TaskBasicFieldsProps = {
   title?: string;

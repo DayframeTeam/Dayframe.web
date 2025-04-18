@@ -1,48 +1,55 @@
-import React, { useMemo, useState } from 'react';
+import { memo, useMemo, useState, useCallback } from 'react';
 import styles from './DaySticker.module.scss';
-import type { Task } from '../../../types/dbTypes';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
-import { TaskSection } from '../../../components/TaskSection/TaskSection';
-import { Modal } from '../../../components/Modal/Modal';
+import { TaskSection } from '../../TaskSection/TaskSection';
+import { Modal } from '../../../shared/Modal/Modal';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { calendarService } from '../../../entities/calendar/calendarService';
+import { format } from 'date-fns';
 
 type Props = Readonly<{
-  date: string; // 'YYYY-MM-DD'
-  isToday?: boolean;
-  tasks: Task[];
+  date: string;
 }>;
 
-export const DaySticker = React.memo(({ date, isToday = false, tasks = [] }: Props) => {
+export const DaySticker = memo(({ date }: Props) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
-  //TODO: на уровне дня сервис
+
+  // Мемоизируем объект даты
+  const dateObj = useMemo(() => new Date(date), [date]);
+
+  // Мемоизируем текущую дату
+  const today = useMemo(() => new Date(), []);
+
+  // Определяем, сегодня ли это
+  const isToday = useMemo(() => {
+    return format(dateObj, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd');
+  }, [dateObj, today]);
+
   // Проверяем, что день уже прошёл
-  const isPast = new Date(date) < new Date(new Date().toDateString());
+  const isPast = useMemo(() => dateObj < new Date(today.setHours(0, 0, 0, 0)), [dateObj, today]);
 
   // Получаем день месяца
-  const dayNumber = new Date(date).getDate();
+  const dayNumber = useMemo(() => dateObj.getDate(), [dateObj]);
 
-  // Сортируем задачи
-  const sortedTasks = useMemo(() => {
-    return [...tasks].sort((a, b) => {
-      const aTime = a.start_time;
-      const bTime = b.start_time;
+  // Получаем отсортированные по времени задачи для этой даты
+  const tasks = useSelector(calendarService.selectTasksSortedByTime(dateObj));
 
-      // Если у обоих нет времени, оставляем их как есть
-      if (!aTime && !bTime) return 0;
-      // Если у a нет времени — отправляем его в конец
-      if (!aTime) return 1;
-      // Если у b нет времени — отправляем его в конец
-      if (!bTime) return -1;
+  // Используем useCallback для стабильных ссылок на функции
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
 
-      // Иначе сравниваем строки "HH:MM" в алфавитном порядке
-      return aTime.localeCompare(bTime);
-    });
-  }, [tasks]);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   console.log('DaySticker');
+
+  // Мемоизируем список задач для предотвращения перерисовок
+  const taskIdsList = useMemo(() => tasks.map((task) => task.special_id), [tasks]);
+
   return (
     <>
       <div
@@ -52,7 +59,7 @@ export const DaySticker = React.memo(({ date, isToday = false, tasks = [] }: Pro
       >
         <div className={styles.day}>{dayNumber}</div>
         <div className={styles.events}>
-          {sortedTasks.map((task) => (
+          {tasks.map((task) => (
             <div
               key={task.special_id || task.id}
               className={`${styles.event} ${task.is_done ? styles.completed : ''}`}
@@ -68,8 +75,8 @@ export const DaySticker = React.memo(({ date, isToday = false, tasks = [] }: Pro
       </div>
 
       {open && (
-        <Modal isOpen={open} onClose={handleClose}>
-          <TaskSection date={date} taskIds={sortedTasks.map((task) => task.special_id)} />
+        <Modal onClose={handleClose}>
+          <TaskSection date={date} taskIds={taskIdsList} />
         </Modal>
       )}
     </>

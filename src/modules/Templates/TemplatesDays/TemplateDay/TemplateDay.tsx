@@ -9,7 +9,7 @@ import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
 import { SelectedDays } from '../../../../widgets/SeleectedDays/SeleectedDays';
 import { DayModal } from '../DayModal/DayModal';
 import { nanoid } from 'nanoid';
-import { TaskModal } from '../../../../components/TaskModal/TaskModal';
+import { TaskModal } from '../../../TaskSection/TaskModal/TaskModal';
 
 type TemplateDayProps = {
   day: Day;

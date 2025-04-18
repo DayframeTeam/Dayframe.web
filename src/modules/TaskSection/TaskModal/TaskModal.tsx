@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Modal } from '../../components/Modal/Modal';
-import { DayTask, RepeatRule, Task, TemplateTask } from '../../types/dbTypes';
+import { Modal } from '../../../shared/Modal/Modal';
+import { DayTask, RepeatRule, Task, TemplateTask } from '../../../types/dbTypes';
 import { memo } from 'react';
 import { nanoid } from 'nanoid';
 import { TaskForm } from './TaskForm';
-import { TaskService, taskService } from '../../entities/task/taskService';
+import { TaskService, taskService } from '../../../entities/task/taskService';
 
 type Props = Readonly<{
   isOpen: boolean;
@@ -25,7 +25,7 @@ export const TaskModal = memo(
     let taskCopy: Task | TemplateTask | DayTask | undefined;
     let handleSubmit = undefined;
     let handleDelete = undefined;
-//TODO: разбить на разные
+    //TODO: разбить на разные
     // Функция для получения соответствующего сервиса для типа задачи
     const getTaskService = (task: Task | TemplateTask | DayTask): AnyService => {
       if ('is_done' in task && 'task_date' in task) {

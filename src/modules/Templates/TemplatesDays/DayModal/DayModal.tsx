@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Modal } from '../../../../components/Modal/Modal';
+import { Modal } from '../../../../shared/Modal/Modal';
 import { Day } from '../../../../types/dbTypes';
 import { useTranslation } from 'react-i18next';
 import { DayEditModal } from './DayEditModal';

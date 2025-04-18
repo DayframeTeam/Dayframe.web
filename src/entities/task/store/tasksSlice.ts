@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice, createSelector } from '@reduxjs/toolkit';
 import type { Task } from '../../../types/dbTypes';
 import type { RootState } from '../../../store';
 
@@ -25,6 +25,25 @@ export const { setTasks, addTask, updateOneTask, deleteTask } = tasksSlice.actio
 
 export default tasksSlice.reducer;
 
-export const { selectAll: selectAllTasks } = tasksAdapter.getSelectors(
-  (state: RootState) => state.tasks
+// Basic selectors
+export const {
+  selectAll: selectAllTasks,
+  selectById: selectTaskById,
+  selectIds: selectTaskIds,
+  selectEntities: selectTaskEntities,
+} = tasksAdapter.getSelectors((state: RootState) => state.tasks);
+
+// Memoized selector for today's tasks
+export const selectTodayTasks = createSelector(
+  [selectAllTasks, (_, today: string) => today],
+  (tasks, today) => tasks.filter((task) => !task.task_date || task.task_date === today)
+);
+
+// Memoized selector for task IDs by date
+export const selectTaskIdsByDate = createSelector(
+  [selectAllTasks, (_, date: string) => date],
+  (tasks, date) =>
+    tasks
+      .filter((task) => !task.task_date || task.task_date === date)
+      .map((task) => task.special_id)
 );

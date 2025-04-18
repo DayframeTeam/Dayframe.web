@@ -1,18 +1,18 @@
 import { useRef, useState } from 'react';
-import type { Task } from '../../types/dbTypes';
-import { getPriorityColorIndex } from '../../utils/getPriorityColorIndex';
-import { formatTime, calculateDuration } from '../../utils/dateUtils';
+import type { Task } from '../../../../types/dbTypes';
+import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
+import { formatTime, calculateDuration } from '../../../../utils/dateUtils';
 import styles from './TaskItem.module.scss';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { Checkbox } from '../../shared/UI/Checkbox/Checkbox';
-import { Badge } from '../../shared/UI/Badge/Badge';
-import { SubtaskList } from '../../widgets/SubtaskList/SubtaskList';
-import { Button } from '../../shared/UI/Button/Button';
-import { TaskModal } from '../TaskModal/TaskModal';
-import { CustomEditBtn } from '../../shared/UI/CustomEditBtn/CustomEditBtn';
-import { taskService } from '../../entities/task/taskService';
-import { userService } from '../../entities/user/userService';
+import { Checkbox } from '../../../../shared/UI/Checkbox/Checkbox';
+import { Badge } from '../../../../shared/UI/Badge/Badge';
+import { SubtaskList } from '../../../../widgets/SubtaskList/SubtaskList';
+import { Button } from '../../../../shared/UI/Button/Button';
+import { TaskModal } from '../../TaskModal/TaskModal';
+import { CustomEditBtn } from '../../../../shared/UI/CustomEditBtn/CustomEditBtn';
+import { taskService } from '../../../../entities/task/taskService';
+import { userService } from '../../../../entities/user/userService';
 
 type Props = Readonly<{
   task: Task;

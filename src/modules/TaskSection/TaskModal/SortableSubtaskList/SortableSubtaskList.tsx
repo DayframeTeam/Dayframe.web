@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react';
-import { Button } from '../../../shared/UI/Button/Button';
+import { Button } from '../../../../shared/UI/Button/Button';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import SortableSubtaskItem from '../SortableSubtaskItem/SortableSubtaskItem';
 import { useTranslation } from 'react-i18next';
-import shared from '../../../shared/UI/shared.module.scss';
-import { DayTaskSubtask, Subtask, TemplateSubtask } from '../../../types/dbTypes';
+import shared from '../../../../shared/UI/shared.module.scss';
+import { DayTaskSubtask, Subtask, TemplateSubtask } from '../../../../types/dbTypes';
 
 type AnySubtask = Subtask | TemplateSubtask | DayTaskSubtask;
 
