@@ -9,14 +9,12 @@ type Props = Readonly<{
 
 export const TaskList = memo(({ taskIds }: Props) => {
   const { t } = useTranslation();
-  console.log('TaskList');
 
-  // Проверка пустого списка
   if (taskIds.length === 0) {
     return <p style={{ color: 'var(--text-muted)' }}>{t('taskSection.empty')}</p>;
   }
 
-  // Используем ID задач, уже отсортированные в адаптере
+  console.log('TaskList');
   return (
     <div className={styles.taskListWrapper}>
       <ul className={styles.taskList}>
