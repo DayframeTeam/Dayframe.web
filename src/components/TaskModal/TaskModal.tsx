@@ -152,16 +152,14 @@ export const TaskModal = memo(
     }
 
     return (
-      isOpen && (
-        <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? t('task.edit') : t('task.add')}>
-          <TaskForm
-            task={taskCopy}
-            isEdit={isEdit}
-            handleSubmit={handleSubmit}
-            handleDelete={handleDelete}
-          />
-        </Modal>
-      )
+      <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? t('task.edit') : t('task.add')}>
+        <TaskForm
+          task={taskCopy}
+          isEdit={isEdit}
+          handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
+        />
+      </Modal>
     );
   }
 );
