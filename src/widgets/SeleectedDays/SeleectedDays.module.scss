@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: max-content;
+  background-color: inherit;
+}
+
+.daysWrapper {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  background-color: var(--bg-tertiary);
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+  cursor: default;
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-primary);
+  font-weight: var(--font-weight-big);
+
+  &.selected {
+    background-color: var(--accent);
+    color: var(--text-on-accent);
+  }
+
+  &.selectable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--accent-muted);
+    }
+  }
+}

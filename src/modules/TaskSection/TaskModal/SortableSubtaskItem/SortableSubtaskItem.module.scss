@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-primary);
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--bg-tertiary);
+  }
+}
+
+.dragHandle {
+  cursor: grab;
+  user-select: none;
+  font-size: var(--font-size-big);
+  padding: 0 6px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+.textField {
+  width: 20rem;
+}

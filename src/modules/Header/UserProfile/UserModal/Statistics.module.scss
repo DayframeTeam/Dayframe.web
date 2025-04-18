@@ -1,0 +1,751 @@
+.statisticsSection {
+  margin-top: 1rem;
+  padding: 16px;
+}
+
+.statisticsButtonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.statisticsButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+
+  span {
+    display: inline-block;
+  }
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: var(--font-size-tertiary);
+  line-height: 1;
+}
+
+.arrowDown {
+  transform: rotate(0deg);
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+// Completed Tasks Section
+.sectionWrapper {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+  padding: 20px;
+  margin-top: 1rem;
+}
+
+.completedTasksHeader {
+  margin-bottom: 1rem;
+}
+
+.completedTasksTitle {
+  font-size: var(--font-size-primary);
+  font-weight: var(--font-weight-big);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.completedTasksIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--text-on-accent);
+  background-color: var(--accent);
+  border-color: var(--accent);
+  border-radius: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.completedTasksOverview {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.completedTasksNumbers {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.completedTasksNumber {
+  flex: 1;
+  text-align: center;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+}
+
+.completedTasksValue {
+  font-size: var(--font-size-primary);
+  font-weight: var(--font-weight-big);
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.completedTasksLabel {
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+}
+
+.completedTasksChart {
+  margin-top: 20px;
+}
+
+.completedTasksChartTitle {
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chartBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 200px;
+  position: relative;
+}
+
+.chartBarWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.chartBar {
+  width: 100%;
+  background: var(--accent);
+  border-radius: var(--border-radius-primary) var(--border-radius-primary) 0 0;
+  transition: all 0.3s ease;
+  position: absolute;
+  bottom: 32px;
+
+  &:hover {
+    background: var(--accent-muted);
+  }
+}
+
+.chartBarLabel {
+  position: absolute;
+  bottom: -4px;
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+  transform: rotate(-45deg);
+  transform-origin: top left;
+  white-space: nowrap;
+}
+
+.completedTasksBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.breakdownSection {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 16px;
+}
+
+.breakdownTitle {
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.breakdownItems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.breakdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.4em;
+    border-bottom: 1px dotted var(--text-primary);
+    opacity: 0.5;
+    z-index: 0;
+  }
+}
+
+.breakdownLabel {
+  font-size: var(--font-size-tertiary);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  padding-right: 4px;
+  z-index: 1;
+  position: relative;
+}
+
+.breakdownValue {
+  font-size: var(--font-size-tertiary);
+  font-weight: var(--font-weight-big);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  padding-left: 4px;
+  z-index: 1;
+  position: relative;
+}
+
+.timeSpentChart {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 16px;
+}
+
+.timeSpentTitle {
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.timeSpentLine {
+  position: relative;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+}
+
+.trendLine {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 65%;
+  border-radius: var(--border-radius-primary);
+  background: var(--accent);
+}
+
+.timeLabel {
+  position: absolute;
+  right: 35%;
+  top: -30px;
+  font-size: var(--font-size-tertiary);
+  background: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-primary);
+  transform: translateX(50%);
+  white-space: nowrap;
+}
+
+.activityTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.monthNavigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.currentMonth {
+  font-size: var(--font-size-secondary);
+  min-width: 100px;
+  text-align: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.weekdayHeader {
+  font-size: var(--font-size-tertiary);
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.dayNumber {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 0.7em;
+}
+
+.emptyDay {
+  background: transparent;
+}
+
+.heatmapGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20px);
+  gap: 4px;
+  padding: 1rem 0;
+}
+
+.heatmapDay {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.heatmapTooltip {
+  position: absolute;
+  background: var(--bg-secondary);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.monthLabel {
+  font-size: var(--font-size-tertiary);
+  margin-bottom: 0.25rem;
+}
+
+.quarterGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.monthGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.activityLegend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+}
+
+.legendText {
+  margin: 0 4px;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+
+  &:first-child {
+    margin-left: 4px;
+  }
+}
+
+.streakHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: var(--font-size-secondary);
+}
+
+.streakBars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.streakBar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.streakLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-tertiary);
+}
+
+.streakValue {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.streakProgress {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+  overflow: hidden;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--border-radius-primary);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    animation: fireShine 4s ease-in-out infinite;
+  }
+}
+
+.streakFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d4d, #ff9900);
+  border-radius: var(--border-radius-primary);
+  position: relative;
+  // transition: width 0.3s ease;
+}
+
+@keyframes fireShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+.productivityTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clockContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.clockFace {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.clockMarkers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.clockMarker {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background: var(--text-secondary);
+  transform-origin: 50% 100px;
+  left: calc(50% - 1px);
+  top: 0;
+}
+
+.clockNumber {
+  position: absolute;
+  font-size: 14px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.clockNumber0 {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clockNumber6 {
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.clockNumber12 {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clockNumber18 {
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.clockSector {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  clip-path: path('');
+  background: var(--accent);
+  opacity: 0.3;
+  animation: sectorPulse 2s ease-in-out infinite;
+}
+
+@keyframes sectorPulse {
+  0% {
+    opacity: 0.2;
+    filter: brightness(0.8);
+  }
+  50% {
+    opacity: 0.4;
+    filter: brightness(1.2);
+  }
+  100% {
+    opacity: 0.2;
+    filter: brightness(0.8);
+  }
+}
+
+.peakTimeWrapper {
+  margin: 1rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.peakTimeLabel {
+  text-align: center;
+  font-size: var(--font-size-secondary);
+}
+
+.peakTimeRange {
+  text-align: center;
+  font-size: var(--font-size-secondary);
+  font-weight: 500;
+}
+
+.dailyComparison {
+  margin-top: 2rem;
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 16px;
+}
+
+.dailyComparisonTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.dailyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dailyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.6em;
+    border-bottom: 1px dotted var(--text-primary);
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  .dailyDay,
+  .dailyTimeRange {
+    background: var(--bg-primary);
+    position: relative;
+    z-index: 1;
+  }
+
+  .dailyDay {
+    padding-left: 0;
+  }
+
+  .dailyTimeRange {
+    padding-right: 0;
+  }
+}
+
+.dailyDay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-size-secondary);
+}
+
+.dailyTaskCount {
+  font-weight: 500;
+  color: var(--accent);
+  min-width: 2rem;
+  text-align: right;
+}
+
+.dailyTimeRange {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.timeAnalysis {
+  margin-top: 2rem;
+}
+
+.timeAnalysisTitle {
+  font-size: var(--font-size-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeBar {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-primary);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.timeBarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.timeBarDay {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.timeBarTotal {
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+}
+
+.stackedBar {
+  height: 24px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.stackedSegment {
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.segmentTooltip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.timeBarLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--border-radius-primary);
+}

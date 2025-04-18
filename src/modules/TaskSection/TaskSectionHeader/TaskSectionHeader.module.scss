@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.buttonContent {
+  display: flex;
+  gap: 0.2rem;
+  font-size: var(--font-size-secondary);
+}

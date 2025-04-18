@@ -1,8 +1,8 @@
-import Calendar from '../../components/Calendar/Calendar';
-import { useAppSelector } from '../../hooks/storeHooks';
+import { Calendar } from '../../modules/Calendar/Calendar';
 
-export default function CalendarPage() {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+export const CalendarPage = () => {
+  console.log('CalendarPage');
+  return <Calendar />;
+};
 
-  return <Calendar tasks={tasks} />;
-}
+CalendarPage.displayName = 'CalendarPage';

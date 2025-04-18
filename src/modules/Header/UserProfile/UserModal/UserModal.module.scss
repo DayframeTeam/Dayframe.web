@@ -1,0 +1,109 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.levelInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.levelRing {
+  width: 120px;
+  height: 120px;
+}
+
+.expProgress {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.expLabels {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.currentExp {
+  width: max-content;
+  height: 100%;
+  font-size: var(--font-size-secondary);
+  display: flex;
+  align-items: center;
+}
+.nextLevel {
+  font-size: var(--font-size-secondary);
+}
+
+.progressBar {
+  width: 100%;
+  height: 18px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress {
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 12px;
+  // transition: width 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  min-width: min-content;
+
+  .currentExp {
+    color: white;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.examplesTitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-secondary);
+  text-align: center;
+}
+
+.examplesList {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.exampleItem {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}

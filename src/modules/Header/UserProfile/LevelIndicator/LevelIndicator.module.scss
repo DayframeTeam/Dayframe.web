@@ -1,0 +1,59 @@
+.levelInfo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.levelInfoLarge {
+  .exp {
+    font-size: 2rem;
+    font-weight: var(--font-weight-big);
+  }
+}
+
+.progressRing {
+  position: absolute;
+  top: -0.25rem;
+  left: -0.25rem;
+  width: calc(100% + 0.5rem);
+  height: calc(100% + 0.5rem);
+  transform: rotate(120deg);
+
+  circle {
+    stroke-linecap: round;
+  }
+}
+
+.backgroundRing {
+  stroke: var(--bg-tertiary);
+  stroke-dasharray: 209 300; // 300 градусов из 360
+}
+
+// .progressPath {
+//   transition: stroke-dasharray 0.3s ease;
+// }
+
+.expCircle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.exp {
+  font-size: var(--font-size-tertiary);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-big);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lightning {
+  font-size: var(--font-size-tertiary);
+}

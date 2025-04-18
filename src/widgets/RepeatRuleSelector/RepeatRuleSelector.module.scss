@@ -1,0 +1,20 @@
+.dayButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  font-size: var(--font-size-secondary);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-primary);
+  font-weight: var(--font-weight-big);
+
+  &.selected {
+    background-color: var(--accent);
+    color: var(--text-on-accent);
+  }
+
+  &:hover {
+    background-color: var(--accent-muted);
+  }
+}

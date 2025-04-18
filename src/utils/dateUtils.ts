@@ -3,6 +3,20 @@ export const toLocalDateString = (dateString: string): string => {
   return date.toLocaleDateString('sv-SE'); // формат YYYY-MM-DD
 };
 
+export function formatDateToLocalYYYYMMDD(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+    date.getDate()
+  ).padStart(2, '0')}`;
+}
+
+export const formatDateDayMonth = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  // const day = date.getDate();
+  return `${day}.${month}`;
+};
+
 export const formatTime = (time: string | null | undefined): string | null => {
   if (!time) return null;
   return time.split(':').slice(0, 2).join(':');

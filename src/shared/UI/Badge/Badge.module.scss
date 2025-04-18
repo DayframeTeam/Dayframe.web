@@ -1,0 +1,13 @@
+.badge {
+  padding: 0 0.6rem;
+  border-radius: 9999px;
+  font-size: var(--font-size-secondary);
+  font-weight: var(--font-weight-big);
+  color: var(--text-on-accent);
+  line-height: 1.2;
+  max-width: 124px;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

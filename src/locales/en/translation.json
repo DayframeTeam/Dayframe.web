@@ -1,8 +1,14 @@
 {
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "create": "Create",
+    "creating": "Creating..."
+  },
   "taskSection": {
     "today": "Tasks for today",
     "dateTasks": "Tasks for {{date}}",
-    "empty": "No tasks for today"
+    "empty": "No tasks for this day"
   },
   "nav": {
     "today": "Today",
@@ -14,14 +20,18 @@
     "description": "Task description",
     "duration": "Task duration",
     "add": "Add task",
-    "save": "Save task",
+    "save": "Save changes",
     "saveChanges": "Save changes",
     "delete": "Delete task",
     "deleted": "Task deleted",
+    "confirmDelete": "Are you sure you want to delete this task?",
+    "cancel": "Cancel",
     "exp": "Task XP",
     "edit": "Edit",
+    "showAdvanced": "Advanced settings",
+    "hideAdvanced": "Hide settings",
     "alert": {
-      "title": "Task title is required",
+      "titleRequired": "Task title is required",
       "updateError": "Update error"
     },
     "status": {
@@ -42,13 +52,15 @@
       "to": "Until",
       "daily": "Daily",
       "weekly": "Weekly",
+      "quest": "Quest",
       "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     },
     "priority": "Priority",
     "priorityType": {
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High"
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "none": "no priority"
     },
     "category": "Category",
     "subtasks": {
@@ -58,10 +70,43 @@
       "remove": "Remove subtask",
       "edit": "Edit subtasks",
       "placeholderTitle": "Enter subtask name",
+      "delete": "Delete subtask",
+      "move": "Move subtask",
       "alert": {
         "title": "All subtasks must have a title"
       }
     }
+  },
+  "templates": {
+    "daily": "Every day",
+    "weekly": "Once a week (no specific day)",
+    "quests": "Quests",
+    "custom": "Selected days",
+    "noTasks": "No template tasks",
+    "activeToggle": "Turn on/off template task",
+    "days": {
+      "title": "Template days",
+      "add": "Add template day",
+      "edit": "Edit template day",
+      "name": "Day name",
+      "namePlaceholder": "Enter day name",
+      "repeatDays": "Repeat by days",
+      "nameRequired": "Day name is required"
+    },
+    "alert": {
+      "repeatRuleRequired": "Repeat rule is required"
+    }
+  },
+  "ui": {
+    "select": {
+      "placeholder": "Select..."
+    },
+    "clickToOpen": "Click to open",
+    "resetDate": "Reset date"
+  },
+  "time": {
+    "hour": "h",
+    "minute": "m"
   },
   "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   "monthNames": [
@@ -78,16 +123,94 @@
     "November",
     "December"
   ],
+  "monthNamesShort": [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ],
+  "required": "required",
+  "confirm": "Confirm",
   "loading": "Loading...",
   "error.loading": "⚠️ Failed to load data",
   "user": {
+    "currentLevel": "Current level",
     "level": "Level",
     "exp": "XP",
-    "nextLevel": "Next level"
+    "nextLevel": "Next level",
+    "levelExamples": "Level examples",
+    "expDetails": "Experience details"
   },
   "theme": {
     "light": "Light theme",
     "dark": "Dark theme",
     "change": "Change theme"
+  },
+  "stats": {
+    "hideStatistics": "Hide statistics",
+    "viewStatistics": "View statistics",
+    "completedTasks": "Completed tasks",
+    "allTime": "All time",
+    "thisMonth": "This month",
+    "today": "Today",
+    "yearlyProgress": "Monthly progress",
+    "byCategory": "By category",
+    "byPriority": "By priority",
+    "timeSpent": "Time spent on completed tasks",
+    "activity": "Activity",
+    "tasksCompleted": "tasks completed",
+    "legend": {
+      "less": "Less tasks completed",
+      "more": "More tasks completed"
+    },
+    "streaks": {
+      "title": "Task Streaks",
+      "current": "Current streak",
+      "best": "Best streak",
+      "days": "days"
+    },
+    "productivity": {
+      "title": "Productivity",
+      "peakTime": "Peak productivity time of all days",
+      "timeRange": "{{start}} - {{end}}",
+      "dailyComparison": "Most productive time of the day",
+      "mostProductive": "Most productive day",
+      "tasksCompleted": "tasks completed"
+    },
+    "timeAnalysis": {
+      "title": "Average time per tasks",
+      "totalTime": "Total time",
+      "perDay": "Time per day",
+      "byCategory": "Time by category",
+      "hours": "{{hours}}h {{minutes}}m"
+    }
+  },
+  "weather": {
+    "location": "{{location}}",
+    "detectLocation": "Detect location",
+    "loading": "Loading weather...",
+    "errors": {
+      "permissionDenied": "⚠️ Location access denied. Please allow access in browser settings",
+      "positionUnavailable": "⚠️ Could not determine location",
+      "timeout": "⚠️ Request timed out. Please try again",
+      "notSupported": "⚠️ Your browser does not support geolocation",
+      "noCity": "⚠️ Could not determine city",
+      "fetchError": "⚠️ Error fetching location data",
+      "unknown": "⚠️ Unknown error"
+    }
+  },
+  "FAQ": {
+    "FAQ": "Information",
+    "quests": {
+      "description": "Quests are tasks you create yourself — just like in a game. Ask the Telegram bot to pick one for you and get your quest of the day!"
+    }
   }
 }

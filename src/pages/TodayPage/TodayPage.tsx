@@ -1,14 +1,14 @@
 import { useAppSelector } from '../../hooks/storeHooks';
-import { Task } from '../../types/dbTypes';
-import { toLocalDateString } from '../../utils/dateUtils';
-import TaskSection from '../../components/TaskSection/TaskSection';
+import { TaskSection } from '../../modules/TaskSection/TaskSection';
+import { selectTaskIdsByDateIncludingUndated } from '../../entities/task/store/tasksSlice';
 
-export default function TodayPage() {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+export const TodayPage = () => {
+  // Получаем сегодняшнюю дату в формате YYYY-MM-DD
   const today = new Date().toLocaleDateString('sv-SE');
-  const todayTasks: Task[] = tasks.filter(
-    (task) => !task.task_date || toLocalDateString(task.task_date) === today
-  );
 
-  return <TaskSection date={today} tasks={todayTasks} />;
-}
+  // Получаем ID задач на сегодня через селектор
+  const todayTaskIds = useAppSelector((state) => selectTaskIdsByDateIncludingUndated(state, today));
+  return <TaskSection date={today} taskIds={todayTaskIds} />;
+};
+
+TodayPage.displayName = 'TodayPage';

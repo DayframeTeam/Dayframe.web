@@ -1,0 +1,65 @@
+.sticker {
+  width: 100%;
+  aspect-ratio: 1 / 1; // Квадратное соотношение по умолчанию
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-primary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem;
+  position: relative;
+  transition: 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--bg-tertiary);
+  }
+}
+
+.today {
+  border: 1px solid var(--accent);
+  color: var(--text-primary);
+}
+
+.past {
+  opacity: 0.4;
+  filter: grayscale(50%);
+}
+
+.day {
+  // font-weight: var(--font-weight-big);
+  // font-size: var(--font-size-secondary);
+  text-align: left;
+}
+
+/* Блок для задач */
+.events {
+  flex: 1;
+  margin-top: 0.25rem;
+  /* Разрешаем вертикальный скролл */
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  gap: 0.2rem;
+  max-height: calc(100% - 1.2rem);
+
+  /* Для Chrome, Safari и остальных WebKit-браузеров */
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Для Firefox */
+  scrollbar-width: none;
+
+  /* Для старых IE/Edge (иногда помогает) */
+  -ms-overflow-style: none;
+}
+
+/* Адаптивные стили для телефонов */
+@media (max-width: 480px) {
+  .sticker {
+    height: 60px;
+    aspect-ratio: auto;
+    padding: 0.2rem;
+  }
+}

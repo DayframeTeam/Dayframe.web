@@ -1,0 +1,34 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.weekDayHeader {
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-big);
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.emptyCell {
+  aspect-ratio: 1;
+  border-radius: var(--border-radius-primary);
+  opacity: 0.3;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .emptyCell {
+    height: 60px;
+    aspect-ratio: auto;
+    padding: 0.2rem;
+  }
+}
