@@ -1,4 +1,4 @@
-import { TemplatesSection } from '../../components/Templates/TemplatesSection/TemplatesSection';
+import { TemplatesSection } from '../../modules/Templates/TemplatesSection/TemplatesSection';
 import { TemplateTask } from '../../types/dbTypes';
 
 const mockTemplates: TemplateTask[] = [

@@ -10,7 +10,7 @@ import { Button } from '../../../shared/UI/Button/Button';
 import { ToggleSwitch } from '../../../shared/UI/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../../widgets/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
-import { TaskModal } from '../../TaskModal/TaskModal';
+import { TaskModal } from '../../../components/TaskModal/TaskModal';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;

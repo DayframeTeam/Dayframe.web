@@ -7,7 +7,7 @@ import { Button } from '../../../shared/UI/Button/Button';
 import { InfoIcon, PlusIcon } from 'lucide-react';
 import { QuestsInfoModal } from '../QuestsInfoModal/QuestsInfoModal';
 import { nanoid } from 'nanoid';
-import { TaskModal } from '../../TaskModal/TaskModal';
+import { TaskModal } from '../../../components/TaskModal/TaskModal';
 
 type TemplateTasksSectionProps = {
   type: RepeatRule;

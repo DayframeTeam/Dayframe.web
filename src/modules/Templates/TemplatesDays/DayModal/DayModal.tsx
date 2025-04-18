@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Modal } from '../../../Modal/Modal';
+import { Modal } from '../../../../components/Modal/Modal';
 import { Day } from '../../../../types/dbTypes';
 import { useTranslation } from 'react-i18next';
 import { DayEditModal } from './DayEditModal';
@@ -17,11 +17,11 @@ export const DayModal = memo(({ isOpen, onClose, day }: DayModalProps) => {
 
   return (
     isOpen && (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={isEdit ? t('templates.days.edit') : t('templates.days.add')}
-    >
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={isEdit ? t('templates.days.edit') : t('templates.days.add')}
+      >
         {isEdit ? <DayEditModal day={day} /> : <DayAddModal />}
       </Modal>
     )

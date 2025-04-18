@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react';
 import styles from './DaySticker.module.scss';
 import type { Task } from '../../../types/dbTypes';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
-import { TaskSection } from '../../TaskSection/TaskSection';
-import { Modal } from '../../Modal/Modal';
+import { TaskSection } from '../../../components/TaskSection/TaskSection';
+import { Modal } from '../../../components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 
 type Props = Readonly<{
@@ -15,7 +15,7 @@ type Props = Readonly<{
 export const DaySticker = React.memo(({ date, isToday = false, tasks = [] }: Props) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
-
+  //TODO: на уровне дня сервис
   // Проверяем, что день уже прошёл
   const isPast = new Date(date) < new Date(new Date().toDateString());
 

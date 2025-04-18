@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar } from '../../components/Calendar/Calendar';
+import { Calendar } from '../../modules/Calendar/Calendar';
 import { selectAllTasks } from '../../entities/task/store/tasksSlice';
 import { useAppSelector } from '../../hooks/storeHooks';
 

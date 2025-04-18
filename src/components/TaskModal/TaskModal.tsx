@@ -25,7 +25,7 @@ export const TaskModal = memo(
     let taskCopy: Task | TemplateTask | DayTask | undefined;
     let handleSubmit = undefined;
     let handleDelete = undefined;
-
+//TODO: разбить на разные
     // Функция для получения соответствующего сервиса для типа задачи
     const getTaskService = (task: Task | TemplateTask | DayTask): AnyService => {
       if ('is_done' in task && 'task_date' in task) {
