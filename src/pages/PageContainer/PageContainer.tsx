@@ -1,8 +1,8 @@
 import styles from './PageContainer.module.scss';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { TodayPage } from '../../pages/TodayPage/TodayPage.tsx';
-import { CalendarPage } from '../../pages/CalendarPage/CalendarPage.tsx';
-import { TemplatesPage } from '../../pages/TemplatesPage/TemplatesPage.tsx';
+import { TodayPage } from '../TodayPage/TodayPage.tsx';
+import { CalendarPage } from '../CalendarPage/CalendarPage.tsx';
+import { TemplatesPage } from '../TemplatesPage/TemplatesPage.tsx';
 
 export function PageContainer() {
   console.log('PageContainer');

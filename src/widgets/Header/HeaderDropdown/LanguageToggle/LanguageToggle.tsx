@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '../ui/Button/Button';
+import { Button } from '../../../../shared/UI/Button/Button';
 
 export function LanguageToggle() {
   const { i18n } = useTranslation();

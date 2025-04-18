@@ -1,7 +1,7 @@
 import { Settings } from 'lucide-react';
-import Dropdown from '../ui/Dropdown/Dropdown';
-import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
-import { LanguageToggle } from '../LanguageToggle/LanguageToggle';
+import Dropdown from '../../../shared/UI/Dropdown/Dropdown';
+import { ThemeToggle } from './ThemeToggle/ThemeToggle';
+import { LanguageToggle } from './LanguageToggle/LanguageToggle';
 import styles from './HeaderDropdown.module.scss';
 
 export function HeaderDropdown() {

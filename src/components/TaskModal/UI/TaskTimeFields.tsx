@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TextInput } from '../../ui/TextInput/TextInput';
-import { DatePicker } from '../../ui/DatePicker/DatePicker';
-import shared from './shared.module.scss';
+import { TextInput } from '../../../shared/UI/TextInput/TextInput';
+import { DatePicker } from '../../../widgets/DatePicker/DatePicker';
+import shared from '../../../shared/UI/shared.module.scss';
 import { DayTask, Task, TemplateTask } from '../../../types/dbTypes';
 import { formatDateToLocalYYYYMMDD } from '../../../utils/dateUtils';
 

@@ -3,7 +3,7 @@ import styles from './TemplateTasksSection.module.scss';
 import { RepeatRule, TemplateTask } from '../../../types/dbTypes';
 import { useTranslation } from 'react-i18next';
 import { TemplateTaskItem } from '../TemplateTaskItem/TemplateTaskItem';
-import { Button } from '../../ui/Button/Button';
+import { Button } from '../../../shared/UI/Button/Button';
 import { InfoIcon, PlusIcon } from 'lucide-react';
 import { QuestsInfoModal } from '../QuestsInfoModal/QuestsInfoModal';
 import { nanoid } from 'nanoid';

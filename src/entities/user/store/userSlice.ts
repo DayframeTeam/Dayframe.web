@@ -12,13 +12,11 @@ const userSlice = createSlice({
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
     },
-    updateUserExp(state, action: PayloadAction<number>) {
-      if (state.user) {
-        state.user.exp = action.payload;
-      }
+    setUserExp(state, action: PayloadAction<number>) {
+      state.user!.exp = action.payload;
     },
   },
 });
 
-export const { setUser, updateUserExp } = userSlice.actions;
+export const { setUser, setUserExp } = userSlice.actions;
 export default userSlice.reducer;

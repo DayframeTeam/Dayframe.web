@@ -1,14 +1,14 @@
 import { memo, useState } from 'react';
 import styles from './TemplateTaskItem.module.scss';
 import { DayTask, TemplateTask as TemplateTaskType } from '../../../types/dbTypes';
-import { CustomEditBtn } from '../../ui/CustomEditBtn/CustomEditBtn';
-import { Badge } from '../../ui/Badge/Badge';
+import { CustomEditBtn } from '../../../shared/UI/CustomEditBtn/CustomEditBtn';
+import { Badge } from '../../../shared/UI/Badge/Badge';
 import { useTranslation } from 'react-i18next';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { calculateDuration, formatTime } from '../../../utils/dateUtils';
-import { Button } from '../../ui/Button/Button';
-import { ToggleSwitch } from '../../ui/ToggleSwitch/ToggleSwitch';
-import { SelectedDays } from '../../ui/SeleectedDays/SeleectedDays';
+import { Button } from '../../../shared/UI/Button/Button';
+import { ToggleSwitch } from '../../../shared/UI/ToggleSwitch/ToggleSwitch';
+import { SelectedDays } from '../../../widgets/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
 import { TaskModal } from '../../TaskModal/TaskModal';
 

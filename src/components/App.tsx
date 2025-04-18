@@ -1,8 +1,8 @@
-import { Header } from './Header/Header.tsx';
-import { HeaderNav } from './HeaderNav/HeaderNav.tsx';
-import { PageContainer } from './PageContainer/PageContainer.tsx';
-import { HeaderDropdown } from './HeaderDropdown/HeaderDropdown.tsx';
-import { UserProfile } from './User/UserProfile/UserProfile.tsx';
+import { Header } from '../widgets/Header/Header.tsx';
+import { HeaderNav } from '../widgets/Header/HeaderNav/HeaderNav.tsx';
+import { PageContainer } from '../pages/PageContainer/PageContainer.tsx';
+import { HeaderDropdown } from '../widgets/Header/HeaderDropdown/HeaderDropdown.tsx';
+import { UserProfile } from '../widgets/Header/UserProfile/UserProfile.tsx';
 
 function App() {
   const saved = localStorage.getItem('theme');

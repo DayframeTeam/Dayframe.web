@@ -1,5 +1,5 @@
 import { memo, useState, useRef, useEffect } from 'react';
-import { Button } from '../../ui/Button/Button';
+import { Button } from '../../../shared/UI/Button/Button';
 import styles from './CalendarHeader.module.scss';
 import { useTranslation } from 'react-i18next';
 import { nanoid } from 'nanoid';

@@ -3,10 +3,10 @@ import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import { ru, enUS } from 'date-fns/locale';
 import 'react-day-picker/dist/style.css';
-import shared from '../shared.module.scss';
+import shared from '../../shared/UI/shared.module.scss';
 import styles from './DatePicker.module.scss';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../Button/Button';
+import { Button } from '../../shared/UI/Button/Button';
 
 const modifiersStyles = {
   today: {

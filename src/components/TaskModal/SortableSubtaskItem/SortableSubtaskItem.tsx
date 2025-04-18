@@ -2,8 +2,8 @@ import { memo } from 'react';
 import styles from './SortableSubtaskItem.module.scss';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { TextInput } from '../../ui/TextInput/TextInput';
-import { Button } from '../../ui/Button/Button';
+import { TextInput } from '../../../shared/UI/TextInput/TextInput';
+import { Button } from '../../../shared/UI/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { Subtask, TemplateSubtask, DayTaskSubtask } from '../../../types/dbTypes';
 

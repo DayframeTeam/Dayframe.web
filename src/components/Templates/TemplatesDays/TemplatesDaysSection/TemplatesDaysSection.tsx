@@ -1,5 +1,5 @@
 import { PlusIcon } from 'lucide-react';
-import { Button } from '../../../ui/Button/Button';
+import { Button } from '../../../../shared/UI/Button/Button';
 import styles from './TemplatesDaysSection.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Day } from '../../../../types/dbTypes';

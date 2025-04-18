@@ -25,8 +25,6 @@ export const { setTasks, addTask, updateOneTask, deleteTask } = tasksSlice.actio
 
 export default tasksSlice.reducer;
 
-export const {
-  selectAll: selectAllTasks,
-  selectById: selectTaskById,
-  selectIds: selectTaskIds,
-} = tasksAdapter.getSelectors((state: RootState) => state.tasks);
+export const { selectAll: selectAllTasks } = tasksAdapter.getSelectors(
+  (state: RootState) => state.tasks
+);

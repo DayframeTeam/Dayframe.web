@@ -5,12 +5,12 @@ import { formatTime, calculateDuration } from '../../utils/dateUtils';
 import styles from './TaskItem.module.scss';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { Checkbox } from '../../components/ui/Checkbox/Checkbox';
-import { Badge } from '../../components/ui/Badge/Badge';
-import { SubtaskList } from '../ui/SubtaskList/SubtaskList';
-import { Button } from '../ui/Button/Button';
+import { Checkbox } from '../../shared/UI/Checkbox/Checkbox';
+import { Badge } from '../../shared/UI/Badge/Badge';
+import { SubtaskList } from '../../widgets/SubtaskList/SubtaskList';
+import { Button } from '../../shared/UI/Button/Button';
 import { TaskModal } from '../TaskModal/TaskModal';
-import { CustomEditBtn } from '../ui/CustomEditBtn/CustomEditBtn';
+import { CustomEditBtn } from '../../shared/UI/CustomEditBtn/CustomEditBtn';
 import { taskService } from '../../entities/task/taskService';
 import { userService } from '../../entities/user/userService';
 
@@ -48,7 +48,7 @@ export default function TaskItem({ task }: Props) {
     try {
       setIsLoading(true);
       const newStatus = !task.is_done;
-
+      console.log('newStatus', newStatus);
       // Обновляем статус по special_id
       await taskService.updateTaskStatus(task.id, newStatus);
 
@@ -224,9 +224,7 @@ export default function TaskItem({ task }: Props) {
             {showSubtasks ? '▲' : '▼'}
           </Button>
         )}
-        {hasSubtasks && showSubtasks && (
-          <SubtaskList task={task}/>
-        )}
+        {hasSubtasks && showSubtasks && <SubtaskList task={task} />}
       </div>
       <CustomEditBtn onClick={() => setIsEditing(true)} />
       {isEditing && (

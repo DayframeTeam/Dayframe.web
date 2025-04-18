@@ -51,7 +51,7 @@ export function handleApiError(error: unknown, context: string): AppError {
 
   // Handle axios error
   if (error && typeof error === 'object' && 'response' in error) {
-    const axiosError = error as { response?: { status: number; data: any } };
+    const axiosError = error as { response?: { status: number; data: unknown } };
 
     if (axiosError.response) {
       const status = axiosError.response.status;

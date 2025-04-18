@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { TaskList } from '../TaskList/TaskList';
 import type { Task } from '../../types/dbTypes';
 import { PlusIcon } from 'lucide-react';
-import { Button } from '../ui/Button/Button';
+import { Button } from '../../shared/UI/Button/Button';
 import { memo, useState, useEffect } from 'react';
 import { TaskModal } from '../TaskModal/TaskModal';
 import { WeatherDisplay } from '../WeatherDisplay';
@@ -22,10 +22,8 @@ export const TaskSection = memo(({ date, taskIds }: Props) => {
   const [isAdding, setIsAdding] = useState(false);
   const [location, setLocation] = useState<string>('');
   const allTasks = useAppSelector((state) => state.tasks.entities);
-  const tasks = taskIds
-    .map((id) => allTasks[id])
-    .filter((t): t is Task => !!t);
-  
+  const tasks = taskIds.map((id) => allTasks[id]).filter((t): t is Task => !!t);
+
   // Проверяем, является ли дата прошедшей
   const isPastDate = new Date(date) < new Date(new Date().setHours(0, 0, 0, 0));
   console.log('TaskSection');

@@ -3,6 +3,7 @@ import api from '../../api/http/axios';
 import { store } from '../../store';
 import { handleApiError } from '../../shared/errors';
 import { addTask, deleteTask, setTasks, updateOneTask } from './store/tasksSlice';
+import { setUserExp } from '../user/store/userSlice';
 
 const url = '/tasks';
 
@@ -14,6 +15,12 @@ export type TaskService = {
   updateTask: (taskId: number, taskData: Partial<Task>) => Promise<void>;
   updateSubtaskStatus: (subtaskId: number, isDone: boolean) => Promise<void>;
 };
+
+// Define response types
+interface TaskResponse {
+  task?: Task;
+  userExp?: number;
+}
 
 /**
  * Service for managing tasks with database and store integration
@@ -63,16 +70,22 @@ export const taskService: TaskService = {
 
   async updateTaskStatus(taskId: number, isDone: boolean): Promise<void> {
     try {
-      const response = await api.patch<Task>(`${url}/is_done/${taskId}`, {
+      const response = await api.patch<TaskResponse>(`${url}/is_done/${taskId}`, {
         is_done: isDone,
       });
 
-      store.dispatch(
-        updateOneTask({
-          id: response.data.special_id,
-          changes: response.data,
-        })
-      );
+      if (response.data.task) {
+        store.dispatch(
+          updateOneTask({
+            id: response.data.task.special_id,
+            changes: response.data.task,
+          })
+        );
+      }
+
+      if (response.data.userExp) {
+        store.dispatch(setUserExp(response.data.userExp));
+      }
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateTaskStatus');
       console.error(appError.message);
@@ -99,20 +112,21 @@ export const taskService: TaskService = {
 
   async updateSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     try {
-      const response = await api.patch<Task>(`${url}/subtasks/${subtaskId}`, {
+      const response = await api.patch<TaskResponse>(`${url}/subtasks/${subtaskId}`, {
         is_done: isDone,
       });
 
-      // The response includes the updated parent task with the new is_done status
-      // Update the task in the store
-      if (response.data && response.data.special_id) {
-        // Use the id and changes format expected by updateOneTask
+      if (response.data.task) {
         store.dispatch(
           updateOneTask({
-            id: response.data.special_id,
-            changes: response.data,
+            id: response.data.task.special_id,
+            changes: response.data.task,
           })
         );
+      }
+
+      if (response.data.userExp) {
+        store.dispatch(setUserExp(response.data.userExp));
       }
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateSubtaskStatus');

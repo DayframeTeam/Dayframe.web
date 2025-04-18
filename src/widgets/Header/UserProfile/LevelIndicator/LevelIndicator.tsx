@@ -3,7 +3,7 @@ import {
   calculateLevel,
   calculateNextLevelExp,
   getLevelColorScheme,
-} from '../../../utils/levelUtils';
+} from '../../../../utils/levelUtils';
 import { memo, useEffect, useRef } from 'react';
 import { animate } from 'animejs';
 

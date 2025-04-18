@@ -1,12 +1,12 @@
 import { Day } from '../../../../types/dbTypes';
 import { useState, memo } from 'react';
 import styles from './TemplateDay.module.scss';
-import { Button } from '../../../ui/Button/Button';
+import { Button } from '../../../../shared/UI/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from 'lucide-react';
-import { CustomEditBtn } from '../../../ui/CustomEditBtn/CustomEditBtn';
+import { CustomEditBtn } from '../../../../shared/UI/CustomEditBtn/CustomEditBtn';
 import { TemplateTaskItem } from '../../TemplateTaskItem/TemplateTaskItem';
-import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
+import { SelectedDays } from '../../../../widgets/SeleectedDays/SeleectedDays';
 import { DayModal } from '../DayModal/DayModal';
 import { nanoid } from 'nanoid';
 import { TaskModal } from '../../../TaskModal/TaskModal';

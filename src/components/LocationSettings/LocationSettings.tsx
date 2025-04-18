@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../ui/Button/Button';
+import { Button } from '../../shared/UI/Button/Button';
 import { MapPinIcon, Loader2Icon } from 'lucide-react';
 
 type Props = {
@@ -194,7 +194,9 @@ export const LocationSettings = ({ onLocationChange }: Props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      <span style={{ fontSize: 'var(--font-size-tertiary)', color: 'var(--text-muted)' }}>{t('weather.location', { location })}</span>
+      <span style={{ fontSize: 'var(--font-size-tertiary)', color: 'var(--text-muted)' }}>
+        {t('weather.location', { location })}
+      </span>
       <Button size="small" variant="secondary" onClick={detectLocation} disabled={isLoading}>
         {isLoading ? <Loader2Icon size={16} className="animate-spin" /> : <MapPinIcon size={16} />}
       </Button>

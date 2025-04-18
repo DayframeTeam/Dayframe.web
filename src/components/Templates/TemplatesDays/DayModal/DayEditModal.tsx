@@ -1,9 +1,9 @@
 import { memo, useState, useEffect } from 'react';
 import { Day } from '../../../../types/dbTypes';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../../ui/Button/Button';
-import { TextInput } from '../../../ui/TextInput/TextInput';
-import { SelectedDays } from '../../../ui/SeleectedDays/SeleectedDays';
+import { Button } from '../../../../shared/UI/Button/Button';
+import { TextInput } from '../../../../shared/UI/TextInput/TextInput';
+import { SelectedDays } from '../../../../widgets/SeleectedDays/SeleectedDays';
 import styles from './DayModal.module.scss';
 
 type DayEditModalProps = {

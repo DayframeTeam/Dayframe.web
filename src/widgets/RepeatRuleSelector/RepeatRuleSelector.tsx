@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { RepeatRule } from '../../../types/dbTypes';
+import { RepeatRule } from '../../types/dbTypes';
 import { SelectedDays } from '../SeleectedDays/SeleectedDays';
 import styles from './RepeatRuleSelector.module.scss';
 import { useTranslation } from 'react-i18next';
-import { Badge } from '../Badge/Badge';
-import shared from '../../TaskModal/UI/shared.module.scss';
-import { Button } from '../Button/Button';
+import { Badge } from '../../shared/UI/Badge/Badge';
+import shared from '../../shared/UI/shared.module.scss';
+import { Button } from '../../shared/UI/Button/Button';
 
 type Props = {
   value: RepeatRule;
