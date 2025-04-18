@@ -1,86 +1,97 @@
 import { memo, useMemo, useState, useCallback } from 'react';
 import styles from './DaySticker.module.scss';
-import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { TaskSection } from '../../TaskSection/TaskSection';
 import { Modal } from '../../../shared/Modal/Modal';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { calendarService } from '../../../entities/calendar/calendarService';
+import { useAppSelector } from '../../../hooks/storeHooks';
+import { selectTaskIdsByDate } from '../../../entities/task/store/tasksSlice';
 import { format } from 'date-fns';
+import { StickerPreview } from './StickerPreview/StickerPreview';
+import { shallowEqual } from 'react-redux';
 
 type Props = Readonly<{
   date: string;
 }>;
 
-export const DaySticker = memo(({ date }: Props) => {
-  const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
+/**
+ * Оптимизированная версия DaySticker, которая не перерисовывается
+ * при изменениях в задачах, не относящихся к этому дню
+ */
+export const DaySticker = memo(
+  ({ date }: Props) => {
+    const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
 
-  // Мемоизируем объект даты
-  const dateObj = useMemo(() => new Date(date), [date]);
+    // Мемоизируем объект даты
+    const dateObj = useMemo(() => new Date(date), [date]);
 
-  // Мемоизируем текущую дату
-  const today = useMemo(() => new Date(), []);
+    // Мемоизируем текущую дату
+    const today = useMemo(() => new Date(), []);
 
-  // Определяем, сегодня ли это
-  const isToday = useMemo(() => {
-    return format(dateObj, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd');
-  }, [dateObj, today]);
+    // Определяем, сегодня ли это
+    const isToday = useMemo(() => {
+      return format(dateObj, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd');
+    }, [dateObj, today]);
 
-  // Проверяем, что день уже прошёл
-  const isPast = useMemo(() => dateObj < new Date(today.setHours(0, 0, 0, 0)), [dateObj, today]);
+    // Проверяем, что день уже прошёл
+    const isPast = useMemo(() => dateObj < new Date(today.setHours(0, 0, 0, 0)), [dateObj, today]);
 
-  // Получаем день месяца
-  const dayNumber = useMemo(() => dateObj.getDate(), [dateObj]);
+    // Получаем день месяца
+    const dayNumber = useMemo(() => dateObj.getDate(), [dateObj]);
 
-  // Получаем отсортированные по времени задачи для этой даты
-  const tasks = useSelector(calendarService.selectTasksSortedByTime(dateObj));
+    // Получаем только ID задач для этой даты с проверкой на изменения через shallowEqual
+    const taskIds = useAppSelector(
+      (state) => selectTaskIdsByDate(state, date),
+      shallowEqual // Важно: использование shallowEqual предотвращает перерисовки при идентичных массивах
+    );
 
-  // Используем useCallback для стабильных ссылок на функции
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
+    // Используем useCallback для стабильных ссылок на функции
+    const handleOpen = useCallback(() => {
+      setOpen(true);
+    }, []);
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
+    const handleClose = useCallback(() => {
+      setOpen(false);
+    }, []);
 
-  console.log('DaySticker');
+    console.log('DaySticker render', date);
 
-  // Мемоизируем список задач для предотвращения перерисовок
-  const taskIdsList = useMemo(() => tasks.map((task) => task.special_id), [tasks]);
+    const renderContent = useMemo(() => {
+      // Мемоизируем превью задач, чтобы не создавать элементы заново при перерисовке
+      return (
+        <>
+          <div className={styles.day}>{dayNumber}</div>
+          <div className={styles.events}>
+            {taskIds.map((special_id) => (
+              <StickerPreview key={special_id} taskId={special_id} />
+            ))}
+          </div>
+        </>
+      );
+    }, [dayNumber, taskIds]);
 
-  return (
-    <>
-      <div
-        className={`${styles.sticker} ${isToday ? styles.today : ''} ${isPast ? styles.past : ''}`}
-        onClick={handleOpen}
-        title={t('ui.clickToOpen')}
-      >
-        <div className={styles.day}>{dayNumber}</div>
-        <div className={styles.events}>
-          {tasks.map((task) => (
-            <div
-              key={task.special_id || task.id}
-              className={`${styles.event} ${task.is_done ? styles.completed : ''}`}
-              style={{
-                borderLeftColor: `var(--select-color-${getPriorityColorIndex(task.priority)})`,
-              }}
-              title={task.title}
-            >
-              {task.start_time?.slice(0, 5)} {task.title}
-            </div>
-          ))}
+    return (
+      <>
+        <div
+          className={`${styles.sticker} ${isToday ? styles.today : ''} ${isPast ? styles.past : ''}`}
+          onClick={handleOpen}
+          title={t('ui.clickToOpen')}
+        >
+          {renderContent}
         </div>
-      </div>
 
-      {open && (
-        <Modal onClose={handleClose}>
-          <TaskSection date={date} taskIds={taskIdsList} />
-        </Modal>
-      )}
-    </>
-  );
-});
+        {open && (
+          <Modal onClose={handleClose}>
+            <TaskSection date={date} taskIds={taskIds} />
+          </Modal>
+        )}
+      </>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Дополнительная проверка для memo - перерисовываем только если изменилась дата
+    return prevProps.date === nextProps.date;
+  }
+);
 
 DaySticker.displayName = 'DaySticker';
