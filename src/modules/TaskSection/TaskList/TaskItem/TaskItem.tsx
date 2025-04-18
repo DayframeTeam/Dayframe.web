@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from '../../../../shared/UI/Checkbox/Checkbox';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
-import { SubtaskList } from '../../../../widgets/SubtaskList/SubtaskList';
+import { SubtaskList } from './SubtaskList/SubtaskList';
 import { Button } from '../../../../shared/UI/Button/Button';
 import { TaskModal } from '../../TaskModal/TaskModal';
 import { CustomEditBtn } from '../../../../shared/UI/CustomEditBtn/CustomEditBtn';
@@ -17,7 +17,7 @@ type Props = Readonly<{
   task: Task;
 }>;
 
-export default function TaskItem({ task }: Props) {
+export function TaskItem({ task }: Props) {
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
   const colorIndex = getPriorityColorIndex(task.priority);
@@ -162,7 +162,7 @@ export default function TaskItem({ task }: Props) {
           </Button>
         )}
 
-        {hasSubtasks && showSubtasks && <SubtaskList task={task} />}
+        {hasSubtasks && showSubtasks && <SubtaskList subtasks={task.subtasks} />}
       </div>
 
       <CustomEditBtn onClick={() => setIsEditing(true)} />

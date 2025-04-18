@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useAppSelector } from '../../../hooks/storeHooks';
 import { selectTaskById } from '../../../entities/task/store/tasksSlice';
-import TaskItem from './TaskItem/TaskItem';
+import { TaskItem } from './TaskItem/TaskItem';
 
 type Props = Readonly<{
   taskId: string;

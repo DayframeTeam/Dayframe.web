@@ -146,7 +146,7 @@ export const taskService: TaskService = {
   },
 
   /**
-   * Updates task properties
+   * Updates task properties and manages its subtasks
    * @param taskId - Task ID
    * @param taskData - Updated task data
    * @returns Updated task
@@ -155,18 +155,29 @@ export const taskService: TaskService = {
     store.dispatch(setLoading(true));
 
     try {
-      const response = await api.patch<Task>(`${url}/${taskId}`, taskData);
-      const updatedTask = response.data;
+      // Отправляем запрос на сервер
+      const response = await api.patch<TaskResponse>(`${url}/${taskId}`, taskData);
 
-      // Точечное обновление - обновляем только одну задачу
-      store.dispatch(
-        updateOneTask({
-          id: updatedTask.special_id,
-          changes: updatedTask,
-        })
-      );
+      // Бэкенд всегда должен возвращать обновленную задачу
+      if (response.data.task) {
+        // Обновляем задачу в Redux store
+        store.dispatch(
+          updateOneTask({
+            id: response.data.task.special_id,
+            changes: response.data.task,
+          })
+        );
 
-      return updatedTask;
+        // Если изменился опыт пользователя, обновляем его в store
+        if (response.data.userExp !== undefined) {
+          store.dispatch(setUserExp(response.data.userExp));
+        }
+
+        return response.data.task;
+      }
+
+      // Если задача не вернулась, это ошибка
+      throw new Error('Server did not return the updated task');
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateTask');
       console.error(appError.message);

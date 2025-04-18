@@ -1,9 +1,9 @@
-import { Subtask } from '../../../types/dbTypes';
-import { Checkbox } from '../../../shared/UI/Checkbox/Checkbox';
+import { Subtask } from '../../../../../../types/dbTypes';
+import { Checkbox } from '../../../../../../shared/UI/Checkbox/Checkbox';
 import styles from './SubtaskList.module.scss';
 import clsx from 'clsx';
 import { memo, useState } from 'react';
-import { taskService } from '../../../entities/task/taskService';
+import { taskService } from '../../../../../../entities/task/taskService';
 
 type Props = Readonly<{
   subtask: Subtask;
@@ -27,10 +27,15 @@ export const SubtaskItem = memo(({ subtask }: Props) => {
     //   setIsUpdating(false);
     // }
   };
-//TODO:: кнопка
+  //TODO:: кнопка
   return (
     <li className={clsx(styles.item, subtask.is_done && styles.doneLi)}>
-      <Checkbox id={`subtask-${subtask.id}`} onChange={handleSubtaskStatusUpdate} checked={subtask.is_done} disabled={isUpdating} />
+      <Checkbox
+        id={`subtask-${subtask.id}`}
+        onChange={handleSubtaskStatusUpdate}
+        checked={subtask.is_done}
+        disabled={isUpdating}
+      />
       <label
         className={clsx(styles.labelWrapper, subtask.is_done && styles.done)}
         // если идёт запрос — блокируем дальнейшие клики
