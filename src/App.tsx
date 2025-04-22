@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -14,18 +14,21 @@ function App() {
   document.body.classList.toggle('theme-dark', shouldUseDark);
   console.log('App');
 
-  useEffect(() => {
-    const loadInitialData = async () => {
+  const inited = useRef(false);
+
+  if (!inited.current) {
+    inited.current = true;
+    // запускаем “одноразово” загрузку
+    (async () => {
+      console.log('init await');
       try {
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
-      } catch (error) {
-        console.error('Ошибка при загрузке первоначальных данных:', error);
+      } catch (e) {
+        console.error(e);
       }
-    };
-
-    loadInitialData();
-  }, []);
+    })();
+  }
 
   return (
     <>
