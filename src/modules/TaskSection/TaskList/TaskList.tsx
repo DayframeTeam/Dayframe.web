@@ -18,8 +18,8 @@ export const TaskList = memo(({ taskIds }: Props) => {
   return (
     <div className={styles.taskListWrapper}>
       <ul className={styles.taskList}>
-        {taskIds.map((taskId) => (
-          <SortedTaskItem key={taskId} taskId={taskId} />
+        {taskIds.map((special_id) => (
+          <SortedTaskItem key={special_id} special_id={special_id} />
         ))}
       </ul>
     </div>

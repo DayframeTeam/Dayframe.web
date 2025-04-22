@@ -2,15 +2,9 @@ import { Task } from '../../types/dbTypes';
 import api from '../../api/http/axios';
 import { store } from '../../store';
 import { handleApiError } from '../../shared/errors';
-import {
-  addTask,
-  deleteTask,
-  setTasks,
-  updateOneTask,
-  setLoading,
-  setError,
-} from './store/tasksSlice';
+import { addTask, deleteTask, setTasks, updateTask } from './store/tasksSlice';
 import { setUserExp } from '../user/store/userSlice';
+import { TaskFind } from '../../utils/find';
 
 const url = '/tasks';
 
@@ -37,8 +31,6 @@ export const taskService: TaskService = {
    * Fetches all tasks from the server and stores them in Redux
    */
   async fetchAndStoreAll(): Promise<void> {
-    store.dispatch(setLoading(true));
-
     try {
       const response = await api.get<Task[]>(url);
       // Сохраняем все задачи в store
@@ -46,10 +38,7 @@ export const taskService: TaskService = {
     } catch (error) {
       const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 
@@ -59,8 +48,6 @@ export const taskService: TaskService = {
    * @returns Created task
    */
   async createTask(taskData: Partial<Task>): Promise<Task> {
-    store.dispatch(setLoading(true));
-
     try {
       const response = await api.post<Task>(url, taskData);
       const createdTask = response.data;
@@ -72,10 +59,7 @@ export const taskService: TaskService = {
     } catch (error) {
       const appError = handleApiError(error, 'taskService.createTask');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 
@@ -84,28 +68,22 @@ export const taskService: TaskService = {
    * @param taskId - Task ID
    */
   async deleteTask(taskId: number): Promise<void> {
-    store.dispatch(setLoading(true));
-
     try {
       await api.delete(`${url}/${taskId}`);
 
       // Находим задачу по ID для получения special_id
       const state = store.getState();
-      const task = Object.values(state.tasks.entities).find((t) => t?.id === taskId);
+      const tasks = Object.values(state.tasks);
+      const task = TaskFind.findTaskById(tasks, taskId);
 
       if (task?.special_id) {
         // Точечное обновление - удаляем только одну задачу по special_id
         store.dispatch(deleteTask(task.special_id));
-      } else {
-        console.warn(`Task with id=${taskId} not found in store`);
       }
     } catch (error) {
       const appError = handleApiError(error, 'taskService.deleteTask');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 
@@ -115,8 +93,6 @@ export const taskService: TaskService = {
    * @param isDone - New status
    */
   async updateTaskStatus(taskId: number, isDone: boolean): Promise<void> {
-    store.dispatch(setLoading(true));
-
     try {
       const response = await api.patch<TaskResponse>(`${url}/is_done/${taskId}`, {
         is_done: isDone,
@@ -124,12 +100,7 @@ export const taskService: TaskService = {
 
       if (response.data.task) {
         // Точечное обновление - обновляем только одну задачу
-        store.dispatch(
-          updateOneTask({
-            id: response.data.task.special_id,
-            changes: response.data.task,
-          })
-        );
+        store.dispatch(updateTask(response.data.task));
       }
 
       if (response.data.userExp) {
@@ -138,10 +109,7 @@ export const taskService: TaskService = {
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateTaskStatus');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 
@@ -152,8 +120,6 @@ export const taskService: TaskService = {
    * @returns Updated task
    */
   async updateTask(taskId: number, taskData: Partial<Task>): Promise<Task> {
-    store.dispatch(setLoading(true));
-
     try {
       // Отправляем запрос на сервер
       const response = await api.patch<TaskResponse>(`${url}/${taskId}`, taskData);
@@ -161,12 +127,7 @@ export const taskService: TaskService = {
       // Бэкенд всегда должен возвращать обновленную задачу
       if (response.data.task) {
         // Обновляем задачу в Redux store
-        store.dispatch(
-          updateOneTask({
-            id: response.data.task.special_id,
-            changes: response.data.task,
-          })
-        );
+        store.dispatch(updateTask(response.data.task));
 
         // Если изменился опыт пользователя, обновляем его в store
         if (response.data.userExp !== undefined) {
@@ -181,10 +142,7 @@ export const taskService: TaskService = {
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateTask');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 
@@ -194,8 +152,6 @@ export const taskService: TaskService = {
    * @param isDone - New status
    */
   async updateSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
-    store.dispatch(setLoading(true));
-
     try {
       const response = await api.patch<TaskResponse>(`${url}/subtasks/${subtaskId}`, {
         is_done: isDone,
@@ -203,12 +159,7 @@ export const taskService: TaskService = {
 
       if (response.data.task) {
         // Точечное обновление - обновляем только родительскую задачу
-        store.dispatch(
-          updateOneTask({
-            id: response.data.task.special_id,
-            changes: response.data.task,
-          })
-        );
+        store.dispatch(updateTask(response.data.task));
       }
 
       if (response.data.userExp) {
@@ -217,10 +168,7 @@ export const taskService: TaskService = {
     } catch (error) {
       const appError = handleApiError(error, 'taskService.updateSubtaskStatus');
       console.error(appError.message);
-      store.dispatch(setError(appError.message));
       throw appError;
-    } finally {
-      store.dispatch(setLoading(false));
     }
   },
 };

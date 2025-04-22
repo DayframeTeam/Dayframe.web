@@ -11,8 +11,8 @@ export function PageContainer() {
       <Routes>
         <Route path="/" element={<Navigate to="/today" />} />
         <Route path="/today" element={<TodayPage />} />
-        <Route path="/templates" element={<TemplatesPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        {/* <Route path="/templates" element={<TemplatesPage />} />
+        <Route path="/calendar" element={<CalendarPage />} /> */}
       </Routes>
     </div>
   );
