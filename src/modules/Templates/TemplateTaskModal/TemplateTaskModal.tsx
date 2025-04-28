@@ -1,27 +1,27 @@
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../../../shared/Modal/Modal';
-import { DayTask, Task, TemplateTask } from '../../../types/dbTypes';
+import { DayTask, RepeatRule, Task, TemplateTask } from '../../../types/dbTypes';
 import { memo } from 'react';
 import { GeneralForm } from '../../../shared/GeneralForm/GeneralForm';
-import { taskService } from '../../../entities/task/taskService';
-import { TaskUtils } from '../../../entities/task/tasks.utils';
+import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
+import { templateTasksService } from '../../../entities/template-tasks/templateTasksService';
 
 type Props = Readonly<{
   isOpen: boolean;
   onClose: () => void;
-  task?: Task;
-  task_date?: string;
+  task?: TemplateTask;
+  repeat_rule?: RepeatRule;
 }>;
 
-export const TaskModal = memo(({ isOpen, onClose, task, task_date }: Props) => {
+export const TemplateTaskModal = memo(({ isOpen, onClose, task, repeat_rule }: Props) => {
   const { t } = useTranslation();
   const isEdit = !!task;
-  let taskCopy: Task | undefined;
+  let taskCopy: TemplateTask | undefined;
   let handleSubmit = undefined;
   const handleDelete = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
     e.preventDefault();
     try {
-      await taskService.deleteTask(task.id);
+      await templateTasksService.deleteTemplateTask(task.id);
       onClose(); // Закрываем модальное окно после успешного создания
     } catch (error) {
       console.error('Ошибка при удалении:', error);
@@ -37,19 +37,19 @@ export const TaskModal = memo(({ isOpen, onClose, task, task_date }: Props) => {
     handleSubmit = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
       e.preventDefault();
       try {
-        await taskService.updateTask(task.id, task as Partial<Task>);
+        await templateTasksService.updateTemplateTask(task.id, task as Partial<TemplateTask>);
         onClose(); // Закрываем модальное окно после успешного создания
       } catch (error) {
         console.error('Ошибка при редактировании:', error);
       }
     };
   } else {
-    taskCopy = TaskUtils.createEmptyTask(task_date);
+    taskCopy = TemplateTaskUtils.createEmptyTemplateTask(repeat_rule);
 
     handleSubmit = async (e: React.FormEvent, task: Task | TemplateTask | DayTask) => {
       e.preventDefault();
       try {
-        await taskService.createTask(task as Partial<Task>);
+        await templateTasksService.createTemplateTask(task as Partial<TemplateTask>);
         onClose(); // Закрываем модальное окно после успешного создания
       } catch (error) {
         console.error('Ошибка при создании задачи:', error);
@@ -71,4 +71,4 @@ export const TaskModal = memo(({ isOpen, onClose, task, task_date }: Props) => {
   );
 });
 
-TaskModal.displayName = 'TaskModal';
+TemplateTaskModal.displayName = 'TemplateTaskModal';

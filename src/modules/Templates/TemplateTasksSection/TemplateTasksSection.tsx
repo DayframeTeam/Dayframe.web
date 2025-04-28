@@ -6,8 +6,7 @@ import { TemplateTaskItem } from '../TemplateTaskItem/TemplateTaskItem';
 import { Button } from '../../../shared/UI/Button/Button';
 import { InfoIcon, PlusIcon } from 'lucide-react';
 import { QuestsInfoModal } from '../QuestsInfoModal/QuestsInfoModal';
-import { nanoid } from 'nanoid';
-import { TaskModal } from '../../TaskSection/TaskModal/TaskModal';
+import { TemplateTaskModal } from '../TemplateTaskModal/TemplateTaskModal';
 
 type TemplateTasksSectionProps = {
   type: RepeatRule;
@@ -52,15 +51,10 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
           </span>
         </Button>
       </div>
-      <TaskModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        type="TemplateTask"
-        repeat_rule={type}
-      />
+      <TemplateTaskModal isOpen={isOpen} onClose={() => setIsOpen(false)} repeat_rule={type} />
 
       {templateTasks.length > 0 ? (
-        templateTasks.map((task) => <TemplateTaskItem key={nanoid()} templateTask={task} />)
+        templateTasks.map((task) => <TemplateTaskItem key={task.special_id} templateTask={task} />)
       ) : (
         <div style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
           {t('templates.noTasks')}

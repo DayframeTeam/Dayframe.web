@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TextInput } from '../../../../shared/UI/TextInput/TextInput';
-import { DatePicker } from '../../../../widgets/DatePicker/DatePicker';
-import shared from '../../../../shared/UI/shared.module.scss';
-import { DayTask, Task, TemplateTask } from '../../../../types/dbTypes';
-import { formatDateToLocalYYYYMMDD } from '../../../../utils/dateUtils';
+import { TextInput } from '../../UI/TextInput/TextInput';
+import { DatePicker } from '../../../widgets/DatePicker/DatePicker';
+import shared from '../../UI/shared.module.scss';
+import { DayTask, Task, TemplateTask } from '../../../types/dbTypes';
+import { formatDateToLocalYYYYMMDD } from '../../../utils/dateUtils';
 
 type TaskTimeFieldsProps = {
   localTask: Task | TemplateTask | DayTask;

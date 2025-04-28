@@ -10,7 +10,8 @@ import { Button } from '../../../shared/UI/Button/Button';
 import { ToggleSwitch } from '../../../shared/UI/ToggleSwitch/ToggleSwitch';
 import { SelectedDays } from '../../../widgets/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
-import { TaskModal } from '../../TaskSection/TaskModal/TaskModal';
+import { TemplateTaskModal } from '../TemplateTaskModal/TemplateTaskModal';
+import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -24,8 +25,8 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
   const [isEditing, setIsEditing] = useState(false);
   const isTaskTemplate = 'repeat_rule' in templateTask;
 
-  const [isActive, setIsActive] = useState(isTaskTemplate ? !templateTask.is_active : true);
-
+  const [isActive, setIsActive] = useState(isTaskTemplate && templateTask.is_active);
+  const rule = isTaskTemplate ? TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule) : [];
   return (
     <div className={styles.item} style={{ opacity: isActive ? 1 : 0.5 }}>
       <div
@@ -37,7 +38,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontWeight: 'var(--font-weight-big)' }}>{templateTask.title}</span>
-          {templateTask.exp > 0 && (
+          {templateTask.exp !== undefined && templateTask.exp > 0 && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <div title={t('task.exp')} style={{ fontSize: 'var(--font-size-secondary)' }}>
                 +{templateTask.exp}⚡
@@ -113,13 +114,10 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
             {t('task.repeat.to')}: {templateTask.end_active_date}
           </div>
         )}
-        {isTaskTemplate &&
-          templateTask.repeat_rule.length !== 7 &&
-          templateTask.repeat_rule !== 'weekly' &&
-          templateTask.repeat_rule !== 'quests' && (
+        {isTaskTemplate && rule.length !== 7 && rule !== 'weekly' && rule !== 'quests' && (
             <SelectedDays
               className={styles.repeatDays}
-              selectedDays={templateTask.repeat_rule}
+              selectedDays={rule}
               selectable={false}
             />
           )}
@@ -147,12 +145,13 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
         )}
       </div>
       <CustomEditBtn onClick={() => setIsEditing(true)} borderColor={'var(--bg-secondary)'} />
-      <TaskModal
-        isOpen={isEditing}
-        onClose={() => setIsEditing(false)}
-        type="TemplateTask"
-        task={templateTask}
-      />
+      {isTaskTemplate && (
+        <TemplateTaskModal
+          isOpen={isEditing}
+          onClose={() => setIsEditing(false)}
+          task={templateTask}
+        />
+      )}
     </div>
   );
 });

@@ -18,7 +18,6 @@ export const DayModal = memo(({ isOpen, onClose, day }: DayModalProps) => {
   return (
     isOpen && (
       <Modal
-        isOpen={isOpen}
         onClose={onClose}
         title={isEdit ? t('templates.days.edit') : t('templates.days.add')}
       >

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import tasksReducer from './entities/task/store/tasksSlice';
 import userReducer from './entities/user/store/userSlice';
+import templateTasksReducer from './entities/template-tasks/store/templateTasksSlice';
 
 export const store = configureStore({
   reducer: {
-    tasks: tasksReducer,
     user: userReducer,
+    tasks: tasksReducer,
+    templateTasks: templateTasksReducer,
   },
 });
 

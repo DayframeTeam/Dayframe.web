@@ -6,6 +6,7 @@ import { UserProfile } from './modules/Header/UserProfile/UserProfile';
 import { PageContainer } from './pages/PageContainer/PageContainer';
 import { userService } from './entities/user/userService';
 import { taskService } from './entities/task/taskService';
+import { templateTasksService } from './entities/template-tasks/templateTasksService';
 
 function App() {
   const saved = localStorage.getItem('theme');
@@ -24,6 +25,7 @@ function App() {
       try {
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
+        await templateTasksService.fetchAndStoreAll();
       } catch (e) {
         console.error(e);
       }

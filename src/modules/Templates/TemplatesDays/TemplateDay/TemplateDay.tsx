@@ -10,6 +10,7 @@ import { SelectedDays } from '../../../../widgets/SeleectedDays/SeleectedDays';
 import { DayModal } from '../DayModal/DayModal';
 import { nanoid } from 'nanoid';
 import { TaskModal } from '../../../TaskSection/TaskModal/TaskModal';
+import { TemplateDayModal } from './TemplateDayModal/TemplateDayModal';
 
 type TemplateDayProps = {
   day: Day;
@@ -77,7 +78,11 @@ export const TemplateDay = memo(({ day }: TemplateDayProps) => {
       </div>
       <CustomEditBtn borderColor="var(--bg-primary)" onClick={handleEditClick} />
       <DayModal isOpen={isModalOpen} onClose={handleCloseModal} day={day} />
-      <TaskModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} type="DayTask" />
+      {/* <TemplateDayModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        dayTasks={day.tasks}
+      /> */}
     </div>
   );
 });
