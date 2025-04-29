@@ -1,72 +1,45 @@
-import { useRef, useState } from 'react';
-import type { Task } from '../../../../types/dbTypes';
-import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
-import { formatTime, calculateDuration } from '../../../../utils/dateUtils';
-import styles from './TaskItem.module.scss';
-import clsx from 'clsx';
+import { TemplateTask } from '../../../types/dbTypes';
+import { memo, useState } from 'react';
+import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
 import { useTranslation } from 'react-i18next';
-import { Checkbox } from '../../../../shared/UI/Checkbox/Checkbox';
-import { Badge } from '../../../../shared/UI/Badge/Badge';
-import { SubtaskList } from './SubtaskList/SubtaskList';
-import { Button } from '../../../../shared/UI/Button/Button';
-import { TaskModal } from '../../TaskModal/TaskModal';
-import { CustomEditBtn } from '../../../../shared/UI/CustomEditBtn/CustomEditBtn';
-import { taskService } from '../../../../entities/task/taskService';
+import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
+import clsx from 'clsx';
+import styles from '../../TaskSection/TaskList/TaskItem/TaskItem.module.scss';
+import { Checkbox } from '../../../shared/UI/Checkbox/Checkbox';
+import { calculateDuration, formatTime } from '../../../utils/dateUtils';
+import { Badge } from '../../../shared/UI/Badge/Badge';
+import { Button } from '../../../shared/UI/Button/Button';
+import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
 
 type Props = Readonly<{
-  task: Task;
+  templateTask: TemplateTask;
+  taskDate: string;
 }>;
 
-export function TaskItem({ task }: Props) {
+export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Props) => {
+  console.log('TemplateTaskItemForComplete');
+
+  const task = TemplateTaskUtils.convertTemplateToTask(templateTask, taskDate);
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
   const colorIndex = getPriorityColorIndex(task.priority);
-  console.log('TaskItem');
-
   // Проверяем наличие подзадач
   const hasSubtasks = task.subtasks && task.subtasks.length > 0;
-
   // Вычисляем прогресс выполнения подзадач
   const completedCount = hasSubtasks
     ? task.is_done
       ? task.subtasks.length
       : task.subtasks.filter((s) => s.is_done).length
     : 0;
-
   const progressPercent = hasSubtasks ? completedCount / task.subtasks.length : 0;
   const progressColor =
     progressPercent === 1
       ? 'var(--subtask-progress-complete)'
       : 'var(--subtask-progress-incomplete)';
-
-  const [showXPAnim, setShowXPAnim] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const rule = TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule);
   const [isLoading, setIsLoading] = useState(false);
-  const animTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleUpdateTaskStatus = async () => {
-    try {
-      setIsLoading(true);
-      const newStatus = !task.is_done;
-      console.log('newStatus', newStatus);
-      // Обновляем статус задачи
-      await taskService.updateTaskStatus(task.id, newStatus);
-
-      // Показываем анимацию XP только при выполнении задачи с опытом
-      if (newStatus && task.exp && task.exp > 0) {
-        setShowXPAnim(true);
-
-        if (animTimeout.current) clearTimeout(animTimeout.current);
-        animTimeout.current = setTimeout(() => {
-          setShowXPAnim(false);
-        }, 1000);
-      }
-    } catch (err) {
-      console.error('Task status update error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleUpdateTaskStatus = async () => {};
 
   return (
     <li className={clsx(styles.taskListItem, task.is_done && styles.completed)}>
@@ -102,7 +75,7 @@ export function TaskItem({ task }: Props) {
 
               {task.exp !== undefined && task.exp > 0 && (
                 <div title={t('task.exp')} className={styles.xp}>
-                  +{task.exp}⚡{showXPAnim && <span className={styles.xpAnim}>+{task.exp}⚡</span>}
+                  +{task.exp}⚡
                 </div>
               )}
             </div>
@@ -148,6 +121,8 @@ export function TaskItem({ task }: Props) {
                 />
               )}
             </div>
+
+            <RepeatRuleSelector value={rule} selectable={false} />
           </div>
         </button>
 
@@ -162,14 +137,10 @@ export function TaskItem({ task }: Props) {
           </Button>
         )}
 
-        {hasSubtasks && showSubtasks && <SubtaskList subtasks={task.subtasks} />}
+        {/* {hasSubtasks && showSubtasks && <SubtaskList subtasks={task.subtasks} />} */}
       </div>
-
-      <CustomEditBtn onClick={() => setIsEditing(true)} />
-
-      {isEditing && (
-        <TaskModal isOpen={isEditing} onClose={() => setIsEditing(false)} task={task} />
-      )}
     </li>
   );
-}
+});
+
+TemplateTaskItemForComplete.displayName = 'TemplateTaskItemForComplete';

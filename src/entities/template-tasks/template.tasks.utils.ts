@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { RepeatRule, TemplateTask } from '../../types/dbTypes';
+import { RepeatRule, TemplateTask, Task } from '../../types/dbTypes';
 
 export class TemplateTaskUtils {
   static createEmptyTemplateTask(repeat_rule?: RepeatRule): TemplateTask {
@@ -49,6 +49,27 @@ export class TemplateTaskUtils {
 
     // 3) Во всех остальных случаях — дефолт
     return [];
+  }
+
+  /**
+   * Конвертирует шаблонную задачу в обычную задачу
+   * @param templateTask Шаблонная задача
+   * @param taskDate Дата для новой задачи
+   * @returns Обычная задача
+   */
+  static convertTemplateToTask(templateTask: TemplateTask, taskDate: string): Task {
+    const { ...taskFields } = templateTask;
+
+    return {
+      ...taskFields,
+      is_done: false,
+      task_date: taskDate ?? undefined,
+      subtasks: templateTask.subtasks.map((subtask) => ({
+        ...subtask,
+        is_done: false,
+        parent_task_id: 0, // Будет установлен после создания задачи
+      })),
+    };
   }
 }
 
