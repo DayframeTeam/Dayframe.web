@@ -71,57 +71,6 @@ export class TemplateTaskUtils {
       })),
     };
   }
-
-  /**
-   * Возвращает special_id шаблонных задач, которые нужно «создать» на указанную дату:
-   * - Ежедневные (repeat_rule = [1,2,3,4,5,6,7])
-   * - Кастомные, включающие номер дня недели (1=Mon…7=Sun)
-   * - Weekly
-   * При этом исключаются те, чей special_id уже в existingIds.
-   *
-   * @param templates Массив всех TemplateTask
-   * @param existingIds special_id уже созданных задач на дату
-   * @param date Строка "YYYY-MM-DD"
-   */
-  // static getTaskSpecialIdsForDate(
-  //   templates: TemplateTask[],
-  //   existingIds: string[],
-  //   date: string
-  // ): string[] {
-  //   // 1) номер дня: Mon=1 … Sun=7
-  //   const jsDay = new Date(date).getDay(); // 0..6, где 0=Sun
-  //   const dayNumber = jsDay === 0 ? 7 : jsDay; // 1..7
-
-  //   return templates
-  //     .filter((t) => {
-  //       // 2) пропускаем, если уже создана
-  //       if (existingIds.includes(t.special_id)) {
-  //         return false;
-  //       }
-
-  //       // 3) парсим повторение
-  //       const rule = this.parseRepeatRule(t.repeat_rule);
-
-  //       // 4) если массив
-  //       if (Array.isArray(rule)) {
-  //         // ежедневные
-  //         if (rule.length === 7) {
-  //           return true;
-  //         }
-  //         // кастомные (дни недели)
-  //         return rule.includes(dayNumber);
-  //       }
-
-  //       // 5) weekly
-  //       if (rule === 'weekly') {
-  //         return false;
-  //       }
-
-  //       // 6) quests — не создаём автоматически
-  //       return false;
-  //     })
-  //     .map((t) => t.special_id);
-  // }
 }
 
 // Export the createEmptyTask function directly for backward compatibility

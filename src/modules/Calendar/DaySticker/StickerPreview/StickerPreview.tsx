@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../../hooks/storeHooks';
 import { selectTaskById } from '../../../../entities/task/store/tasksSlice';
 import styles from './StickerPreview.module.scss';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
+import { TemplateTaskSelectors } from '../../../../entities/template-tasks/store/templateTasksSlice';
 
 type Props = Readonly<{
   taskId: string;
@@ -17,21 +18,27 @@ type Props = Readonly<{
 export const StickerPreview = memo(({ taskId }: Props) => {
   // Получаем задачу по ID
   const task = useAppSelector((state) => selectTaskById(state, taskId));
+  const templateTask = useAppSelector((state) =>
+    TemplateTaskSelectors.selectTemplateTaskBySpecialId(state, taskId)
+  );
 
-  // Если задача не найдена, не рендерим ничего
-  if (!task) return null;
+  if (!task && !templateTask) return null;
+
+  // Определяем, какую задачу отображать
+  const displayTask = task || templateTask;
+  const isTemplate = !!templateTask;
 
   console.log('StickerPreview render', taskId);
 
   return (
     <div
-      className={`${styles.event} ${task.is_done ? styles.completed : ''}`}
+      className={`${styles.event} ${!isTemplate && task.is_done ? styles.completed : ''}`}
       style={{
-        borderLeftColor: `var(--select-color-${getPriorityColorIndex(task.priority)})`,
+        borderLeftColor: `var(--select-color-${getPriorityColorIndex(displayTask.priority)})`,
       }}
-      title={task.title}
+      title={displayTask.title}
     >
-      {task.start_time?.slice(0, 5)} {task.title}
+      {displayTask.start_time?.slice(0, 5)} {displayTask.title}
     </div>
   );
 });

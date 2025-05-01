@@ -5,6 +5,7 @@ import { Modal } from '../../../shared/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/storeHooks';
 import { selectTaskIdsByDate } from '../../../entities/task/store/tasksSlice';
+import { CommonTaskSelectors } from '../../../entities/common/selectors';
 import { format } from 'date-fns';
 import { StickerPreview } from './StickerPreview/StickerPreview';
 import { shallowEqual } from 'react-redux';
@@ -39,10 +40,13 @@ export const DaySticker = memo(
     // Получаем день месяца
     const dayNumber = useMemo(() => dateObj.getDate(), [dateObj]);
 
-    // Получаем только ID задач для этой даты с проверкой на изменения через shallowEqual
+    // Для прошедших дней используем только обычные задачи, для остальных - все задачи
     const taskIds = useAppSelector(
-      (state) => selectTaskIdsByDate(state, date),
-      shallowEqual // Важно: использование shallowEqual предотвращает перерисовки при идентичных массивах
+      (state) =>
+        isPast
+          ? selectTaskIdsByDate(state, date)
+          : CommonTaskSelectors.selectSortedTaskIdsForDate(state, date),
+      shallowEqual
     );
 
     // Используем useCallback для стабильных ссылок на функции
