@@ -5,10 +5,9 @@ import { TaskSectionHeader } from './TaskSectionHeader/TaskSectionHeader';
 
 type Props = Readonly<{
   date: string;
-  taskIds: string[];
 }>;
 
-export const TaskSection = memo(({ date, taskIds }: Props) => {
+export const TaskSection = memo(({ date }: Props) => {
   const [isAdding, setIsAdding] = useState(false);
 
   console.log('TaskSection');
@@ -20,13 +19,9 @@ export const TaskSection = memo(({ date, taskIds }: Props) => {
   return (
     <section>
       <TaskSectionHeader date={date} onAddTask={handleAddTask} />
-      <TaskList taskIds={taskIds} />
+      <TaskList date={date} />
       {isAdding && (
-        <TaskModal
-          isOpen={isAdding}
-          onClose={() => setIsAdding(false)}
-          task_date={date}
-        />
+        <TaskModal isOpen={isAdding} onClose={() => setIsAdding(false)} task_date={date} />
       )}
     </section>
   );

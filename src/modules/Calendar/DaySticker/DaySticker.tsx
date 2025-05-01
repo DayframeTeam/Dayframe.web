@@ -82,7 +82,7 @@ export const DaySticker = memo(
 
         {open && (
           <Modal onClose={handleClose}>
-            <TaskSection date={date} taskIds={taskIds} />
+            <TaskSection date={date} />
           </Modal>
         )}
       </>

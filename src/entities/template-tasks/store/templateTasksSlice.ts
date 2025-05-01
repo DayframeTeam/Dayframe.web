@@ -26,7 +26,9 @@ interface TemplateTasksState extends EntityState<TemplateTask, string> {
  */
 const templateTasksSlice = createSlice({
   name: 'templateTasks',
-  initialState: templateTasksAdapter.getInitialState<Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>>({
+  initialState: templateTasksAdapter.getInitialState<
+    Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>
+  >({
     isLoading: false,
     error: null,
     lastUpdated: null,
@@ -83,6 +85,46 @@ export class TemplateTaskSelectors {
    * Получить все шаблонные задачи
    */
   static selectAllTemplateTasks = baseSelectors.selectAll;
+
+  /**
+   * Получить шаблонную задачу по special_id
+   */
+  static selectTemplateTaskBySpecialId = baseSelectors.selectById;
+
+  /**
+   * Получить шаблонные задачи для указанной даты
+   */
+  static selectTemplateTasksByDate = createSelector(
+    [baseSelectors.selectAll, (state: RootState, date: string) => date],
+    (tasks, date) => {
+      // 1) номер дня: Mon=1 … Sun=7
+      const jsDay = new Date(date).getDay(); // 0..6, где 0=Sun
+      const dayNumber = jsDay === 0 ? 7 : jsDay; // 1..7
+
+      return tasks.filter((task) => {
+        // 2) парсим повторение
+        const rule = TemplateTaskUtils.parseRepeatRule(task.repeat_rule);
+
+        // 3) если массив
+        if (Array.isArray(rule)) {
+          // ежедневные
+          if (rule.length === 7) {
+            return true;
+          }
+          // кастомные (дни недели)
+          return rule.includes(dayNumber);
+        }
+
+        // 4) weekly
+        if (rule === 'weekly') {
+          return false;
+        }
+
+        // 5) quests — не создаём автоматически
+        return false;
+      });
+    }
+  );
 
   /**
    * Получить ежедневные шаблонные задачи
