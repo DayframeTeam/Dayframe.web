@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../store';
 import { Sorter } from '../../utils/sort';
 import { TemplateTaskSelectors } from '../template-tasks/store/templateTasksSlice';
-import { selectTasksByDateIncludingUndated } from '../task/store/tasksSlice';
+import { selectTasksByDate, selectTasksByDateIncludingUndated } from '../task/store/tasksSlice';
 
 /**
  * Селекторы для работы с обычными и шаблонными задачами
@@ -17,6 +17,18 @@ export class CommonTaskSelectors {
   static selectSortedTaskIdsForDate = createSelector(
     [
       (state: RootState, date: string) => selectTasksByDateIncludingUndated(state, date),
+      (state: RootState, date: string) =>
+        TemplateTaskSelectors.selectTemplateTasksByDate(state, date),
+    ],
+    (regularTasks, templateTasks) => {
+      const sortedTasks = [...regularTasks, ...templateTasks].sort(Sorter.complexSort);
+      return sortedTasks.map((task) => task.special_id);
+    }
+  );
+
+  static selectSortedTaskIdsByDateForCalendar = createSelector(
+    [
+      (state: RootState, date: string) => selectTasksByDate(state, date),
       (state: RootState, date: string) =>
         TemplateTaskSelectors.selectTemplateTasksByDate(state, date),
     ],

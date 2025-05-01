@@ -45,7 +45,7 @@ export const DaySticker = memo(
       (state) =>
         isPast
           ? selectTaskIdsByDate(state, date)
-          : CommonTaskSelectors.selectSortedTaskIdsForDate(state, date),
+          : CommonTaskSelectors.selectSortedTaskIdsByDateForCalendar(state, date),
       shallowEqual
     );
 
