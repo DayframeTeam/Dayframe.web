@@ -18,7 +18,7 @@ export type TaskService = {
   fetchAndStoreAll: () => Promise<void>;
   createTask: (taskData: Partial<Task>) => Promise<Task>;
   deleteTask: (taskId: number) => Promise<void>;
-  updateTaskStatus: (taskId: number, isDone: boolean) => Promise<void>;
+  updateTaskStatus: (taskId: number, isDone: boolean, completionDate: string) => Promise<void>;
   updateTask: (taskId: number, taskData: Partial<Task>) => Promise<Task>;
   updateSubtaskStatus: (subtaskId: number, isDone: boolean) => Promise<void>;
 };
@@ -114,12 +114,13 @@ export const taskService: TaskService = {
    * @param taskId - Task ID
    * @param isDone - New status
    */
-  async updateTaskStatus(taskId: number, isDone: boolean): Promise<void> {
+  async updateTaskStatus(taskId: number, isDone: boolean, completionDate: string): Promise<void> {
     store.dispatch(setLoading(true));
 
     try {
       const response = await api.patch<TaskResponse>(`${url}/is_done/${taskId}`, {
         is_done: isDone,
+        completion_date: completionDate,
       });
 
       if (response.data.task) {

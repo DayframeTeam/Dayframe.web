@@ -18,7 +18,7 @@ export const SortedTaskItem = memo(({ taskId, date }: Props) => {
   if (!task && !templateTask) return null;
 
   if (task) {
-    return <TaskItem task={task} />;
+    return <TaskItem task={task} completionDate={date} />;
   }
   if (templateTask) {
     return <TemplateTaskItemForComplete templateTask={templateTask} taskDate={date} />;

@@ -15,9 +15,10 @@ import { taskService } from '../../../../entities/task/taskService';
 
 type Props = Readonly<{
   task: Task;
+  completionDate: string;
 }>;
 
-export function TaskItem({ task }: Props) {
+export function TaskItem({ task, completionDate }: Props) {
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
   const colorIndex = getPriorityColorIndex(task.priority);
@@ -50,7 +51,7 @@ export function TaskItem({ task }: Props) {
       const newStatus = !task.is_done;
       console.log('newStatus', newStatus);
       // Обновляем статус задачи
-      await taskService.updateTaskStatus(task.id, newStatus);
+      await taskService.updateTaskStatus(task.id, newStatus, completionDate);
 
       // Показываем анимацию XP только при выполнении задачи с опытом
       if (newStatus && task.exp && task.exp > 0) {
