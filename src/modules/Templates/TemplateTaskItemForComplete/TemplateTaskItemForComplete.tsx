@@ -4,12 +4,13 @@ import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tas
 import { useTranslation } from 'react-i18next';
 import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import clsx from 'clsx';
-import styles from '../../TaskSection/TaskList/TaskItem/TaskItem.module.scss';
 import { Checkbox } from '../../../shared/UI/Checkbox/Checkbox';
 import { calculateDuration, formatTime } from '../../../utils/dateUtils';
 import { Badge } from '../../../shared/UI/Badge/Badge';
 import { Button } from '../../../shared/UI/Button/Button';
 import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
+import styles from '../../TaskSection/TaskList/TaskItem/TaskItem.module.scss';
+import templateVersionStyles from './TemplateTaskItemForComplete.module.scss';
 
 type Props = Readonly<{
   templateTask: TemplateTask;
@@ -39,15 +40,15 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
   const rule = TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleUpdateTaskStatus = async () => {};
+  const createCompletedTask = async () => {};
 
   return (
     <li className={clsx(styles.taskListItem, task.is_done && styles.completed)}>
       <div
-        className={clsx(styles.taskItem, hasSubtasks && styles.noPaddingBottom)}
+        className={clsx(styles.taskItem, templateVersionStyles.taskItem, hasSubtasks && styles.noPaddingBottom)}
         style={{ borderLeftColor: `var(--select-color-${colorIndex})` }}
       >
-        <button className={styles.wrapper} onClick={handleUpdateTaskStatus} disabled={isLoading}>
+        <button className={styles.wrapper} onClick={createCompletedTask} disabled={isLoading}>
           <div className={styles.header}>
             <Checkbox id={`task-${task.id}`} checked={task.is_done} disabled />
 
@@ -121,9 +122,8 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
                 />
               )}
             </div>
-
-            <RepeatRuleSelector value={rule} selectable={false} />
           </div>
+          <RepeatRuleSelector value={rule} selectable={false} className={templateVersionStyles.repeatRuleSelector} />
         </button>
 
         {hasSubtasks && (

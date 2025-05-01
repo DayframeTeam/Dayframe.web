@@ -8,10 +8,10 @@ import { getPriorityColorIndex } from '../../../utils/getPriorityColorIndex';
 import { calculateDuration, formatTime } from '../../../utils/dateUtils';
 import { Button } from '../../../shared/UI/Button/Button';
 import { ToggleSwitch } from '../../../shared/UI/ToggleSwitch/ToggleSwitch';
-import { SelectedDays } from '../../../widgets/SeleectedDays/SeleectedDays';
 import { nanoid } from 'nanoid';
 import { TemplateTaskModal } from '../TemplateTaskModal/TemplateTaskModal';
 import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
+import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -38,31 +38,33 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontWeight: 'var(--font-weight-big)' }}>{templateTask.title}</span>
-          {templateTask.exp !== undefined && templateTask.exp > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {templateTask.exp !== undefined && templateTask.exp > 0 && (
               <div title={t('task.exp')} style={{ fontSize: 'var(--font-size-secondary)' }}>
                 +{templateTask.exp}⚡
               </div>
-              {isTaskTemplate && (
-                <ToggleSwitch
-                  checked={isActive}
-                  onChange={() => setIsActive(!isActive)}
-                  title={t('templates.activeToggle')}
-                />
-              )}
-            </div>
-          )}
+            )}
+            {isTaskTemplate && (
+              <ToggleSwitch
+                checked={isActive}
+                onChange={() => setIsActive(!isActive)}
+                title={t('templates.activeToggle')}
+              />
+            )}
+          </div>
         </div>
 
-        <div
-          style={{
-            fontSize: 'var(--font-size-secondary)',
-            color: 'var(--text-secondary)',
-            padding: '0.5rem 0 0 0.5rem',
-          }}
+        {templateTask.description && (
+          <div
+            style={{
+              fontSize: 'var(--font-size-secondary)',
+              color: 'var(--text-secondary)',
+              padding: '0.5rem 0 0 0.5rem',
+            }}
         >
-          {templateTask.description}
-        </div>
+            {templateTask.description}
+          </div>
+        )}
         <div className={styles.metaAndTiming}>
           {(templateTask.start_time || templateTask.end_time) && (
             <div className={styles.timing}>
@@ -115,12 +117,12 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           </div>
         )}
         {isTaskTemplate && rule.length !== 7 && rule !== 'weekly' && rule !== 'quests' && (
-            <SelectedDays
-              className={styles.repeatDays}
-              selectedDays={rule}
-              selectable={false}
-            />
-          )}
+          <RepeatRuleSelector
+            value={rule}
+            selectable={false}
+            className={styles.repeatRuleSelector}
+          />
+        )}
         {hasSubtasks && (
           <Button
             className={styles.templatesubtaskToggle}

@@ -96,7 +96,7 @@
       "edit": "Edit template day",
       "name": "Day name",
       "namePlaceholder": "Enter day name",
-      "repeatDays": "Repeat by days",
+      "repeatDays": "Repeat:",
       "nameRequired": "Day name is required"
     },
     "alert": {

@@ -11,9 +11,10 @@ type Props = {
   value: RepeatRule;
   onChange?: (value: RepeatRule) => void;
   selectable?: boolean;
+  className?: string;
 };
 
-export default function RepeatRuleSelector({ value, onChange, selectable = false }: Props) {
+export default function RepeatRuleSelector({ value, onChange, selectable = false, className }: Props) {
   const { t } = useTranslation();
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<'weekly' | 'quests' | null>(null);
@@ -57,7 +58,7 @@ export default function RepeatRuleSelector({ value, onChange, selectable = false
   const isDaysMode = Array.isArray(value);
 
   return (
-    <div className={shared.categoryWrapper}>
+    <div className={`${shared.categoryWrapper} ${className}`}>
       {selectable ? (
         <>
           <SelectedDays
