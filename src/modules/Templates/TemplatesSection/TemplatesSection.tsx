@@ -1,18 +1,13 @@
 import { memo } from 'react';
 import { TemplateTasksSection } from '../TemplateTasksSection/TemplateTasksSection';
 import { useAppSelector } from '../../../hooks/storeHooks';
-import {
-  selectDailyTemplateTasks,
-  selectWeeklyTemplateTasks,
-  selectQuestsTemplateTasks,
-  selectCustomTemplateTasks,
-} from '../../../entities/template-tasks/store/templateTasksSlice';
+import { TemplateTaskSelectors } from '../../../entities/template-tasks/store/templateTasksSlice';
 
 export const TemplatesSection = memo(() => {
-  const daily = useAppSelector(selectDailyTemplateTasks);
-  const weekly = useAppSelector(selectWeeklyTemplateTasks);
-  const custom = useAppSelector(selectCustomTemplateTasks);
-  const quests = useAppSelector(selectQuestsTemplateTasks);
+  const daily = useAppSelector(TemplateTaskSelectors.selectDailyTemplateTasks);
+  const weekly = useAppSelector(TemplateTaskSelectors.selectWeeklyTemplateTasks);
+  const custom = useAppSelector(TemplateTaskSelectors.selectCustomTemplateTasks);
+  const quests = useAppSelector(TemplateTaskSelectors.selectQuestsTemplateTasks);
 
   return (
     <section>

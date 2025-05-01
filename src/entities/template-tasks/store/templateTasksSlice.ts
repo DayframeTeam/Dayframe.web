@@ -26,9 +26,7 @@ interface TemplateTasksState extends EntityState<TemplateTask, string> {
  */
 const templateTasksSlice = createSlice({
   name: 'templateTasks',
-  initialState: templateTasksAdapter.getInitialState<
-    Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>
-  >({
+  initialState: templateTasksAdapter.getInitialState<Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>>({
     isLoading: false,
     error: null,
     lastUpdated: null,
@@ -80,7 +78,7 @@ const baseSelectors = templateTasksAdapter.getSelectors((state: RootState) => st
 /**
  * Селекторы для шаблонных задач
  */
-class TemplateTaskSelectors {
+export class TemplateTaskSelectors {
   /**
    * Получить все шаблонные задачи
    */
@@ -126,11 +124,3 @@ class TemplateTaskSelectors {
     })
   );
 }
-
-export const {
-  selectAllTemplateTasks,
-  selectDailyTemplateTasks,
-  selectWeeklyTemplateTasks,
-  selectQuestsTemplateTasks,
-  selectCustomTemplateTasks,
-} = TemplateTaskSelectors;
