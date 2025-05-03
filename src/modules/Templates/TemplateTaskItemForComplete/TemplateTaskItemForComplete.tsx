@@ -37,7 +37,6 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
     progressPercent === 1
       ? 'var(--subtask-progress-complete)'
       : 'var(--subtask-progress-incomplete)';
-  const rule = TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule);
   const [isLoading, setIsLoading] = useState(false);
 
   const createCompletedTask = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,7 +125,7 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
               )}
             </div>
           </div>
-          <RepeatRuleSelector value={rule} selectable={false} className={templateVersionStyles.repeatRuleSelector} />
+          <RepeatRuleSelector value={templateTask.repeat_rule} selectable={false} className={templateVersionStyles.repeatRuleSelector} />
         </button>
 
         {hasSubtasks && (

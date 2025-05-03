@@ -38,11 +38,12 @@
 }
 
 .repeatRuleSelector {
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
 
   & div {
     span {
+      font-size: var(--font-size-secondary) !important;
       padding: 0 !important;
     }
   }

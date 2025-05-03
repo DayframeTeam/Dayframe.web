@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '../../shared/UI/Badge/Badge';
 import shared from '../../shared/UI/shared.module.scss';
 import { Button } from '../../shared/UI/Button/Button';
+import { TemplateTaskUtils } from '../../entities/template-tasks/template.tasks.utils';
 
 type Props = {
   value: RepeatRule;
@@ -21,17 +22,18 @@ export default function RepeatRuleSelector({
   className,
 }: Props) {
   const { t } = useTranslation();
+  const rule = TemplateTaskUtils.parseRepeatRule(value);
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<'weekly' | 'quests' | null>(null);
 
   // Initialize state based on the value prop
   useEffect(() => {
-    if (Array.isArray(value)) {
-      setSelectedDays(value);
+    if (Array.isArray(rule)) {
+      setSelectedDays(rule);
       setSelectedOption(null);
     } else {
       setSelectedDays([]);
-      setSelectedOption(value);
+      setSelectedOption(rule);
     }
   }, [value]);
 
@@ -60,7 +62,7 @@ export default function RepeatRuleSelector({
   };
 
   // Determine if we're in days selection mode
-  const isDaysMode = Array.isArray(value);
+  const isDaysMode = Array.isArray(rule);
 
   return (
     <div className={`${shared.categoryWrapper} ${className}`}>
@@ -75,14 +77,14 @@ export default function RepeatRuleSelector({
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
             <Button
               variant="secondary"
-              className={styles.dayButton}
+              className={`${styles.dayButton} ${selectedOption === 'weekly' ? styles.selected : ''}`}
               onClick={() => handleOptionChange('weekly')}
             >
               {t('task.repeat.weekly')}
             </Button>
             <Button
               variant="secondary"
-              className={styles.dayButton}
+              className={`${styles.dayButton} ${selectedOption === 'quests' ? styles.selected : ''}`}
               onClick={() => handleOptionChange('quests')}
             >
               {t('task.repeat.quest')}
@@ -92,19 +94,19 @@ export default function RepeatRuleSelector({
       ) : (
         <>
           {isDaysMode &&
-            (value.length < 7 ? (
+            (rule.length < 7 ? (
               <SelectedDays
-                selectedDays={value as number[]}
+                selectedDays={rule as number[]}
                 selectable={false}
                 label={t('templates.days.repeatDays')}
               />
             ) : (
               <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.daily')}`}</div>
             ))}
-          {value === 'weekly' && (
+          {rule === 'weekly' && (
             <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.weekly')}`}</div>
           )}
-          {value === 'quests' && (
+          {rule === 'quests' && (
             <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.quest')}`}</div>
           )}
         </>
