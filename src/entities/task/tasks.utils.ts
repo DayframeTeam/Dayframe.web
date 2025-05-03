@@ -44,6 +44,13 @@ export class TaskUtils {
     };
   }
 
+  static setSubtaskDone(task: Task, subtaskId: number, isDone: boolean): Task {
+    return {
+      ...task,
+      subtasks: task.subtasks.map((st) => (st.id === subtaskId ? { ...st, is_done: isDone } : st)),
+    };
+  }
+
   //создаю уникальный ключ для стора и верстки
   static createTaskUniqueKey(task: Task): string {
     return `t${task.id}`;

@@ -19,7 +19,7 @@ export const SubtaskList = memo(({ subtasks }: Props) => {
     <div className={styles.wrapper}>
       <ul className={styles.list}>
         {sortedSubtasks.map((subtask: Subtask) => (
-          <SubtaskItem key={subtask.special_id} subtask={subtask} />
+          <SubtaskItem key={subtask.id} subtask={subtask} />
         ))}
       </ul>
     </div>

@@ -1,4 +1,4 @@
-import { Task, TemplateTask } from '../../../types/dbTypes';
+import { TemplateTask } from '../../../types/dbTypes';
 import { memo, useState } from 'react';
 import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import styles from '../../TaskSection/TaskList/TaskItem/TaskItem.module.scss';
 import templateVersionStyles from './TemplateTaskItemForComplete.module.scss';
 import { taskService } from '../../../entities/task/taskService';
 import { TaskUtils } from '../../../entities/task/tasks.utils';
+import { TemplateForCompleteSubtaskList } from './TemplateForCompleteSubtaskList/TemplateForCompleteSubtaskList';
 
 type Props = Readonly<{
   templateTask: TemplateTask;
@@ -148,7 +149,7 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
           </Button>
         )}
 
-        {/* {hasSubtasks && showSubtasks && <SubtaskList subtasks={task.subtasks} />} */}
+        {hasSubtasks && showSubtasks && <TemplateForCompleteSubtaskList task={task} subtasks={task.subtasks} />}
       </div>
     </li>
   );

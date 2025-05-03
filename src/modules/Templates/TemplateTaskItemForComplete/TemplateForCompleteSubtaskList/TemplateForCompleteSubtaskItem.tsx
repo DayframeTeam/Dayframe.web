@@ -1,25 +1,27 @@
-import { Subtask } from '../../../../../../types/dbTypes';
-import { Checkbox } from '../../../../../../shared/UI/Checkbox/Checkbox';
-import styles from './SubtaskItem.module.scss';
 import clsx from 'clsx';
 import { memo, useState } from 'react';
-import { taskService } from '../../../../../../entities/task/taskService';
+import { Subtask, Task } from '../../../../types/dbTypes';
+import { Checkbox } from '../../../../shared/UI/Checkbox/Checkbox';
+import styles from '../../../TaskSection/TaskList/TaskItem/SubtaskList/SubtaskItem/SubtaskItem.module.scss';
+import { TaskUtils } from '../../../../entities/task/tasks.utils';
+import { taskService } from '../../../../entities/task/taskService';
 
 type Props = Readonly<{
+  task: Task;
   subtask: Subtask;
 }>;
 
-export const SubtaskItem = memo(({ subtask }: Props) => {
+export const TemplateForCompleteSubtaskItem = memo(({ task, subtask }: Props) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Обработчик для чекбокса
-  const handleCheckboxChange = () => {
+  const handleCheckboxChange = async () => {
     if (isUpdating) return;
 
     setIsUpdating(true);
     try {
-      taskService.updateSubtaskStatus(subtask.id, !subtask.is_done);
-      console.log('Статус подзадачи обновлен:', subtask.id, !subtask.is_done);
+      await taskService.createTask(TaskUtils.setSubtaskDone(task, subtask.id, !subtask.is_done));
+      //console.log(TaskUtils.setSubtaskDone(task, subtask.id, !subtask.is_done));
     } catch (error) {
       console.error('Ошибка при обновлении статуса подзадачи:', error);
     } finally {
@@ -46,4 +48,4 @@ export const SubtaskItem = memo(({ subtask }: Props) => {
   );
 });
 
-SubtaskItem.displayName = 'SubtaskItem';
+TemplateForCompleteSubtaskItem.displayName = 'TemplateForCompleteSubtaskItem';

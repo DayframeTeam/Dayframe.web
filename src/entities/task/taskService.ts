@@ -17,7 +17,7 @@ const url = '/tasks';
 
 export type TaskService = {
   fetchAndStoreAll: () => Promise<void>;
-  createTask: (taskData: Partial<Task>) => Promise<Task>;
+  createTask: (taskData: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
   updateTaskStatus: (taskId: number, isDone: boolean, completionDate: string) => Promise<void>;
   updateTask: (taskId: number, taskData: Partial<Task>) => Promise<Task>;
@@ -59,17 +59,18 @@ export const taskService: TaskService = {
    * @param taskData - Partial task data
    * @returns Created task
    */
-  async createTask(taskData: Partial<Task>): Promise<Task> {
+  async createTask(taskData: Partial<Task>): Promise<void> {
     store.dispatch(setLoading(true));
 
     try {
-      const response = await api.post<Task>(url, taskData);
-      const createdTask = response.data;
+      const response = await api.post<TaskResponse>(url, taskData);
 
-      // Точечное обновление - добавляем только одну задачу
-      store.dispatch(addTask(createdTask));
-
-      return createdTask;
+      if (response.data.task) {
+        store.dispatch(addTask(response.data.task));
+      }
+      if (response.data.userExp) {
+        store.dispatch(setUserExp(response.data.userExp));
+      }
     } catch (error) {
       const appError = handleApiError(error, 'taskService.createTask');
       console.error(appError.message);
