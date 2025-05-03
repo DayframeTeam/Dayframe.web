@@ -125,7 +125,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
 
   return (
     isOpen && (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('user.expDetails')}>
+      <Modal onClose={onClose} title={t('user.expDetails')}>
         <div className={styles.content}>
           <div className={styles.levelInfo}>
             <div className={styles.levelRing}>
