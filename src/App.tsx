@@ -13,7 +13,6 @@ function App() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
   document.body.classList.toggle('theme-dark', shouldUseDark);
-  console.log('App');
 
   const inited = useRef(false);
 
@@ -21,7 +20,6 @@ function App() {
     inited.current = true;
     // запускаем “одноразово” загрузку
     (async () => {
-      console.log('init await');
       try {
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();

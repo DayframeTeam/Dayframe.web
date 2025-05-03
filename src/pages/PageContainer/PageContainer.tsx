@@ -22,7 +22,6 @@ const CalendarPage = lazy(() =>
 );
 
 export function PageContainer() {
-  console.log('PageContainer');
   const { t } = useTranslation();
 
   return (

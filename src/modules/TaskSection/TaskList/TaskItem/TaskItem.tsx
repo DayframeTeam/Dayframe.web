@@ -22,7 +22,6 @@ export function TaskItem({ task, completionDate }: Props) {
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
   const colorIndex = getPriorityColorIndex(task.priority);
-  console.log('TaskItem');
 
   // Проверяем наличие подзадач
   const hasSubtasks = task.subtasks && task.subtasks.length > 0;
@@ -49,7 +48,6 @@ export function TaskItem({ task, completionDate }: Props) {
     try {
       setIsLoading(true);
       const newStatus = !task.is_done;
-      console.log('newStatus', newStatus);
       // Обновляем статус задачи
       await taskService.updateTaskStatus(task.id, newStatus, completionDate);
 

@@ -2,10 +2,8 @@ import { PlusIcon } from 'lucide-react';
 import { Button } from '../../../../shared/UI/Button/Button';
 import styles from './TemplatesDaysSection.module.scss';
 import { useTranslation } from 'react-i18next';
-import { TemplateDay } from '../TemplateDay/TemplateDay';
 import { useState } from 'react';
 import { DayModal } from '../DayModal/DayModal';
-import { nanoid } from 'nanoid';
 
 export const TemplatesDaysSection = () => {
   const { t } = useTranslation();

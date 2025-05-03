@@ -14,7 +14,6 @@ export const CalendarHeader = memo(({ month, year, onMonthChange }: Props) => {
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  console.log('CalendarHeader');
 
   // Текущий месяц (для выделения в выпадающем списке)
   const realCurrentMonth = new Date().getMonth();

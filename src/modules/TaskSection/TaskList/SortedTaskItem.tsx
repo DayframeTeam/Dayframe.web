@@ -13,7 +13,6 @@ type Props = Readonly<{
 export const SortedTaskItem = memo(({ taskId, date }: Props) => {
   const task = useAppSelector((state) => selectTaskById(state, taskId));
   const templateTask = useAppSelector((state) => TemplateTaskSelectors.selectTemplateTaskBySpecialId(state, taskId));
-  console.log('SortedTaskItem', taskId);
 
   if (!task && !templateTask) return null;
 
@@ -23,7 +22,6 @@ export const SortedTaskItem = memo(({ taskId, date }: Props) => {
   if (templateTask) {
     return <TemplateTaskItemForComplete templateTask={templateTask} taskDate={date} />;
   }
-  // return <TaskItem task={task} />;
 });
 
 SortedTaskItem.displayName = 'SortedTaskItem';

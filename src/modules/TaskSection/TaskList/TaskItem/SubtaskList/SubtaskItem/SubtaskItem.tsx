@@ -19,7 +19,6 @@ export const SubtaskItem = memo(({ subtask }: Props) => {
     setIsUpdating(true);
     try {
       taskService.updateSubtaskStatus(subtask.id, !subtask.is_done);
-      console.log('Статус подзадачи обновлен:', subtask.id, !subtask.is_done);
     } catch (error) {
       console.error('Ошибка при обновлении статуса подзадачи:', error);
     } finally {

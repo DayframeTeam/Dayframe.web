@@ -16,8 +16,6 @@ export const TaskSectionHeader = memo(({ date, onAddTask }: TaskSectionHeaderPro
   const today = new Date().toLocaleDateString('sv-SE');
   const isToday = date === today;
 
-  console.log('TaskSectionHeader');
-
   return (
     <div className={styles.container}>
       <Weather date={date} />

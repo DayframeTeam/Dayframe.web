@@ -28,8 +28,6 @@ export const StickerPreview = memo(({ taskId }: Props) => {
   const displayTask = task || templateTask;
   const isTemplate = !!templateTask;
 
-  console.log('StickerPreview render', taskId);
-
   return (
     <div
       className={`${styles.event} ${!isTemplate && task.is_done ? styles.completed : ''}`}

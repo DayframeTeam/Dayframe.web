@@ -27,7 +27,7 @@ export const CalendarGrid = React.memo(({ daysInMonth, year, month }: Props) => 
     () => [1, 2, 3, 4, 5, 6, 0].map((dayIndex) => t(`weekdaysShort.${dayIndex}`)),
     [t]
   );
-  console.log('CalendarGrid');
+
   // Подготовка дней месяца
   const monthDays = useMemo(() => {
     return Array.from({ length: daysInMonth }, (_, i) => {

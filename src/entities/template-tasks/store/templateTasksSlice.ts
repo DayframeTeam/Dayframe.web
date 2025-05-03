@@ -93,7 +93,7 @@ export class TemplateTaskSelectors {
    * Получить АКТИВНЫЕ шаблонные задачи для указанной даты
    */
   static selectTemplateTasksByDate = createSelector(
-    [baseSelectors.selectAll, (state: RootState, date: string) => date],
+    [baseSelectors.selectAll, (_: RootState, date: string) => date],
     (tasks, date) => {
       // 1) номер дня: Mon=1 … Sun=7
       const jsDay = new Date(date).getDay(); // 0..6, где 0=Sun

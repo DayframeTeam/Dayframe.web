@@ -10,8 +10,6 @@ type Props = Readonly<{
 export const TaskSection = memo(({ date }: Props) => {
   const [isAdding, setIsAdding] = useState(false);
 
-  console.log('TaskSection');
-
   const handleAddTask = () => {
     setIsAdding(true);
   };

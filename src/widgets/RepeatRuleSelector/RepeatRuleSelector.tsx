@@ -3,7 +3,6 @@ import { RepeatRule } from '../../types/dbTypes';
 import { SelectedDays } from '../SeleectedDays/SeleectedDays';
 import styles from './RepeatRuleSelector.module.scss';
 import { useTranslation } from 'react-i18next';
-import { Badge } from '../../shared/UI/Badge/Badge';
 import shared from '../../shared/UI/shared.module.scss';
 import { Button } from '../../shared/UI/Button/Button';
 import { TemplateTaskUtils } from '../../entities/template-tasks/template.tasks.utils';

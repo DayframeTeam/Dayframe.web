@@ -10,15 +10,6 @@ type ModalProps = {
 
 export const Modal = memo(({ onClose, title, children }: ModalProps) => {
   const [mouseDownOnBackdrop, setMouseDownOnBackdrop] = useState(false);
-  console.log('Modal');
-  // useEffect(() => {
-  //   const handleEsc = (e: KeyboardEvent) => {
-  //     if (e.key === 'Escape') onClose();
-  //   };
-  //   document.addEventListener('keydown', handleEsc);
-  //   return () => document.removeEventListener('keydown', handleEsc);
-  // }, [onClose]);
-
   /**
    * Если пользователь нажал мышь именно на backdrop (не на дочерних элементах),
    * сохраняем флаг в стейте. При mouseup проверим, всё ли прошло на backdrop.

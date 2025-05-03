@@ -85,7 +85,11 @@ export function handleApiError(error: unknown, context: string): AppError {
 /**
  * Helper for handling thunk rejections
  */
-export function handleThunkError(error: unknown, context: string, thunkAPI: any) {
+export function handleThunkError(
+  error: unknown,
+  context: string,
+  thunkAPI: { rejectWithValue: (value: AppError) => unknown }
+) {
   const appError = handleApiError(error, context);
   return thunkAPI.rejectWithValue(appError);
 }

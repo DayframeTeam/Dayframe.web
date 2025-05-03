@@ -7,10 +7,7 @@ const today = new Date();
 export const Calendar = React.memo(() => {
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
-
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  console.log('Calendar');
 
   // Обработчик изменения месяца/года
   const handleMonthChange = (newMonth: number, newYear: number) => {

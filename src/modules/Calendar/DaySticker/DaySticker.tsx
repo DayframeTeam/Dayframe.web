@@ -58,8 +58,6 @@ export const DaySticker = memo(
       setOpen(false);
     }, []);
 
-    console.log('DaySticker render', date);
-
     const renderContent = useMemo(() => {
       // Мемоизируем превью задач, чтобы не создавать элементы заново при перерисовке
       return (

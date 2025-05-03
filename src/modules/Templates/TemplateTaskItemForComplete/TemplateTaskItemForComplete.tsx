@@ -21,8 +21,6 @@ type Props = Readonly<{
 }>;
 
 export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Props) => {
-  console.log('TemplateTaskItemForComplete');
-
   const task = TemplateTaskUtils.convertTemplateToTask(templateTask, taskDate);
   const [showSubtasks, setShowSubtasks] = useState(false);
   const { t } = useTranslation();
@@ -43,7 +41,6 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
   const [isLoading, setIsLoading] = useState(false);
 
   const createCompletedTask = async () => {
-    console.log('createCompletedTask', task);
     setIsLoading(true);
     try {
       await taskService.createTask(TaskUtils.createCompletedTask(task));

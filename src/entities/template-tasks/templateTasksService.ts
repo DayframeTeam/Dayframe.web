@@ -34,7 +34,18 @@ export const templateTasksService: TemplateTasksService = {
         store.dispatch(setTemplateTasks(response.data));
       }
     } catch (error) {
-      if (error.response.data.error === 'Шаблоны задач не найдены') {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'response' in error &&
+        error.response &&
+        typeof error.response === 'object' &&
+        'data' in error.response &&
+        error.response.data &&
+        typeof error.response.data === 'object' &&
+        'error' in error.response.data &&
+        error.response.data.error === 'Шаблоны задач не найдены'
+      ) {
         store.dispatch(setTemplateTasks([]));
       } else {
         const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
@@ -95,8 +106,10 @@ export const templateTasksService: TemplateTasksService = {
       if (response.data.task) {
         // Обновляем задачу в Redux store
         store.dispatch(
-            updateOneTemplateTask({
-            id: TemplateTaskUtils.createTemplateTaskUniqueKey({ id: response.data.task.id } as TemplateTask),
+          updateOneTemplateTask({
+            id: TemplateTaskUtils.createTemplateTaskUniqueKey({
+              id: response.data.task.id,
+            } as TemplateTask),
             changes: response.data.task,
           })
         );
@@ -121,14 +134,18 @@ export const templateTasksService: TemplateTasksService = {
 
     try {
       // Отправляем запрос на сервер
-      const response = await api.patch<TemplateTaskResponse>(`${url}/${taskId}/set_active`, { is_active: is_active });
+      const response = await api.patch<TemplateTaskResponse>(`${url}/${taskId}/set_active`, {
+        is_active: is_active,
+      });
 
       // Бэкенд всегда должен возвращать обновленную задачу
       if (response.data.task) {
         // Обновляем задачу в Redux store
         store.dispatch(
           updateOneTemplateTask({
-            id: TemplateTaskUtils.createTemplateTaskUniqueKey({ id: response.data.task.id } as TemplateTask),
+            id: TemplateTaskUtils.createTemplateTaskUniqueKey({
+              id: response.data.task.id,
+            } as TemplateTask),
             changes: response.data.task,
           })
         );

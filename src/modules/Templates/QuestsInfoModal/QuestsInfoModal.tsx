@@ -13,7 +13,7 @@ export const QuestsInfoModal = memo(({ isOpen, onClose }: QuestsInfoModalProps) 
 
   return (
     isOpen && (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('FAQ.FAQ')}>
+      <Modal onClose={onClose} title={t('FAQ.FAQ')}>
         <div className={styles.content}>
           <div className={styles.section}>
             <h3>🎯 {t('templates.quests')}</h3>

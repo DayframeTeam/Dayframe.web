@@ -47,7 +47,18 @@ export const taskService: TaskService = {
         store.dispatch(setTasks(response.data));
       }
     } catch (error) {
-      if (error.response.data.error === 'Задачи не найдены') {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'response' in error &&
+        error.response &&
+        typeof error.response === 'object' &&
+        'data' in error.response &&
+        error.response.data &&
+        typeof error.response.data === 'object' &&
+        'error' in error.response.data &&
+        error.response.data.error === 'Задачи не найдены'
+      ) {
         store.dispatch(setTasks([]));
       } else {
         const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
