@@ -56,9 +56,9 @@
       "label": "Repeat",
       "from": "From",
       "to": "Until",
-      "daily": "Daily",
-      "weekly": "Weekly",
-      "quest": "Quest",
+      "daily": "every day",
+      "weekly": "every week",
+      "quest": "quest",
       "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     },
     "priority": "Priority",

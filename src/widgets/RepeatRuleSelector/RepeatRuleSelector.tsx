@@ -14,7 +14,12 @@ type Props = {
   className?: string;
 };
 
-export default function RepeatRuleSelector({ value, onChange, selectable = false, className }: Props) {
+export default function RepeatRuleSelector({
+  value,
+  onChange,
+  selectable = false,
+  className,
+}: Props) {
   const { t } = useTranslation();
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<'weekly' | 'quests' | null>(null);
@@ -70,14 +75,14 @@ export default function RepeatRuleSelector({ value, onChange, selectable = false
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
             <Button
               variant="secondary"
-              className={`${styles.dayButton} ${selectedOption === 'weekly' ? styles.selected : ''}`}
+              className={styles.dayButton}
               onClick={() => handleOptionChange('weekly')}
             >
               {t('task.repeat.weekly')}
             </Button>
             <Button
               variant="secondary"
-              className={`${styles.dayButton} ${selectedOption === 'quests' ? styles.selected : ''}`}
+              className={styles.dayButton}
               onClick={() => handleOptionChange('quests')}
             >
               {t('task.repeat.quest')}
@@ -86,16 +91,21 @@ export default function RepeatRuleSelector({ value, onChange, selectable = false
         </>
       ) : (
         <>
-          {isDaysMode ? (
-            <SelectedDays
-              selectedDays={value as number[]}
-              selectable={false}
-              label={t('templates.days.repeatDays')}
-            />
-          ) : (
-            <div className={styles.selectedOption}>
-              <Badge label={t(value)} />
-            </div>
+          {isDaysMode &&
+            (value.length < 7 ? (
+              <SelectedDays
+                selectedDays={value as number[]}
+                selectable={false}
+                label={t('templates.days.repeatDays')}
+              />
+            ) : (
+              <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.daily')}`}</div>
+            ))}
+          {value === 'weekly' && (
+            <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.weekly')}`}</div>
+          )}
+          {value === 'quests' && (
+            <div className={styles.dayLabel}>{`🔁 ${t('task.repeat.quest')}`}</div>
           )}
         </>
       )}
