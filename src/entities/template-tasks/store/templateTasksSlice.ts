@@ -92,7 +92,7 @@ export class TemplateTaskSelectors {
   static selectTemplateTaskBySpecialId = baseSelectors.selectById;
 
   /**
-   * Получить шаблонные задачи для указанной даты
+   * Получить АКТИВНЫЕ шаблонные задачи для указанной даты
    */
   static selectTemplateTasksByDate = createSelector(
     [baseSelectors.selectAll, (state: RootState, date: string) => date],
@@ -102,6 +102,7 @@ export class TemplateTaskSelectors {
       const dayNumber = jsDay === 0 ? 7 : jsDay; // 1..7
 
       return tasks.filter((task) => {
+        if (!task.is_active) return false;
         // 2) парсим повторение
         const rule = TemplateTaskUtils.parseRepeatRule(task.repeat_rule);
 

@@ -40,7 +40,10 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
   const rule = TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule);
   const [isLoading, setIsLoading] = useState(false);
 
-  const createCompletedTask = async () => {};
+  const createCompletedTask = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log('createCompletedTask');
+  };
 
   return (
     <li className={clsx(styles.taskListItem, task.is_done && styles.completed)}>

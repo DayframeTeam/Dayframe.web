@@ -12,6 +12,7 @@ import { nanoid } from 'nanoid';
 import { TemplateTaskModal } from '../TemplateTaskModal/TemplateTaskModal';
 import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
 import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
+import { templateTasksService } from '../../../entities/template-tasks/templateTasksService';
 
 type TemplateTaskItemProps = {
   templateTask: TemplateTaskType | DayTask;
@@ -24,11 +25,20 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
   const [showSubtasks, setShowSubtasks] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const isTaskTemplate = 'repeat_rule' in templateTask;
+  if (!isTaskTemplate) {
+    return null;
+  }
+  const rule = TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule);
 
-  const [isActive, setIsActive] = useState(isTaskTemplate && templateTask.is_active);
-  const rule = isTaskTemplate ? TemplateTaskUtils.parseRepeatRule(templateTask.repeat_rule) : [];
+  const toggleActiveTemplateTask = async () => {
+    try {
+      await templateTasksService.toggleActiveTemplateTask(templateTask.id, !templateTask.is_active);
+    } catch (err) {
+      console.error('Error toggling active template task:', err);
+    }
+  };
   return (
-    <div className={styles.item} style={{ opacity: isActive ? 1 : 0.5 }}>
+    <div className={styles.item} style={{ opacity: templateTask.is_active ? 1 : 0.5 }}>
       <div
         className={styles.info}
         style={{
@@ -46,8 +56,8 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
             )}
             {isTaskTemplate && (
               <ToggleSwitch
-                checked={isActive}
-                onChange={() => setIsActive(!isActive)}
+                checked={templateTask.is_active}
+                onChange={toggleActiveTemplateTask}
                 title={t('templates.activeToggle')}
               />
             )}
@@ -61,7 +71,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
               color: 'var(--text-secondary)',
               padding: '0.5rem 0 0 0.5rem',
             }}
-        >
+          >
             {templateTask.description}
           </div>
         )}

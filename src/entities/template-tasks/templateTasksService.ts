@@ -2,7 +2,14 @@ import { TemplateTask } from '../../types/dbTypes';
 import api from '../../api/http/axios';
 import { handleApiError } from '../../shared/errors';
 import { store } from '../../store';
-import { addTemplateTask, deleteTemplateTask, setError, setLoading, setTemplateTasks, updateOneTemplateTask } from './store/templateTasksSlice';
+import {
+  addTemplateTask,
+  deleteTemplateTask,
+  setError,
+  setLoading,
+  setTemplateTasks,
+  updateOneTemplateTask,
+} from './store/templateTasksSlice';
 
 const url = '/templateTasks';
 
@@ -11,6 +18,7 @@ export type TemplateTasksService = {
   createTemplateTask: (taskData: Partial<TemplateTask>) => Promise<TemplateTask>;
   deleteTemplateTask: (taskId: number) => Promise<void>;
   updateTemplateTask: (taskId: number, taskData: Partial<TemplateTask>) => Promise<TemplateTask>;
+  toggleActiveTemplateTask: (taskId: number, is_active: boolean) => Promise<TemplateTask>;
 };
 
 interface TemplateTaskResponse {
@@ -93,6 +101,37 @@ export const templateTasksService: TemplateTasksService = {
           })
         );
 
+        return response.data.task;
+      }
+
+      // Если задача не вернулась, это ошибка
+      throw new Error('Server did not return the updated task');
+    } catch (error) {
+      const appError = handleApiError(error, 'taskService.updateTask');
+      console.error(appError.message);
+      store.dispatch(setError(appError.message));
+      throw appError;
+    } finally {
+      store.dispatch(setLoading(false));
+    }
+  },
+
+  async toggleActiveTemplateTask(taskId: number, is_active: boolean): Promise<TemplateTask> {
+    store.dispatch(setLoading(true));
+
+    try {
+      // Отправляем запрос на сервер
+      const response = await api.patch<TemplateTaskResponse>(`${url}/${taskId}/set_active`, { is_active: is_active });
+
+      // Бэкенд всегда должен возвращать обновленную задачу
+      if (response.data.task) {
+        // Обновляем задачу в Redux store
+        store.dispatch(
+          updateOneTemplateTask({
+            id: response.data.task.special_id,
+            changes: response.data.task,
+          })
+        );
         return response.data.task;
       }
 
