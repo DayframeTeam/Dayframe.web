@@ -8,7 +8,7 @@ import { TemplateTaskUtils } from '../template.tasks.utils';
  * EntityAdapter для шаблонных задач
  */
 const templateTasksAdapter = createEntityAdapter<TemplateTask, string>({
-  selectId: (task) => task.special_id,
+  selectId: (task) => TemplateTaskUtils.createTemplateTaskUniqueKey(task),
   sortComparer: Sorter.complexSort,
 });
 
@@ -26,9 +26,7 @@ interface TemplateTasksState extends EntityState<TemplateTask, string> {
  */
 const templateTasksSlice = createSlice({
   name: 'templateTasks',
-  initialState: templateTasksAdapter.getInitialState<
-    Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>
-  >({
+  initialState: templateTasksAdapter.getInitialState<Omit<TemplateTasksState, keyof EntityState<TemplateTask, string>>>({
     isLoading: false,
     error: null,
     lastUpdated: null,
@@ -87,7 +85,7 @@ export class TemplateTaskSelectors {
   static selectAllTemplateTasks = baseSelectors.selectAll;
 
   /**
-   * Получить шаблонную задачу по special_id
+   * Получить шаблонную задачу
    */
   static selectTemplateTaskBySpecialId = baseSelectors.selectById;
 

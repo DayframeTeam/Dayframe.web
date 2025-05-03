@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { Task } from '../../types/dbTypes';
+import { Subtask, Task } from '../../types/dbTypes';
 
 /**
  * Class containing utility methods for working with tasks
@@ -27,6 +27,26 @@ export class TaskUtils {
       task_date,
       subtasks: [],
     };
+  }
+
+  static createCompletedTask(task: Task): Task {
+    return {
+      ...task,
+      is_done: true,
+      subtasks: task.subtasks.map((subtask) => this.createCompletedSubtask(subtask)),
+    };
+  }
+
+  static createCompletedSubtask(subtask: Subtask): Subtask {
+    return {
+      ...subtask,
+      is_done: true,
+    };
+  }
+
+  //создаю уникальный ключ для стора и верстки
+  static createTaskUniqueKey(task: Task): string {
+    return `t${task.id}`;
   }
 }
 

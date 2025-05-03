@@ -12,18 +12,19 @@ import type { Task } from '../../../types/dbTypes';
 import type { RootState } from '../../../store';
 import { toLocalDateString } from '../../../utils/dateUtils';
 import { Sorter } from '../../../utils/sort';
+import { TaskUtils } from '../tasks.utils';
 
 /**
  * EntityAdapter - специальный инструмент Redux Toolkit для работы с коллекциями объектов.
  * Преимущества:
- * - Нормализованное хранение данных (как Map с ключами special_id)
+ * - Нормализованное хранение данных (как Map с ключами)
  * - Эффективные CRUD операции
  * - Встроенная оптимизация производительности
  * - Автоматическая генерация селекторов
  */
 const tasksAdapter = createEntityAdapter<Task, string>({
   // Определяем, какое поле будет использоваться как ключ (ID) для хранения задач
-  selectId: (task) => task.special_id,
+  selectId: (task) => TaskUtils.createTaskUniqueKey(task),
 
   // Используем комплексную сортировку задач
   sortComparer: Sorter.complexSort,
@@ -179,7 +180,7 @@ class TaskSelectors {
    */
   static selectTaskIdsByDate = createSelector(
     [TaskSelectors.selectTasksByDate, (_, date: string) => date],
-    (tasks) => tasks.map((task) => task.special_id)
+    (tasks) => tasks.map((task) => TaskUtils.createTaskUniqueKey(task))
   );
 
   /**
@@ -215,7 +216,7 @@ class TaskSelectors {
    */
   static selectTaskIdsByDateIncludingUndated = createSelector(
     [TaskSelectors.selectTasksByDateIncludingUndated, (_, date: string) => date],
-    (tasks) => tasks.map((task) => task.special_id)
+    (tasks) => tasks.map((task) => TaskUtils.createTaskUniqueKey(task))
   );
 }
 

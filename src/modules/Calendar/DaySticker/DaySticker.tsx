@@ -66,8 +66,8 @@ export const DaySticker = memo(
         <>
           <div className={styles.day}>{dayNumber}</div>
           <div className={styles.events}>
-            {taskIds.map((special_id) => (
-              <StickerPreview key={special_id} taskId={special_id} />
+            {taskIds.map((key) => (
+              <StickerPreview key={key} taskId={key} />
             ))}
           </div>
         </>

@@ -71,6 +71,11 @@ export class TemplateTaskUtils {
       })),
     };
   }
+
+  //создаю уникальный ключ для стора и верстки
+  static createTemplateTaskUniqueKey(task: TemplateTask): string {
+    return `p${task.id}`;
+  }
 }
 
 // Export the createEmptyTask function directly for backward compatibility

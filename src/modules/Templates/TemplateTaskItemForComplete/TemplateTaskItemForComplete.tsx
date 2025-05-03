@@ -1,4 +1,4 @@
-import { TemplateTask } from '../../../types/dbTypes';
+import { Task, TemplateTask } from '../../../types/dbTypes';
 import { memo, useState } from 'react';
 import { TemplateTaskUtils } from '../../../entities/template-tasks/template.tasks.utils';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,8 @@ import { Button } from '../../../shared/UI/Button/Button';
 import RepeatRuleSelector from '../../../widgets/RepeatRuleSelector/RepeatRuleSelector';
 import styles from '../../TaskSection/TaskList/TaskItem/TaskItem.module.scss';
 import templateVersionStyles from './TemplateTaskItemForComplete.module.scss';
+import { taskService } from '../../../entities/task/taskService';
+import { TaskUtils } from '../../../entities/task/tasks.utils';
 
 type Props = Readonly<{
   templateTask: TemplateTask;
@@ -39,9 +41,16 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
       : 'var(--subtask-progress-incomplete)';
   const [isLoading, setIsLoading] = useState(false);
 
-  const createCompletedTask = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    console.log('createCompletedTask');
+  const createCompletedTask = async () => {
+    console.log('createCompletedTask', task);
+    setIsLoading(true);
+    try {
+      await taskService.createTask(TaskUtils.createCompletedTask(task));
+    } catch (error) {
+      console.error('Ошибка при создании задачи:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

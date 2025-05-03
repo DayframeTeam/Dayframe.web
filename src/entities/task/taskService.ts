@@ -11,6 +11,7 @@ import {
   setError,
 } from './store/tasksSlice';
 import { setUserExp } from '../user/store/userSlice';
+import { TaskUtils } from './tasks.utils';
 
 const url = '/tasks';
 
@@ -89,16 +90,11 @@ export const taskService: TaskService = {
     try {
       await api.delete(`${url}/${taskId}`);
 
-      // Находим задачу по ID для получения special_id
-      const state = store.getState();
-      const task = Object.values(state.tasks.entities).find((t) => t?.id === taskId);
+      // Создаем уникальный ключ для задачи
+      const taskKey = TaskUtils.createTaskUniqueKey({ id: taskId } as Task);
 
-      if (task?.special_id) {
-        // Точечное обновление - удаляем только одну задачу по special_id
-        store.dispatch(deleteTask(task.special_id));
-      } else {
-        console.warn(`Task with id=${taskId} not found in store`);
-      }
+      // Удаляем задачу по новому ключу
+      store.dispatch(deleteTask(taskKey));
     } catch (error) {
       const appError = handleApiError(error, 'taskService.deleteTask');
       console.error(appError.message);
@@ -127,7 +123,7 @@ export const taskService: TaskService = {
         // Точечное обновление - обновляем только одну задачу
         store.dispatch(
           updateOneTask({
-            id: response.data.task.special_id,
+            id: TaskUtils.createTaskUniqueKey({ id: response.data.task.id } as Task),
             changes: response.data.task,
           })
         );
@@ -164,7 +160,7 @@ export const taskService: TaskService = {
         // Обновляем задачу в Redux store
         store.dispatch(
           updateOneTask({
-            id: response.data.task.special_id,
+            id: TaskUtils.createTaskUniqueKey({ id: response.data.task.id } as Task),
             changes: response.data.task,
           })
         );
@@ -206,7 +202,7 @@ export const taskService: TaskService = {
         // Точечное обновление - обновляем только родительскую задачу
         store.dispatch(
           updateOneTask({
-            id: response.data.task.special_id,
+            id: TaskUtils.createTaskUniqueKey({ id: response.data.task.id } as Task),
             changes: response.data.task,
           })
         );

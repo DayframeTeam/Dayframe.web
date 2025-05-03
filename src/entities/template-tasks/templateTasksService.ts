@@ -10,6 +10,7 @@ import {
   setTemplateTasks,
   updateOneTemplateTask,
 } from './store/templateTasksSlice';
+import { TemplateTaskUtils } from './template.tasks.utils';
 
 const url = '/templateTasks';
 
@@ -63,17 +64,10 @@ export const templateTasksService: TemplateTasksService = {
 
     try {
       await api.delete(`${url}/${taskId}`);
-
-      // Находим задачу по ID для получения special_id
-      const state = store.getState();
-      const task = Object.values(state.templateTasks.entities).find((t) => t?.id === taskId);
-
-      if (task?.special_id) {
-        // Точечное обновление - удаляем только одну задачу по special_id
-        store.dispatch(deleteTemplateTask(task.special_id));
-      } else {
-        console.warn(`Task with id=${taskId} not found in store`);
-      }
+      // Создаем уникальный ключ для задачи
+      const taskKey = TemplateTaskUtils.createTemplateTaskUniqueKey({ id: taskId } as TemplateTask);
+      // Удаляем задачу по новому ключу
+      store.dispatch(deleteTemplateTask(taskKey));
     } catch (error) {
       const appError = handleApiError(error, 'taskService.deleteTask');
       console.error(appError.message);
@@ -96,7 +90,7 @@ export const templateTasksService: TemplateTasksService = {
         // Обновляем задачу в Redux store
         store.dispatch(
             updateOneTemplateTask({
-            id: response.data.task.special_id,
+            id: TemplateTaskUtils.createTemplateTaskUniqueKey({ id: response.data.task.id } as TemplateTask),
             changes: response.data.task,
           })
         );
@@ -128,7 +122,7 @@ export const templateTasksService: TemplateTasksService = {
         // Обновляем задачу в Redux store
         store.dispatch(
           updateOneTemplateTask({
-            id: response.data.task.special_id,
+            id: TemplateTaskUtils.createTemplateTaskUniqueKey({ id: response.data.task.id } as TemplateTask),
             changes: response.data.task,
           })
         );
