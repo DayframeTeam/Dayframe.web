@@ -18,7 +18,15 @@ function App() {
 
   if (!inited.current) {
     inited.current = true;
-    // запускаем “одноразово” загрузку
+    // запускаем "одноразово" загрузку
+    const tg = window.Telegram?.WebApp;
+    if (tg && tg.initDataUnsafe) {
+      const chatId = tg.initDataUnsafe.user?.id;
+      alert('chat_id: ' + chatId);
+    } else {
+      alert('Telegram WebApp API не найден');
+    }
+
     (async () => {
       try {
         await userService.fetchAndStoreCurrentUser();
