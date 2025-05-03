@@ -43,12 +43,18 @@ export const taskService: TaskService = {
     try {
       const response = await api.get<Task[]>(url);
       // Сохраняем все задачи в store
-      store.dispatch(setTasks(response.data));
+      if (response.data) {
+        store.dispatch(setTasks(response.data));
+      }
     } catch (error) {
-      const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
-      console.error(appError.message);
-      store.dispatch(setError(appError.message));
-      throw appError;
+      if (error.response.data.error === 'Задачи не найдены') {
+        store.dispatch(setTasks([]));
+      } else {
+        const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
+        console.error(appError.message);
+        store.dispatch(setError(appError.message));
+        throw appError;
+      }
     } finally {
       store.dispatch(setLoading(false));
     }

@@ -30,11 +30,17 @@ export const templateTasksService: TemplateTasksService = {
   async fetchAndStoreAll(): Promise<void> {
     try {
       const response = await api.get<TemplateTask[]>(url);
-      store.dispatch(setTemplateTasks(response.data));
+      if (response.data) {
+        store.dispatch(setTemplateTasks(response.data));
+      }
     } catch (error) {
-      const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
-      console.error(appError.message);
-      throw appError;
+      if (error.response.data.error === 'Шаблоны задач не найдены') {
+        store.dispatch(setTemplateTasks([]));
+      } else {
+        const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
+        console.error(appError.message);
+        throw appError;
+      }
     }
   },
 

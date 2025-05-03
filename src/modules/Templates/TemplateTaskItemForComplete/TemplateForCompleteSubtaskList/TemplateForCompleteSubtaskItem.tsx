@@ -21,7 +21,6 @@ export const TemplateForCompleteSubtaskItem = memo(({ task, subtask }: Props) =>
     setIsUpdating(true);
     try {
       await taskService.createTask(TaskUtils.setSubtaskDone(task, subtask.id, !subtask.is_done));
-      //console.log(TaskUtils.setSubtaskDone(task, subtask.id, !subtask.is_done));
     } catch (error) {
       console.error('Ошибка при обновлении статуса подзадачи:', error);
     } finally {
