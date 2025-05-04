@@ -26,7 +26,11 @@ function App() {
     inited.current = true;
 
     const tg = window.Telegram?.WebApp;
-    const chat_id = tg?.initDataUnsafe?.user?.id;
+    let chat_id = tg?.initDataUnsafe?.user?.id;
+
+    if (import.meta.env.DEV && !chat_id) {
+      chat_id = 613434210;
+    }
 
     if (!chat_id) {
       setShowBotLink(true);
