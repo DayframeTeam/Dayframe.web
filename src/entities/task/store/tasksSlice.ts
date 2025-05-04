@@ -10,7 +10,6 @@
 import { createEntityAdapter, createSlice, createSelector, EntityState } from '@reduxjs/toolkit';
 import type { Task } from '../../../types/dbTypes';
 import type { RootState } from '../../../store';
-import { toLocalDateString } from '../../../utils/dateUtils';
 import { Sorter } from '../../../utils/sort';
 import { TaskUtils } from '../tasks.utils';
 
@@ -151,14 +150,8 @@ class TaskSelectors {
    * @private использовании только внутри класса
    */
   private static matchesDate(taskDate: string | undefined, targetDate: string): boolean {
-    // Для TodayPage мы хотим показывать только задачи с датой, совпадающей с сегодняшней
-    if (!taskDate) return false; // Задачи без даты НЕ показываются
-
-    // Нормализуем форматы даты через вспомогательную функцию
-    const normalizedTaskDate = toLocalDateString(taskDate);
-    const normalizedTargetDate = toLocalDateString(targetDate);
-
-    return normalizedTaskDate === normalizedTargetDate;
+    if (!taskDate) return false;
+    return taskDate.slice(0, 10) === targetDate.slice(0, 10);
   }
 
   /**
@@ -198,12 +191,8 @@ class TaskSelectors {
       tasks.filter((task) => {
         // Включаем задачи без даты
         if (!task.task_date) return true;
-
-        // И задачи с совпадающей датой
-        const normalizedTaskDate = toLocalDateString(task.task_date);
-        const normalizedTargetDate = toLocalDateString(date);
-
-        return normalizedTaskDate === normalizedTargetDate;
+        // И задачи с совпадающей датой (сравниваем только YYYY-MM-DD)
+        return task.task_date.slice(0, 10) === date.slice(0, 10);
       })
   );
 

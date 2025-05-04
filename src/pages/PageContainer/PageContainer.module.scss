@@ -5,6 +5,7 @@
   width: 100%;
   max-width: 100%;
   overflow-y: auto;
+  min-height: calc(100vh - 70px);
 
   @media (max-width: 600px) {
     padding: 0.5rem;

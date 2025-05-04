@@ -1,31 +1,48 @@
-import styles from './PageContainer.module.scss';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import { useTranslation } from 'react-i18next';
+// src/components/PageContainer/PageContainer.tsx
+import styles from './PageContainer.module.scss'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSwipeable } from 'react-swipeable'
 
 const TodayPage = lazy(() =>
-  import('../TodayPage/TodayPage').then((module) => ({
-    default: module.TodayPage,
-  }))
-);
-
+  import('../TodayPage/TodayPage').then(m => ({ default: m.TodayPage }))
+)
 const TemplatesPage = lazy(() =>
-  import('../TemplatesPage/TemplatesPage').then((module) => ({
-    default: module.TemplatesPage,
-  }))
-);
-
+  import('../TemplatesPage/TemplatesPage').then(m => ({ default: m.TemplatesPage }))
+)
 const CalendarPage = lazy(() =>
-  import('../CalendarPage/CalendarPage').then((module) => ({
-    default: module.CalendarPage,
-  }))
-);
+  import('../CalendarPage/CalendarPage').then(m => ({ default: m.CalendarPage }))
+)
 
 export function PageContainer() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  // порядок роутов для свайпа
+  const pages = ['/today', '/templates', '/calendar']
+  const currentIndex = pages.findIndex(p => pathname.startsWith(p))
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (currentIndex >= 0 && currentIndex < pages.length - 1) {
+        navigate(pages[currentIndex + 1])
+      }
+    },
+    onSwipedRight: () => {
+      if (currentIndex > 0) {
+        navigate(pages[currentIndex - 1])
+      }
+    },
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+    trackMouse: false,
+    delta: 50,
+  })
 
   return (
-    <div className={styles.container}>
+    <div {...handlers} className={styles.container}>
       <Routes>
         <Route path="/" element={<Navigate to="/today" replace />} />
         <Route
@@ -59,5 +76,5 @@ export function PageContainer() {
         <Route path="*" element={<div>{t('pageLoading.notFound')}</div>} />
       </Routes>
     </div>
-  );
+  )
 }
