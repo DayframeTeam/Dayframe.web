@@ -2,8 +2,8 @@ export type User = {
   id: number; // Уникальный идентификатор пользователя (PK)
   username: string; // Отображаемое имя или логин
   email: string | undefined; // Email (опционально)
-  password: string; // Захешированный пароль
-  telegram_id: number | undefined; // Telegram ID, если есть связка (опционально)
+  // password: string; // Захешированный пароль
+  chat_id: number | undefined; // Telegram ID, если есть связка (опционально)
   is_premium: boolean; // Подписка: true — платный пользователь
   user_categories: string | undefined; // Пользовательские категории (например, JSON или строка) (опционально)
   exp: number; // Очки опыта пользователя

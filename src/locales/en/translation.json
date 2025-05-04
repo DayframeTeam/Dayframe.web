@@ -1,4 +1,11 @@
 {
+  "auth": {
+    "register": {
+      "title": "Please register via the Telegram bot",
+      "link": "Go to bot",
+      "description": "Open the Web App via Telegram after registration."
+    }
+  },
   "common": {
     "save": "Save",
     "saving": "Saving...",

@@ -1,10 +1,18 @@
 import axios from 'axios';
+import { selectAuthToken } from '../../entities/auth/store/authSlice';
+import { store } from '../../store';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// ⛔ Временно захардкожен user-id
-api.defaults.headers.common['user-id'] = '1';
-
+// Каждый запрос автоматически получит нужный Authorization
+api.interceptors.request.use((config) => {
+  const token = selectAuthToken(store.getState());
+  if (token) {
+    config.headers!['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
 export default api;
