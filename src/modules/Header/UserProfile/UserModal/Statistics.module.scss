@@ -318,7 +318,7 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  font-size: 0.7em;
+  font-size: var(--font-size-tertiary);
 }
 
 .emptyDay {

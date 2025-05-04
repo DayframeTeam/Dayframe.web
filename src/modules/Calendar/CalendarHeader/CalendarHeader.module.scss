@@ -15,7 +15,7 @@
 }
 
 .monthLabel {
-  font-size: 1.2rem;
+  font-size: var(--font-size-big);
 }
 
 .dropdown {
@@ -57,7 +57,7 @@
   transition: all 0.2s ease;
   border-radius: 4px;
   margin: 2px 0;
-  font-size: 0.95rem;
+  font-size: var(--font-size-primary);
   position: relative;
   cursor: pointer;
 
