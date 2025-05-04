@@ -16,10 +16,9 @@ export const authService = {
   /**
    * Fetch current user from the server and update the store
    */
-  async authUserByChatId(chatId: number): Promise<void> {
+  async authUserByChatId(chat_id: number): Promise<void> {
     try {
-      const response = await api.get<AuthResponse>(`${url}/webapp-login/${chatId}`);
-
+      const response = await api.get<AuthResponse>(`${url}/webapp-login/${chat_id}`);
       store.dispatch(setAuthToken(response.data.accessToken));
     } catch (error) {
       const appError = handleApiError(error, 'authService.authUserByChatId');

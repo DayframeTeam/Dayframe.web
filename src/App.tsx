@@ -26,15 +26,15 @@ function App() {
     inited.current = true;
 
     const tg = window.Telegram?.WebApp;
-    const chatId = tg?.initDataUnsafe?.user?.id;
+    const chat_id = tg?.initDataUnsafe?.user?.id;
 
-    if (!chatId) {
+    if (!chat_id) {
       setShowBotLink(true);
     } else {
       (async () => {
         try {
           // Пробуем получить пользователя
-          await authService.authUserByChatId(chatId);
+          await authService.authUserByChatId(Number(chat_id));
           // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
           await userService.fetchAndStoreCurrentUser();
           await taskService.fetchAndStoreAll();
