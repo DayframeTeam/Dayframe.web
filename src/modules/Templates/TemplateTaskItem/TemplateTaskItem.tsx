@@ -105,7 +105,7 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
 
           <div className={styles.meta}>
             {templateTask.category && (
-              <Badge label={'# ' + templateTask.category} title={t('task.category')} />
+              <Badge label={'#' + templateTask.category} title={t('task.category')} />
             )}
             {templateTask.priority && (
               <Badge

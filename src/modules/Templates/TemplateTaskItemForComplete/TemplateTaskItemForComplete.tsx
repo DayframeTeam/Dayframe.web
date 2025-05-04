@@ -122,7 +122,7 @@ export const TemplateTaskItemForComplete = memo(({ templateTask, taskDate }: Pro
             )}
 
             <div className={styles.meta}>
-              {task.category && <Badge label={'# ' + task.category} title={t('task.category')} />}
+              {task.category && <Badge label={'#' + task.category} title={t('task.category')} />}
               {task.priority && (
                 <Badge
                   label={t(`task.priorityType.${task.priority}`)}

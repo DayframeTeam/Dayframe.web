@@ -19,7 +19,7 @@ export const TaskBasicFields = memo(
     return (
       <>
         <TextInput
-          label={t('task.title') + ' ( ' + t('required') + ' )'}
+          label={t('task.title') + ' (' + t('required') + ')'}
           value={title ?? ''}
           onChange={(val) => setValue({ title: val })}
           required

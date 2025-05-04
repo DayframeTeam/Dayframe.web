@@ -26,7 +26,7 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
     >
       <div className={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <h3 style={{ margin: '0.5rem 0', paddingLeft: 'calc(1rem + 4px)' }}>
+          <h3 style={{ margin: '0.5rem 0' }}>
             {type === 'quests' && t('templates.quests')}
             {type === 'weekly' && t('templates.weekly')}
             {Array.isArray(type) && type.length === 7 && t('templates.daily')}

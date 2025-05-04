@@ -138,7 +138,7 @@ export function TaskItem({ task, completionDate }: Props) {
             )}
 
             <div className={styles.meta}>
-              {task.category && <Badge label={'# ' + task.category} title={t('task.category')} />}
+              {task.category && <Badge label={'#' + task.category} title={t('task.category')} />}
               {task.priority && (
                 <Badge
                   label={t(`task.priorityType.${task.priority}`)}
