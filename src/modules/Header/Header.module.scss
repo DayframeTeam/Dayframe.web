@@ -11,7 +11,6 @@
   box-sizing: border-box;
 
   @media (max-width: 600px) {
-    justify-content: center;
     padding: 0 0;
   }
 }
@@ -23,7 +22,7 @@
 
   @media (max-width: 600px) {
     position: absolute;
-    left: 1rem;
+    left: 0.5rem;
   }
 }
 
@@ -34,7 +33,7 @@
 
   @media (max-width: 600px) {
     position: absolute;
-    right: 1rem;
+    right: 0.5rem;
   }
 }
 
