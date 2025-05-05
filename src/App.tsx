@@ -22,6 +22,7 @@ function App() {
   document.body.classList.toggle('theme-dark', colorScheme === 'dark');
 
   const userLang = tg.initDataUnsafe?.user?.language_code;
+  console.log('userLang', userLang);
   if (userLang) {
     i18n.changeLanguage(userLang);
   }
