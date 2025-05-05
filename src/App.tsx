@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -18,6 +18,8 @@ function App() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
   document.body.classList.toggle('theme-dark', shouldUseDark);
+
+  const [showBotLink, setShowBotLink] = useState(false);
   const inited = useRef(false);
 
   if (!inited.current) {
@@ -31,15 +33,7 @@ function App() {
     }
 
     if (!chat_id) {
-      return (
-        <div style={{ padding: 32, textAlign: 'center' }}>
-          <h2>{t('auth.register.title')}</h2>
-          <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
-            {t('auth.register.link')}
-          </a>
-          <p>{t('auth.register.description')}</p>
-        </div>
-      );
+      setShowBotLink(true);
     } else {
       (async () => {
         try {
@@ -54,14 +48,27 @@ function App() {
           alert('Ошибка загрузки пользователя');
         }
       })();
-      return (
-        <>
-          <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
-          <PageContainer />
-        </>
-      );
     }
   }
+
+  if (showBotLink) {
+    return (
+      <div style={{ padding: 32, textAlign: 'center' }}>
+        <h2>{t('auth.register.title')}</h2>
+        <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
+          {t('auth.register.link')}
+        </a>
+        <p>{t('auth.register.description')}</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
+      <PageContainer />
+    </>
+  );
 }
 
 export default App;
