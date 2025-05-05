@@ -2,6 +2,7 @@ import api from '../../api/http/axios';
 import { store } from '../../store';
 import { setAuthToken } from './store/authSlice';
 import { handleApiError } from '../../shared/errors';
+import { TelegramWebAppInitDataUnsafe } from '../../types/telegram-webapp';
 
 const url = '/auth';
 
@@ -16,7 +17,7 @@ export const authService = {
   /**
    * Fetch current user from the server and update the store
    */
-  async authUser(initData: string): Promise<void> {
+  async authUser(initData: TelegramWebAppInitDataUnsafe): Promise<void> {
     try {
       const response = await api.post<AuthResponse>(`${url}/login`, { initData });
       store.dispatch(setAuthToken(response.data.accessToken));

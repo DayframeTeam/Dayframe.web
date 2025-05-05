@@ -21,8 +21,8 @@ function App() {
 
   tg.ready();
 
-  const initData = tg.initData;
-  alert(initData);
+  const initData = tg.initDataUnsafe;
+
   if (!initData) {
     window.location.href = TG_BOT_LINK;
     return;
