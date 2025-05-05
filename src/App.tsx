@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -14,18 +14,17 @@ const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 
 function App() {
   const { t } = useTranslation();
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
-  document.body.classList.toggle('theme-dark', shouldUseDark);
-
   const [showBotLink, setShowBotLink] = useState(false);
-  const inited = useRef(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (inited.current) return;
-    inited.current = true;
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
+    document.body.classList.toggle('theme-dark', shouldUseDark);
+  }, []);
 
+  useEffect(() => {
     const tg = window.Telegram?.WebApp;
     let chat_id = tg?.initDataUnsafe?.user?.id;
 
@@ -35,19 +34,21 @@ function App() {
 
     if (!chat_id) {
       setShowBotLink(true);
-    } else {
-      (async () => {
-        try {
-          await authService.authUserByChatId(Number(chat_id));
-          await userService.fetchAndStoreCurrentUser();
-          await taskService.fetchAndStoreAll();
-          await templateTasksService.fetchAndStoreAll();
-        } catch (e) {
-          console.error(e);
-          alert('Ошибка загрузки пользователя');
-        }
-      })();
+      return;
     }
+
+    (async () => {
+      try {
+        await authService.authUserByChatId(Number(chat_id));
+        await userService.fetchAndStoreCurrentUser();
+        await taskService.fetchAndStoreAll();
+        await templateTasksService.fetchAndStoreAll();
+        setIsReady(true);
+      } catch (e) {
+        console.error(e);
+        alert('Ошибка загрузки пользователя');
+      }
+    })();
   }, []);
 
   if (showBotLink) {
@@ -61,6 +62,8 @@ function App() {
       </div>
     );
   }
+
+  if (!isReady) return null;
 
   return (
     <>
