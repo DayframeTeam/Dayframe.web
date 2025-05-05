@@ -1,28 +1,52 @@
-interface TelegramWebAppUser {
+// Тип данных пользователя
+export interface TelegramWebAppUser {
   id: number;
   is_bot?: boolean;
   first_name?: string;
   last_name?: string;
   username?: string;
   language_code?: string;
+  allows_write_to_pm?: boolean;
+  photo_url?: string;
 }
 
-interface TelegramWebAppInitDataUnsafe {
+// Тип небезопасных данных (initDataUnsafe)
+export interface TelegramWebAppInitDataUnsafe {
   user?: TelegramWebAppUser;
-  chat?: { id: number };
-  // ... другие поля по необходимости
+  chat?: { id: number; type?: string; title?: string };
+  auth_date?: number;
+  hash?: string;
+  query_id?: string;
+  receiver?: TelegramWebAppUser;
+  start_param?: string;
 }
 
-interface TelegramWebApp {
+// Основной WebApp интерфейс
+export interface TelegramWebApp {
   initData: string;
   initDataUnsafe: TelegramWebAppInitDataUnsafe;
-  // ... другие методы и свойства
+  version?: string;
+  platform?: string;
+  colorScheme?: 'light' | 'dark';
+  isExpanded?: boolean;
+  isClosingConfirmationEnabled?: boolean;
+
+  ready: () => void;
+  expand: () => void;
+  close: () => void;
+  sendData: (data: string) => void;
+  onEvent: (eventType: string, callback: () => void) => void;
+  offEvent: (eventType: string, callback: () => void) => void;
 }
 
-interface TelegramNamespace {
+// Глобальное пространство Telegram в window
+export interface TelegramNamespace {
   WebApp: TelegramWebApp;
 }
 
-interface Window {
-  Telegram?: TelegramNamespace;
+// Расширяем глобальный объект Window
+declare global {
+  interface Window {
+    Telegram?: TelegramNamespace;
+  }
 }
