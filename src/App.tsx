@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -18,64 +18,50 @@ function App() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
   document.body.classList.toggle('theme-dark', shouldUseDark);
-
-  const [showBotLink, setShowBotLink] = useState(false);
   const inited = useRef(false);
 
   if (!inited.current) {
     inited.current = true;
 
-    const checkTelegramAuth = () => {
-      const tg = window.Telegram?.WebApp;
-      let chat_id = tg?.initDataUnsafe?.user?.id;
+    const tg = window.Telegram?.WebApp;
+    let chat_id = tg?.initDataUnsafe?.user?.id;
 
-      if (import.meta.env.DEV && !chat_id) {
-        chat_id = 613434210;
-      }
+    if (import.meta.env.DEV && !chat_id) {
+      chat_id = 613434210;
+    }
 
-      if (!chat_id) {
-        // If Telegram WebApp is not ready yet, retry after a short delay
-        if (window.Telegram?.WebApp) {
-          setTimeout(checkTelegramAuth, 100);
-          return;
+    if (!chat_id) {
+      return (
+        <div style={{ padding: 32, textAlign: 'center' }}>
+          <h2>{t('auth.register.title')}</h2>
+          <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
+            {t('auth.register.link')}
+          </a>
+          <p>{t('auth.register.description')}</p>
+        </div>
+      );
+    } else {
+      (async () => {
+        try {
+          // Пробуем получить пользователя
+          await authService.authUserByChatId(Number(chat_id));
+          // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
+          await userService.fetchAndStoreCurrentUser();
+          await taskService.fetchAndStoreAll();
+          await templateTasksService.fetchAndStoreAll();
+        } catch (e) {
+          console.error(e);
+          alert('Ошибка загрузки пользователя');
         }
-        setShowBotLink(true);
-      } else {
-        (async () => {
-          try {
-            await authService.authUserByChatId(Number(chat_id));
-            await userService.fetchAndStoreCurrentUser();
-            await taskService.fetchAndStoreAll();
-            await templateTasksService.fetchAndStoreAll();
-          } catch (e) {
-            console.error(e);
-            alert('Ошибка загрузки пользователя');
-          }
-        })();
-      }
-    };
-
-    checkTelegramAuth();
+      })();
+      return (
+        <>
+          <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
+          <PageContainer />
+        </>
+      );
+    }
   }
-
-  if (showBotLink) {
-    return (
-      <div style={{ padding: 32, textAlign: 'center' }}>
-        <h2>{t('auth.register.title')}</h2>
-        <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
-          {t('auth.register.link')}
-        </a>
-        <p>{t('auth.register.description')}</p>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
-      <PageContainer />
-    </>
-  );
 }
 
 export default App;
