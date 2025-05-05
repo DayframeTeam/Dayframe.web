@@ -3,7 +3,7 @@ name: Deploy to FTP
 on:
   push:
     branches:
-      - master # или твоя ветка
+      - master
 
 jobs:
   ftp-deploy:
@@ -14,16 +14,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Build project
-        run: |
-          npm install
-          npm run build
+        run: npm run build
 
       - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist # путь до билда
-          server-dir: / # путь на сервере
+          local-dir: ./dist
+          server-dir: /
