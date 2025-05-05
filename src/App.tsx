@@ -37,7 +37,7 @@ function App() {
         await templateTasksService.fetchAndStoreAll();
       } catch (e) {
         console.error(e);
-        alert('Ошибка загрузки пользователя');
+        // alert('Ошибка загрузки пользователя');
       }
     })();
   }
