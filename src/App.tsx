@@ -13,59 +13,110 @@ import { useTranslation } from 'react-i18next';
 const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 
 function App() {
-  const { t } = useTranslation();
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
-  document.body.classList.toggle('theme-dark', shouldUseDark);
+  const { t, i18n } = useTranslation();
+  const tg = window.Telegram?.WebApp;
+  if (!tg) return;
 
-  const inited = useRef(false);
+  tg.ready();
 
-  if (!inited.current) {
-    inited.current = true;
+  const { colorScheme } = tg.themeParams || {};
+  document.body.classList.toggle('theme-dark', colorScheme === 'dark');
 
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
-    tg.ready();
-    
-    let chat_id = tg?.initDataUnsafe?.user?.id;
-
-    if (import.meta.env.DEV && !chat_id) {
-      chat_id = 613434210;
-    }
-
-    if (!chat_id) {
-      return (
-        <div style={{ padding: 32, textAlign: 'center' }}>
-          <h2>{t('auth.register.title')}</h2>
-          <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
-            {t('auth.register.link')}
-          </a>
-          <p>{t('auth.register.description')}</p>
-        </div>
-      );
-    } else {
-      (async () => {
-        try {
-          // Пробуем получить пользователя
-          await authService.authUserByChatId(Number(chat_id));
-          // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
-          await userService.fetchAndStoreCurrentUser();
-          await taskService.fetchAndStoreAll();
-          await templateTasksService.fetchAndStoreAll();
-        } catch (e) {
-          console.error(e);
-          alert('Ошибка загрузки пользователя');
-        }
-      })();
-      return (
-        <>
-          <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
-          <PageContainer />
-        </>
-      );
-    }
+  const userLang = tg.initDataUnsafe?.user?.language_code;
+  if (userLang) {
+    i18n.changeLanguage(userLang);
   }
+
+  let chat_id = tg?.initDataUnsafe?.user?.id;
+  if (import.meta.env.DEV && !chat_id) {
+    chat_id = 613434210;
+  }
+
+  if (!chat_id) {
+    return (
+      <div style={{ padding: 32, textAlign: 'center' }}>
+        <h2>{t('auth.register.title')}</h2>
+        <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
+          {t('auth.register.link')}
+        </a>
+        <p>{t('auth.register.description')}</p>
+      </div>
+    );
+  } else {
+    (async () => {
+      try {
+        // Пробуем получить пользователя
+        await authService.authUserByChatId(Number(chat_id));
+        // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
+        await userService.fetchAndStoreCurrentUser();
+        await taskService.fetchAndStoreAll();
+        await templateTasksService.fetchAndStoreAll();
+      } catch (e) {
+        console.error(e);
+        alert('Ошибка загрузки пользователя');
+      }
+    })();
+  }
+
+  return (
+    <>
+      <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
+      <PageContainer />
+    </>
+  );
+  // const { t } = useTranslation();
+  // const saved = localStorage.getItem('theme');
+  // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
+  // document.body.classList.toggle('theme-dark', shouldUseDark);
+
+  // const inited = useRef(false);
+
+  // if (!inited.current) {
+  //   inited.current = true;
+
+  //   const tg = window.Telegram?.WebApp;
+  //   if (!tg) return;
+  //   tg.ready();
+
+  //   let chat_id = tg?.initDataUnsafe?.user?.id;
+
+  //   if (import.meta.env.DEV && !chat_id) {
+  //     chat_id = 613434210;
+  //   }
+
+  //   if (!chat_id) {
+  //     return (
+  //       <div style={{ padding: 32, textAlign: 'center' }}>
+  //         <h2>{t('auth.register.title')}</h2>
+  //         <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
+  //           {t('auth.register.link')}
+  //         </a>
+  //         <p>{t('auth.register.description')}</p>
+  //       </div>
+  //     );
+  //   } else {
+  //     (async () => {
+  //       try {
+  //         // Пробуем получить пользователя
+  //         await authService.authUserByChatId(Number(chat_id));
+  //         // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
+  //         await userService.fetchAndStoreCurrentUser();
+  //         await taskService.fetchAndStoreAll();
+  //         await templateTasksService.fetchAndStoreAll();
+  //       } catch (e) {
+  //         console.error(e);
+  //         alert('Ошибка загрузки пользователя');
+  //       }
+  //     })();
+  //     return (
+  //       <>
+  //         <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
+  //         <PageContainer />
+  //       </>
+  //     );
+  //   }
+  // }
 }
 
 export default App;
