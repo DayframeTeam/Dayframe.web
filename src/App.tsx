@@ -1,5 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useRef } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -9,86 +8,64 @@ import { userService } from './entities/user/userService';
 import { taskService } from './entities/task/taskService';
 import { templateTasksService } from './entities/template-tasks/templateTasksService';
 import { authService } from './entities/auth/authService';
+import { useTranslation } from 'react-i18next';
 
 const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 
 function App() {
-  const { t, i18n } = useTranslation();
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasChatId, setHasChatId] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
+  document.body.classList.toggle('theme-dark', shouldUseDark);
+
   const inited = useRef(false);
 
-  // 1. Тема и язык из Telegram
-  useEffect(() => {
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
-
-    tg.ready();
-
-    const { colorScheme } = tg.themeParams || {};
-    document.body.classList.toggle('theme-dark', colorScheme === 'dark');
-
-    const userLang = tg.initDataUnsafe?.user?.language_code;
-    i18n.changeLanguage(userLang);
-  }, [i18n]);
-
-  // 2. Авторизация + загрузка данных
-  useEffect(() => {
-    if (inited.current) return;
+  if (!inited.current) {
     inited.current = true;
 
     const tg = window.Telegram?.WebApp;
-    const chatId = tg?.initDataUnsafe?.user?.id ?? (import.meta.env.DEV ? 613434210 : undefined);
+    if (!tg) return;
+    tg.ready();
+    
+    let chat_id = tg?.initDataUnsafe?.user?.id;
 
-    if (!chatId) {
-      setHasChatId(false);
-      setIsLoading(false);
-      return;
+    if (import.meta.env.DEV && !chat_id) {
+      chat_id = 613434210;
     }
 
-    setHasChatId(true);
-
-    // именованная async-функция вместо IIFE
-    async function initializeUser() {
-      try {
-        await authService.authUserByChatId(Number(chatId));
-        await userService.fetchAndStoreCurrentUser();
-        await taskService.fetchAndStoreAll();
-        await templateTasksService.fetchAndStoreAll();
-      } catch (err) {
-        console.error(err);
-        alert('Ошибка загрузки пользователя');
-      } finally {
-        setIsLoading(false);
-      }
+    if (!chat_id) {
+      return (
+        <div style={{ padding: 32, textAlign: 'center' }}>
+          <h2>{t('auth.register.title')}</h2>
+          <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
+            {t('auth.register.link')}
+          </a>
+          <p>{t('auth.register.description')}</p>
+        </div>
+      );
+    } else {
+      (async () => {
+        try {
+          // Пробуем получить пользователя
+          await authService.authUserByChatId(Number(chat_id));
+          // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
+          await userService.fetchAndStoreCurrentUser();
+          await taskService.fetchAndStoreAll();
+          await templateTasksService.fetchAndStoreAll();
+        } catch (e) {
+          console.error(e);
+          alert('Ошибка загрузки пользователя');
+        }
+      })();
+      return (
+        <>
+          <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
+          <PageContainer />
+        </>
+      );
     }
-
-    initializeUser();
-  }, []);
-
-  if (isLoading) {
-    // можно кинуть спиннер или просто null
-    return null;
   }
-
-  if (!hasChatId) {
-    return (
-      <div style={{ padding: 32, textAlign: 'center' }}>
-        <h2>{t('auth.register.title')}</h2>
-        <a href={TG_BOT_LINK} target="_blank" rel="noopener noreferrer">
-          {t('auth.register.link')}
-        </a>
-        <p>{t('auth.register.description')}</p>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <Header left={<UserProfile />} center={<HeaderNav />} right={<HeaderDropdown />} />
-      <PageContainer />
-    </>
-  );
 }
 
 export default App;
