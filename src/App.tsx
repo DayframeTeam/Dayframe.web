@@ -21,19 +21,16 @@ function App() {
 
   tg.ready();
 
-  let chat_id = tg?.initDataUnsafe?.user?.id;
-  if (import.meta.env.DEV && !chat_id) {
-    chat_id = 613434210;
-  }
-
-  if (!chat_id) {
+  const initData = tg.initData;
+  alert(initData);
+  if (!initData) {
     window.location.href = TG_BOT_LINK;
     return;
   } else {
     (async () => {
       try {
         // Пробуем получить пользователя
-        await authService.authUserByChatId(Number(chat_id));
+        await authService.authUser(initData);
         // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
