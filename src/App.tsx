@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -22,41 +22,33 @@ function App() {
   const [showBotLink, setShowBotLink] = useState(false);
   const inited = useRef(false);
 
-  if (!inited.current) {
+  useEffect(() => {
+    if (inited.current) return;
     inited.current = true;
 
-    const checkTelegramAuth = () => {
-      const tg = window.Telegram?.WebApp;
-      let chat_id = tg?.initDataUnsafe?.user?.id;
+    const tg = window.Telegram?.WebApp;
+    let chat_id = tg?.initDataUnsafe?.user?.id;
 
-      if (import.meta.env.DEV && !chat_id) {
-        chat_id = 613434210;
-      }
+    if (import.meta.env.DEV && !chat_id) {
+      chat_id = 613434210;
+    }
 
-      if (!chat_id) {
-        // If Telegram WebApp is not ready yet, retry after a short delay
-        if (window.Telegram?.WebApp) {
-          setTimeout(checkTelegramAuth, 100);
-          return;
+    if (!chat_id) {
+      setShowBotLink(true);
+    } else {
+      (async () => {
+        try {
+          await authService.authUserByChatId(Number(chat_id));
+          await userService.fetchAndStoreCurrentUser();
+          await taskService.fetchAndStoreAll();
+          await templateTasksService.fetchAndStoreAll();
+        } catch (e) {
+          console.error(e);
+          alert('Ошибка загрузки пользователя');
         }
-        setShowBotLink(true);
-      } else {
-        (async () => {
-          try {
-            await authService.authUserByChatId(Number(chat_id));
-            await userService.fetchAndStoreCurrentUser();
-            await taskService.fetchAndStoreAll();
-            await templateTasksService.fetchAndStoreAll();
-          } catch (e) {
-            console.error(e);
-            alert('Ошибка загрузки пользователя');
-          }
-        })();
-      }
-    };
-
-    checkTelegramAuth();
-  }
+      })();
+    }
+  }, []);
 
   if (showBotLink) {
     return (
