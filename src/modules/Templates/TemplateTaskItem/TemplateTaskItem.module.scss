@@ -26,10 +26,11 @@
   display: flex;
   gap: 0.2rem;
   flex-wrap: nowrap;
+  font-size: var(--font-size-secondary);
+}
 
-  span {
-    font-size: var(--font-size-secondary);
-  }
+.timing {
+  padding-bottom: 0.1rem;
 }
 
 .templatesubtaskToggle {

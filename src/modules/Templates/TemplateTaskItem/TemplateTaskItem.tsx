@@ -79,26 +79,20 @@ export const TemplateTaskItem = memo(({ templateTask }: TemplateTaskItemProps) =
           {(templateTask.start_time || templateTask.end_time) && (
             <div className={styles.timing}>
               {templateTask.start_time && (
-                <span title={t('task.timing.start')}>
-                  {t('task.timing.from')}{' '}
-                  <span style={{ fontWeight: 'var(--font-weight-big)' }}>
-                    {formatTime(templateTask.start_time)}
-                  </span>
-                </span>
+                <>{t('task.timing.from') + ' ' + formatTime(templateTask.start_time)}</>
               )}
               {templateTask.end_time && (
-                <span title={t('task.timing.end')}>
-                  {t('task.timing.to')}{' '}
-                  <span style={{ fontWeight: 'var(--font-weight-big)' }}>
-                    {formatTime(templateTask.end_time)}
-                  </span>
-                </span>
+                <>{' ' + t('task.timing.to') + ' ' + formatTime(templateTask.end_time)}</>
               )}
               {templateTask.start_time && templateTask.end_time && (
-                <span title={t('task.timing.duration')}>
-                  ⏳ {calculateDuration(templateTask.start_time, templateTask.end_time)}
-                  {' ' + t('time.hour') + ':' + t('time.minute')}
-                </span>
+                <>
+                  {'\u00A0 '}⏳
+                  {calculateDuration(templateTask.start_time, templateTask.end_time) +
+                    ' ' +
+                    t('time.hour') +
+                    ':' +
+                    t('time.minute')}
+                </>
               )}
             </div>
           )}

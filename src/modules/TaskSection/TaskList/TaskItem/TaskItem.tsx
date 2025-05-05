@@ -117,22 +117,19 @@ export function TaskItem({ task, completionDate }: Props) {
             {(task.start_time || task.end_time) && (
               <div className={styles.timing}>
                 {task.start_time && (
-                  <span className={styles.timeLabel} title={t('task.timing.start')}>
-                    {t('task.timing.from')}{' '}
-                    <span className={styles.timeValue}>{formatTime(task.start_time)}</span>
-                  </span>
+                  <>{t('task.timing.from') + ' ' + formatTime(task.start_time)}</>
                 )}
                 {task.end_time && (
-                  <span className={styles.timeLabel} title={t('task.timing.end')}>
-                    {t('task.timing.to')}{' '}
-                    <span className={styles.timeValue}>{formatTime(task.end_time)}</span>
-                  </span>
+                  <>{' ' + t('task.timing.to') + ' ' + formatTime(task.end_time) + ' '}</>
                 )}
                 {task.start_time && task.end_time && (
-                  <span className={styles.durationText} title={t('task.timing.duration')}>
-                    {'\u00A0 '}⏳{calculateDuration(task.start_time, task.end_time)}
-                    {' ' + t('time.hour') + ':' + t('time.minute')}
-                  </span>
+                  <>
+                    {'⏳' + calculateDuration(task.start_time, task.end_time) +
+                      ' ' +
+                      t('time.hour') +
+                      ':' +
+                      t('time.minute')}
+                  </>
                 )}
               </div>
             )}
