@@ -12,20 +12,16 @@ import { useTranslation } from 'react-i18next';
 const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 
 function App() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
+  document.body.classList.toggle('theme-dark', shouldUseDark);
+
   const tg = window.Telegram?.WebApp;
   if (!tg) return;
 
   tg.ready();
-
-  const { colorScheme } = tg.themeParams || {};
-  document.body.classList.toggle('theme-dark', colorScheme === 'dark');
-
-  const userLang = tg.initDataUnsafe?.user?.language_code;
-  console.log('userLang', userLang);
-  if (userLang) {
-    i18n.changeLanguage(userLang);
-  }
 
   let chat_id = tg?.initDataUnsafe?.user?.id;
   if (import.meta.env.DEV && !chat_id) {
