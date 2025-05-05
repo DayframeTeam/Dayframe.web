@@ -26,18 +26,27 @@ function App() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    let chat_id = tg?.initDataUnsafe?.user?.id;
 
-    if (import.meta.env.DEV && !chat_id) {
-      chat_id = 613434210;
-    }
+    const waitForTelegram = async () => {
+      const maxAttempts = 10;
+      let attempts = 0;
 
-    if (!chat_id) {
-      setShowBotLink(true);
-      return;
-    }
+      while ((!tg?.initDataUnsafe?.user?.id) && attempts < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        attempts++;
+      }
 
-    (async () => {
+      let chat_id = tg?.initDataUnsafe?.user?.id;
+
+      if (import.meta.env.DEV && !chat_id) {
+        chat_id = 613434210;
+      }
+
+      if (!chat_id) {
+        setShowBotLink(true);
+        return;
+      }
+
       try {
         await authService.authUserByChatId(Number(chat_id));
         await userService.fetchAndStoreCurrentUser();
@@ -48,7 +57,9 @@ function App() {
         console.error(e);
         alert('Ошибка загрузки пользователя');
       }
-    })();
+    };
+
+    waitForTelegram();
   }, []);
 
   if (showBotLink) {
