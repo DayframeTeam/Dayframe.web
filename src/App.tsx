@@ -25,30 +25,37 @@ function App() {
   if (!inited.current) {
     inited.current = true;
 
-    const tg = window.Telegram?.WebApp;
-    let chat_id = tg?.initDataUnsafe?.user?.id;
+    const checkTelegramAuth = () => {
+      const tg = window.Telegram?.WebApp;
+      let chat_id = tg?.initDataUnsafe?.user?.id;
 
-    if (import.meta.env.DEV && !chat_id) {
-      chat_id = 613434210;
-    }
+      if (import.meta.env.DEV && !chat_id) {
+        chat_id = 613434210;
+      }
 
-    if (!chat_id) {
-      setShowBotLink(true);
-    } else {
-      (async () => {
-        try {
-          // Пробуем получить пользователя
-          await authService.authUserByChatId(Number(chat_id));
-          // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
-          await userService.fetchAndStoreCurrentUser();
-          await taskService.fetchAndStoreAll();
-          await templateTasksService.fetchAndStoreAll();
-        } catch (e) {
-          console.error(e);
-          alert('Ошибка загрузки пользователя');
+      if (!chat_id) {
+        // If Telegram WebApp is not ready yet, retry after a short delay
+        if (window.Telegram?.WebApp) {
+          setTimeout(checkTelegramAuth, 100);
+          return;
         }
-      })();
-    }
+        setShowBotLink(true);
+      } else {
+        (async () => {
+          try {
+            await authService.authUserByChatId(Number(chat_id));
+            await userService.fetchAndStoreCurrentUser();
+            await taskService.fetchAndStoreAll();
+            await templateTasksService.fetchAndStoreAll();
+          } catch (e) {
+            console.error(e);
+            alert('Ошибка загрузки пользователя');
+          }
+        })();
+      }
+    };
+
+    checkTelegramAuth();
   }
 
   if (showBotLink) {
