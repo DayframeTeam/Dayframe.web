@@ -29,9 +29,7 @@ function App() {
     document.body.classList.toggle('theme-dark', colorScheme === 'dark');
 
     const userLang = tg.initDataUnsafe?.user?.language_code;
-    if (userLang && userLang !== i18n.language) {
-      i18n.changeLanguage(userLang);
-    }
+    i18n.changeLanguage(userLang);
   }, [i18n]);
 
   // 2. Авторизация + загрузка данных
