@@ -21,23 +21,23 @@ function App() {
 
   tg.ready();
 
-  const initDataUnsafe = tg.initDataUnsafe;
-  alert(JSON.stringify(initDataUnsafe));
-  if (!initDataUnsafe) {
+  const initData = tg.initData;
+
+  if (!initData) {
     window.location.href = TG_BOT_LINK;
     return;
   } else {
     (async () => {
       try {
         // Пробуем получить пользователя
-        await authService.authUser(initDataUnsafe);
+        await authService.authUser(initData);
         // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
         await templateTasksService.fetchAndStoreAll();
       } catch (e) {
         console.error(e);
-        // alert('Ошибка загрузки пользователя');
+        alert('Ошибка загрузки пользователя');
       }
     })();
   }
