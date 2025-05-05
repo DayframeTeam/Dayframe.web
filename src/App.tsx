@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Header } from './modules/Header/Header';
 import { HeaderDropdown } from './modules/Header/HeaderDropdown/HeaderDropdown';
 import { HeaderNav } from './modules/Header/HeaderNav/HeaderNav';
@@ -8,68 +9,71 @@ import { userService } from './entities/user/userService';
 import { taskService } from './entities/task/taskService';
 import { templateTasksService } from './entities/template-tasks/templateTasksService';
 import { authService } from './entities/auth/authService';
-import { useTranslation } from 'react-i18next';
 
 const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 
 function App() {
-  const { t } = useTranslation();
-  const [showBotLink, setShowBotLink] = useState(false);
-  const initialized = useRef(false);
+  const { t, i18n } = useTranslation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasChatId, setHasChatId] = useState<boolean>(false);
+  const inited = useRef(false);
 
-  // Тема оформления
+  // 1. Тема и язык из Telegram
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldUseDark = saved === 'dark' || (!saved && prefersDark);
-    document.body.classList.toggle('theme-dark', shouldUseDark);
-  }, []);
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
 
-  // Инициализация Telegram WebApp и загрузка пользователя
+    tg.ready();
+
+    const { colorScheme } = tg.themeParams || {};
+    document.body.classList.toggle('theme-dark', colorScheme === 'dark');
+
+    const userLang = tg.initDataUnsafe?.user?.language_code;
+    if (userLang && userLang !== i18n.language) {
+      i18n.changeLanguage(userLang);
+    }
+  }, [i18n]);
+
+  // 2. Авторизация + загрузка данных
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
+    if (inited.current) return;
+    inited.current = true;
 
     const tg = window.Telegram?.WebApp;
+    const chatId = tg?.initDataUnsafe?.user?.id ?? (import.meta.env.DEV ? 613434210 : undefined);
 
-    const init = async () => {
-      if (!tg) {
-        setShowBotLink(true);
-        return;
-      }
+    if (!chatId) {
+      setHasChatId(false);
+      setIsLoading(false);
+      return;
+    }
 
-      tg.ready(); // инициируем готовность Telegram WebApp
+    setHasChatId(true);
 
+    // именованная async-функция вместо IIFE
+    async function initializeUser() {
       try {
-        const userId = tg.initDataUnsafe?.user?.id;
-
-        let chatId: number | null = userId || null;
-
-        if (import.meta.env.DEV && !chatId) {
-          chatId = 613434210; // тестовый chat_id
-        }
-
-        if (!chatId) {
-          setShowBotLink(true);
-          return;
-        }
-
-        // Авторизация и загрузка данных
-        await authService.authUserByChatId(chatId);
+        await authService.authUserByChatId(Number(chatId));
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
         await templateTasksService.fetchAndStoreAll();
       } catch (err) {
-        console.error('Ошибка инициализации:', err);
+        console.error(err);
         alert('Ошибка загрузки пользователя');
+      } finally {
+        setIsLoading(false);
       }
-    };
+    }
 
-    init();
+    initializeUser();
   }, []);
 
-  // Если зашли не из Telegram — предложить перейти в бот
-  if (showBotLink) {
+  if (isLoading) {
+    // можно кинуть спиннер или просто null
+    return null;
+  }
+
+  if (!hasChatId) {
     return (
       <div style={{ padding: 32, textAlign: 'center' }}>
         <h2>{t('auth.register.title')}</h2>

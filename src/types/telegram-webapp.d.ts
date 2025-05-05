@@ -30,7 +30,9 @@ export interface TelegramWebApp {
   colorScheme?: 'light' | 'dark';
   isExpanded?: boolean;
   isClosingConfirmationEnabled?: boolean;
-
+  themeParams?: {
+    colorScheme?: 'light' | 'dark';
+  };
   ready: () => void;
   expand: () => void;
   close: () => void;
