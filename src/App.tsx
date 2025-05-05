@@ -21,16 +21,16 @@ function App() {
 
   tg.ready();
 
-  const initData = tg.initDataUnsafe;
-
-  if (!initData) {
+  const initDataUnsafe = tg.initDataUnsafe;
+  console.log(initDataUnsafe);
+  if (!initDataUnsafe) {
     window.location.href = TG_BOT_LINK;
     return;
   } else {
     (async () => {
       try {
         // Пробуем получить пользователя
-        await authService.authUser(initData);
+        await authService.authUser(initDataUnsafe);
         // Если не выбросило ошибку — пользователь найден, продолжаем загрузку
         await userService.fetchAndStoreCurrentUser();
         await taskService.fetchAndStoreAll();
