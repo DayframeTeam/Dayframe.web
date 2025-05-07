@@ -8,7 +8,7 @@ export type User = {
   user_categories: string | undefined; // Пользовательские категории (например, JSON или строка) (опционально)
   exp: number; // Очки опыта пользователя
   timezone: string; // Таймзона в формате IANA (например, 'Europe/Moscow') при регистрации получаем
-  created_at: string; // Время регистрации (ISO timestamp в UTC)
+  created_at: string; // Время регистрации (ISO timestamp в Europe/Moscow)
 };
 
 type BaseTaskFields = {
@@ -21,13 +21,13 @@ type BaseTaskFields = {
   start_time: string | undefined; // Время начала (локальное), формат 'HH:mm:ss' (опционально)
   end_time: string | undefined; // Время окончания, формат 'HH:mm:ss' (опционально)
   user_id: number; // Внешний ключ к пользователю
-  created_at: string; // Время создания задачи (ISO timestamp в UTC)
+  created_at: string; // Время создания задачи (ISO timestamp в Europe/Moscow)
   special_id: string; // Уникальный ID чтобы не дублировать задачи из шаблонов
 };
 
 export type Task = BaseTaskFields & {
   is_done: boolean; // Статус: false — запланировано, true — выполнено
-  task_date: string | undefined; // Дата задачи (в UTC, ISO строка) (опционально)
+  task_date: string | undefined; // Дата задачи (в Europe/Moscow, ISO строка) (опционально)
 
   subtasks: Subtask[]; //TODO: чисто для фронта
 };
@@ -35,8 +35,8 @@ export type Task = BaseTaskFields & {
 export type TemplateTask = BaseTaskFields & {
   is_active: boolean; // Активен ли шаблон (можно временно выключить) базово включен
   repeat_rule: RepeatRule; // Правило повторения: daily | weekly | quests | [дни недели]
-  start_active_date: string | undefined; // Начало действия шаблона (UTC) (опционально)
-  end_active_date: string | undefined; // Конец действия шаблона (UTC) (опционально)
+  start_active_date: string | undefined; // Начало действия шаблона (Europe/Moscow) (опционально)
+  end_active_date: string | undefined; // Конец действия шаблона (Europe/Moscow) (опционально)
 
   subtasks: TemplateSubtask[]; //TODO: чисто для фронта
 };
@@ -51,7 +51,7 @@ type BaseSubtaskFields = {
   title: string; // Название подзадачи
   position: number; // Позиция в списке (для drag-and-drop)
   user_id: number; // Внешний ключ к пользователю
-  created_at: string; // Когда была создана (ISO UTC)
+  created_at: string; // Когда была создана (ISO Europe/Moscow)
   special_id: string;
   is_deleted: boolean; //TODO: чисто для фронта
 };
