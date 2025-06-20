@@ -20,7 +20,7 @@ const LoadingSpinner = () => (
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'var(--bg-color, #ffffff)',
+      backgroundColor: 'var(--bg-primary)',
       zIndex: 9999,
     }}
   >
@@ -29,7 +29,7 @@ const LoadingSpinner = () => (
         width: '50px',
         height: '50px',
         border: '4px solid #f3f3f3',
-        borderTop: '4px solid var(--primary-color, #007bff)',
+        borderTop: '4px solid var(--text-primary)',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite',
       }}
@@ -55,7 +55,7 @@ const ErrorScreen = () => (
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'var(--bg-color, #ffffff)',
+      backgroundColor: 'var(--bg-primary)',
       color: 'var(--text-primary)',
       padding: '2rem',
       textAlign: 'center',
@@ -71,7 +71,7 @@ const ErrorScreen = () => (
       onClick={() => window.location.reload()}
       style={{
         padding: '0.75rem 1.5rem',
-        backgroundColor: 'var(--primary-color, #007bff)',
+        backgroundColor: 'var(--text-primary)',
         color: 'white',
         border: 'none',
         borderRadius: '8px',
