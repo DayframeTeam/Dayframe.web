@@ -59,7 +59,7 @@ export const useTelegramAuth = () => {
 
         setIsError(false);
       } catch (e) {
-        alert(e);
+        alert((e as Error).message);
         setIsError(true);
         alert('Ошибка загрузки пользователя');
       } finally {

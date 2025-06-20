@@ -71,8 +71,8 @@ const ErrorScreen = () => (
       onClick={() => window.location.reload()}
       style={{
         padding: '0.75rem 1.5rem',
-        backgroundColor: 'var(--text-primary)',
-        color: 'white',
+        backgroundColor: 'var(--accent)',
+        color: 'var(--text-primary)',
         border: 'none',
         borderRadius: '8px',
         cursor: 'pointer',
