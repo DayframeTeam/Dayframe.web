@@ -19,12 +19,16 @@ button {
   all: unset;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   font-size: var(--font-size-primary);
-  font-family: "IBM Plex Sans", sans-serif;
+  font-family:
+    'IBM Plex Sans',
+    sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-optical-sizing: auto;
 }

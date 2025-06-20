@@ -33,13 +33,13 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
             {Array.isArray(type) && type.length !== 7 && t('templates.custom')}
           </h3>
           {type === 'quests' && (
-            <Button size="small" variant="secondary" onClick={() => setIsQuestsInfoOpen(true)}>
+            <Button size='small' variant='secondary' onClick={() => setIsQuestsInfoOpen(true)}>
               <InfoIcon />
             </Button>
           )}
         </div>
 
-        <Button size="small" variant="secondary" onClick={() => setIsOpen(true)}>
+        <Button size='small' variant='secondary' onClick={() => setIsOpen(true)}>
           <span
             style={{
               display: 'flex',
@@ -55,7 +55,12 @@ export const TemplateTasksSection = memo(({ type, templateTasks }: TemplateTasks
       <TemplateTaskModal isOpen={isOpen} onClose={() => setIsOpen(false)} repeat_rule={type} />
 
       {templateTasks.length > 0 ? (
-        templateTasks.map((task) => <TemplateTaskItem key={TemplateTaskUtils.createTemplateTaskUniqueKey(task)} templateTask={task} />)
+        templateTasks.map((task) => (
+          <TemplateTaskItem
+            key={TemplateTaskUtils.createTemplateTaskUniqueKey(task)}
+            templateTask={task}
+          />
+        ))
       ) : (
         <div style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
           {t('templates.noTasks')}

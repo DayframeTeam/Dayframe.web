@@ -1,4 +1,3 @@
-// src/components/PageContainer/PageContainer.tsx
 import styles from './PageContainer.module.scss'
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense } from 'react'

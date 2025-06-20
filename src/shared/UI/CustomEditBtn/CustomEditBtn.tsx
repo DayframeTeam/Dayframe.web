@@ -11,12 +11,7 @@ type CustomEditBtnProps = {
 export const CustomEditBtn = memo(({ onClick, borderColor }: CustomEditBtnProps) => {
   const { t } = useTranslation();
   return (
-    <button
-      className={styles.btn}
-      title={t('task.edit')}
-      onClick={onClick}
-      style={{ borderColor }}
-    >
+    <button className={styles.btn} title={t('task.edit')} onClick={onClick} style={{ borderColor }}>
       <PencilIcon />
     </button>
   );

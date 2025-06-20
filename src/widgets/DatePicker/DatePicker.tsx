@@ -63,7 +63,7 @@ export const DatePicker = memo(({ value, label, onChange, placeholder }: Props) 
             {label}
           </label>
           {value && (
-            <Button variant="secondary" size="small" onClick={handleReset}>
+            <Button variant='secondary' size='small' onClick={handleReset}>
               {t('ui.resetDate')}
             </Button>
           )}
@@ -84,7 +84,7 @@ export const DatePicker = memo(({ value, label, onChange, placeholder }: Props) 
       {isOpen && (
         <div className={styles.wrapper}>
           <DayPicker
-            mode="single"
+            mode='single'
             selected={value ?? undefined}
             onSelect={handleSelect}
             locale={currentLocale}

@@ -26,4 +26,12 @@ export const authService = {
       throw appError;
     }
   },
+
+  /**
+   * Auth dev user
+   */
+  async authDevUser(): Promise<void> {
+    const response = await api.post<AuthResponse>(`${url}/dev-login`, { initData: '' });
+    store.dispatch(setAuthToken(response.data.accessToken));
+  },
 };

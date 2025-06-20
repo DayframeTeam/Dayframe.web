@@ -299,8 +299,8 @@ export const GeneralForm = memo(
             </TaskBasicFields>
 
             <Button
-              type="button"
-              variant="secondary"
+              type='button'
+              variant='secondary'
               onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
               className={shared.toggleButton}
             >
@@ -339,17 +339,17 @@ export const GeneralForm = memo(
           {isEdit && (
             <>
               {isDeleted ? (
-                <Button type="button" variant="secondary" onClick={() => setIsDeleted(false)}>
+                <Button type='button' variant='secondary' onClick={() => setIsDeleted(false)}>
                   {t('task.cancel')}
                 </Button>
               ) : (
-                <Button type="button" variant="danger" onClick={() => setIsDeleted(true)}>
+                <Button type='button' variant='danger' onClick={() => setIsDeleted(true)}>
                   {t('task.delete')}
                 </Button>
               )}
             </>
           )}
-          <Button type="submit" variant="primary" disabled={!hasChanges && !isDeleted}>
+          <Button type='submit' variant='primary' disabled={!hasChanges && !isDeleted}>
             {isDeleted ? t('confirm') : t('task.save')}
           </Button>
         </div>

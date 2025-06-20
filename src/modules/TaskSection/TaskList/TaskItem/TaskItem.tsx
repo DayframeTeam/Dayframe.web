@@ -124,7 +124,8 @@ export function TaskItem({ task, completionDate }: Props) {
                 )}
                 {task.start_time && task.end_time && (
                   <>
-                    {'⏳' + calculateDuration(task.start_time, task.end_time) +
+                    {'⏳' +
+                      calculateDuration(task.start_time, task.end_time) +
                       ' ' +
                       t('time.hour') +
                       ':' +
@@ -151,8 +152,8 @@ export function TaskItem({ task, completionDate }: Props) {
           <Button
             className={styles.subtaskToggleBtn}
             onClick={() => setShowSubtasks((prev) => !prev)}
-            variant="secondary"
-            size="small"
+            variant='secondary'
+            size='small'
           >
             {showSubtasks ? '▲' : '▼'}
           </Button>
