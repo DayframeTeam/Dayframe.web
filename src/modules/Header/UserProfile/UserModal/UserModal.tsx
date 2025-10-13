@@ -17,11 +17,10 @@ import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
 import {
   selectAllTasks,
-  selectTasksFromPreviousWeek,
+  selectCompletedTasksFromPreviousWeek,
 } from '../../../../entities/task/store/tasksSlice';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
 import { StreakUtils } from '../../../../utils/stats/streakUtils';
-import { ProductivityUtils } from '../../../../utils/stats/productivityUtils';
 import { CompletedTasksUtils } from '../../../../utils/stats/completedTasksUtils';
 import { ActivityUtils } from '../../../../utils/stats/activityUtils';
 import { generateUniqueColors } from '../../../../utils/uniqueColors';
@@ -44,7 +43,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
   const tasks = useSelector(selectAllTasks);
-  const tasksFromPreviousWeek = useSelector(selectTasksFromPreviousWeek);
+  const completedTasksFromPreviousWeek = useSelector(selectCompletedTasksFromPreviousWeek);
   const [showStatistics, setShowStatistics] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
@@ -261,7 +260,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     })()}
                   </div>
                 </div>
-
+                {/* 
                 <div className={statsStyles.sectionWrapper}>
                   <div className={statsStyles.productivityTitle}>
                     <span>🧠</span>
@@ -375,7 +374,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       })()}
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className={statsStyles.sectionWrapper}>
                   <div className={statsStyles.timeAnalysisTitle}>
@@ -388,9 +387,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     const categoryStats = new Map<string, number>();
                     const dailyStats = new Map<string, Map<string, number>>();
 
-                    // Обрабатываем каждую задачу из прошлой недели
-                    tasksFromPreviousWeek.forEach((task) => {
-                      if (!task.is_done) return;
+                    // Обрабатываем каждую выполненную задачу из прошлой недели
+                    completedTasksFromPreviousWeek.forEach((task) => {
                       if (task.start_time && task.end_time) {
                         // Используем категорию или "остальные" если её нет
                         const category = task.category || t('stats.timeAnalysis.other');
@@ -448,8 +446,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     previousWeekStart.setDate(currentWeekStart.getDate() - 7);
 
                     const dailyData = reorderedWeekdays.map((_, dayIndex) => {
-                      // Вычисляем правильный индекс для данных (учитываем перестановку дней)
-                      const dataIndex = dayIndex === 6 ? 0 : dayIndex + 1; // Воскресенье (индекс 6) -> данные с индекса 0
+                      const dataIndex = dayIndex + 1;
 
                       const currentDate = new Date(previousWeekStart);
                       currentDate.setDate(previousWeekStart.getDate() + dataIndex);
