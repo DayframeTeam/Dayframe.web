@@ -15,10 +15,14 @@ import {
 import { Modal } from '../../../../shared/Modal/Modal';
 import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
+import {
+  selectAllTasks,
+  selectTasksFromPreviousWeek,
+} from '../../../../entities/task/store/tasksSlice';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
 import { StreakUtils } from '../../../../utils/stats/streakUtils';
 import { ProductivityUtils } from '../../../../utils/stats/productivityUtils';
-import { selectAllTasks } from '../../../../entities/task/store/tasksSlice';
+import { generateUniqueColors } from '../../../../utils/uniqueColors';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -38,6 +42,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
   const tasks = useSelector(selectAllTasks);
+  const tasksFromPreviousWeek = useSelector(selectTasksFromPreviousWeek);
   const [showStatistics, setShowStatistics] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
@@ -377,81 +382,95 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                   </div>
 
                   {(() => {
-                    // Функция для генерации массива уникальных цветов
-                    const generateUniqueColors = (count: number) => {
-                      const colors: string[] = [];
-                      const hueStep = 360 / count; // Равномерно распределяем оттенки
+                    // Анализируем реальные данные из прошлой недели
+                    const categoryStats = new Map<string, number>();
+                    const dailyStats = new Map<string, Map<string, number>>();
 
-                      for (let i = 0; i < count; i++) {
-                        // Добавляем небольшую случайность к базовому оттенку
-                        const hue = (i * hueStep + Math.random() * 20 - 10) % 360;
-                        // Более сбалансированные параметры для насыщенности и яркости
-                        colors.push(`hsl(${hue}, 65%, 65%)`);
+                    // Обрабатываем каждую задачу из прошлой недели
+                    tasksFromPreviousWeek.forEach((task) => {
+                      if (!task.is_done) return;
+                      if (task.start_time && task.end_time) {
+                        // Используем категорию или "остальные" если её нет
+                        const category = task.category || t('stats.timeAnalysis.other');
+
+                        // Вычисляем время выполнения в минутах
+                        const startTime = new Date(`2000-01-01T${task.start_time}`);
+                        const endTime = new Date(`2000-01-01T${task.end_time}`);
+                        const timeSpent = Math.max(
+                          0,
+                          (endTime.getTime() - startTime.getTime()) / (1000 * 60)
+                        ); // в минутах
+
+                        // Общая статистика по категориям
+                        categoryStats.set(category, (categoryStats.get(category) || 0) + timeSpent);
+
+                        // Статистика по дням
+                        if (task.task_date) {
+                          // Используем дату как есть, без конвертации в Date объект
+                          const dayKey = task.task_date;
+
+                          if (!dailyStats.has(dayKey)) {
+                            dailyStats.set(dayKey, new Map());
+                          }
+
+                          const dayMap = dailyStats.get(dayKey)!;
+                          dayMap.set(category, (dayMap.get(category) || 0) + timeSpent);
+                        }
                       }
+                    });
 
-                      return colors;
-                    };
+                    // Получаем все уникальные категории и создаем цветовую схему
+                    const allCategories = Array.from(categoryStats.keys());
+                    const categoryColors = new Map<string, string>();
 
-                    // Список возможных категорий
-                    const allCategories = [
-                      'Work',
-                      'Study',
-                      'Personal',
-                      'Health',
-                      'Shopping',
-                      'Family',
-                      'Friends',
-                      'Hobby',
-                      'Sport',
-                      'Reading',
-                      'Learning',
-                      'Projects',
-                      'Meetings',
-                      'Planning',
-                      'Rest',
-                    ];
-
-                    // Генерируем данные для каждого дня
+                    // Генерируем цвета для всех категорий
+                    const uniqueColors = generateUniqueColors(allCategories.length);
+                    allCategories.forEach((category, index) => {
+                      if (category === t('stats.timeAnalysis.other')) {
+                        // Категория "Остальные" всегда серая
+                        categoryColors.set(category, '#808080');
+                      } else {
+                        categoryColors.set(category, uniqueColors[index]);
+                      }
+                    });
+                    // Генерируем данные для каждого дня недели
                     const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
+                    // Переставляем воскресенье в конец: Пн, Вт, Ср, Чт, Пт, Сб, Вс
                     const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
 
-                    const dailyData = reorderedWeekdays.map(() => {
-                      // Выбираем случайное количество категорий (2-5) для этого дня
-                      const numCategories = Math.floor(Math.random() * 4) + 2;
+                    // Вычисляем даты прошлой недели
+                    const now = new Date();
+                    const currentWeekStart = new Date(now);
+                    currentWeekStart.setDate(now.getDate() - now.getDay() + 1);
+                    const previousWeekStart = new Date(currentWeekStart);
+                    previousWeekStart.setDate(currentWeekStart.getDate() - 7);
 
-                      // Генерируем уникальные цвета для этого дня
-                      const uniqueColors = generateUniqueColors(numCategories);
+                    const dailyData = reorderedWeekdays.map((_, dayIndex) => {
+                      // Вычисляем правильный индекс для данных (учитываем перестановку дней)
+                      const dataIndex = dayIndex === 6 ? 0 : dayIndex + 1; // Воскресенье (индекс 6) -> данные с индекса 0
 
-                      // Перемешиваем массив категорий и берем первые numCategories элементов
-                      const shuffledCategories = [...allCategories]
-                        .sort(() => Math.random() - 0.5)
-                        .slice(0, numCategories)
-                        .map((label, index) => ({
-                          id: label.toLowerCase(),
-                          label,
-                          color: uniqueColors[index], // Используем предварительно сгенерированный уникальный цвет
-                        }));
+                      const currentDate = new Date(previousWeekStart);
+                      currentDate.setDate(previousWeekStart.getDate() + dataIndex);
+                      const dateKey = currentDate.toISOString().split('T')[0];
 
-                      // Общее время в минутах (2-6 часов)
-                      const totalMinutes = (Math.floor(Math.random() * 4) + 2) * 60;
+                      const dayCategories = dailyStats.get(dateKey) || new Map();
+                      const totalMinutes = Array.from(dayCategories.values()).reduce(
+                        (sum, time) => sum + time,
+                        0
+                      );
 
-                      // Распределяем время по категориям
-                      let remainingMinutes = totalMinutes;
-                      const categoryTimes = shuffledCategories.map((_, index) => {
-                        if (index === shuffledCategories.length - 1) {
-                          return remainingMinutes;
-                        }
-                        const minutes = Math.floor(Math.random() * remainingMinutes * 0.6);
-                        remainingMinutes -= minutes;
-                        return minutes;
-                      });
+                      const categories = Array.from(dayCategories.entries()).map(
+                        ([category, minutes]) => ({
+                          id: category.toLowerCase(),
+                          label: category,
+                          color: categoryColors.get(category) || '#808080',
+                          minutes,
+                        })
+                      );
 
                       return {
                         total: totalMinutes,
-                        categories: shuffledCategories.map((cat, index) => ({
-                          ...cat,
-                          minutes: categoryTimes[index],
-                        })),
+                        categories,
                       };
                     });
 

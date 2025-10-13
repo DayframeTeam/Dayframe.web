@@ -203,8 +203,9 @@
       "tasksCompleted": "tasks completed"
     },
     "timeAnalysis": {
-      "title": "Average time on tasks by categories",
-      "hours": "{{hours}}h {{minutes}}m"
+      "title": "Average time on tasks by categories (last week)",
+      "hours": "{{hours}}h {{minutes}}m",
+      "other": "Other"
     }
   },
   "weather": {

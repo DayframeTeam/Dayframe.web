@@ -207,6 +207,34 @@ class TaskSelectors {
     [TaskSelectors.selectTasksByDateIncludingUndated, (_, date: string) => date],
     (tasks) => tasks.map((task) => TaskUtils.createTaskUniqueKey(task))
   );
+
+  /**
+   * Селектор для получения задач всей прошлой недели
+   * @param state - состояние Redux
+   * @returns массив задач за прошлую неделю (с понедельника по воскресенье)
+   */
+  static selectTasksFromPreviousWeek = createSelector([TaskSelectors.selectAllTasks], (tasks) => {
+    const now = new Date();
+    const currentWeekStart = new Date(now);
+    currentWeekStart.setDate(now.getDate() - now.getDay() + 1); // Понедельник текущей недели
+
+    const previousWeekStart = new Date(currentWeekStart);
+    previousWeekStart.setDate(currentWeekStart.getDate() - 7); // Понедельник прошлой недели
+
+    const previousWeekEnd = new Date(previousWeekStart);
+    previousWeekEnd.setDate(previousWeekStart.getDate() + 6); // Воскресенье прошлой недели
+
+    // Конвертируем в строки для сравнения
+    const startDateStr = previousWeekStart.toISOString().split('T')[0];
+    const endDateStr = previousWeekEnd.toISOString().split('T')[0];
+
+    return tasks.filter((task) => {
+      if (!task.task_date) return false;
+
+      // Сравниваем строки напрямую, избегая проблем с часовыми поясами
+      return task.task_date >= startDateStr && task.task_date <= endDateStr;
+    });
+  });
 }
 
 // Экспортируем все селекторы из класса TaskSelectors для использования в компонентах
@@ -221,4 +249,5 @@ export const {
   selectTaskIdsByDate,
   selectTasksByDateIncludingUndated,
   selectTaskIdsByDateIncludingUndated,
+  selectTasksFromPreviousWeek,
 } = TaskSelectors;
