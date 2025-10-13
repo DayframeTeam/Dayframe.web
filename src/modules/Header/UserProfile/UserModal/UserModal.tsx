@@ -17,6 +17,7 @@ import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
 import { StreakUtils } from '../../../../utils/streakUtils';
+import { ProductivityUtils } from '../../../../utils/productivityUtils';
 import { selectAllTasks } from '../../../../entities/task/store/tasksSlice';
 
 const LEVEL_EXAMPLES = [
@@ -260,9 +261,9 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     {t('stats.productivity.title')}
                   </div>
                   {(() => {
-                    // Генерируем случайное время для пика продуктивности (10:00-14:00)
-                    const peakHour = Math.floor(Math.random() * 4) + 10; // 10-13
-                    const peakMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
+                    // Получаем реальные данные продуктивности
+                    const productivityStats = ProductivityUtils.getProductivityStats(tasks);
+                    const { peakTime } = productivityStats;
 
                     return (
                       <>
@@ -272,8 +273,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                           </div>
                           <div className={statsStyles.peakTimeRange}>
                             {t('stats.productivity.timeRange', {
-                              start: `${String(peakHour).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
-                              end: `${String((peakHour + 2) % 24).padStart(2, '0')}:${String(peakMinute).padStart(2, '0')}`,
+                              start: peakTime.peakStartTime,
+                              end: peakTime.peakEndTime,
                             })}
                           </div>
                         </div>
@@ -314,20 +315,26 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                             <div
                               className={statsStyles.clockSector}
                               style={{
-                                clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
+                                clipPath: `path('M 100,100 L ${100 + 95 * Math.cos(((peakTime.peakMinuteIndex / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
                                   100 +
                                   95 *
                                     Math.sin(
-                                      ((peakHour + peakMinute / 60) * 15 * Math.PI) / 180 -
+                                      ((peakTime.peakMinuteIndex / 60) * 15 * Math.PI) / 180 -
                                         Math.PI / 2
                                     )
                                 } A 95,95 0 ${
-                                  ((peakHour + 2) % 24) - peakHour > 12 ? 1 : 0
-                                },1 ${100 + 95 * Math.cos(((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
+                                  ((peakTime.peakMinuteIndex + 1) % 1440) -
+                                    peakTime.peakMinuteIndex >
+                                  720
+                                    ? 1
+                                    : 0
+                                },1 ${100 + 95 * Math.cos(((((peakTime.peakMinuteIndex + 1) % 1440) / 60) * 15 * Math.PI) / 180 - Math.PI / 2)},${
                                   100 +
                                   95 *
                                     Math.sin(
-                                      ((((peakHour + 2) % 24) + peakMinute / 60) * 15 * Math.PI) /
+                                      ((((peakTime.peakMinuteIndex + 1) % 1440) / 60) *
+                                        15 *
+                                        Math.PI) /
                                         180 -
                                         Math.PI / 2
                                     )
@@ -346,32 +353,15 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     </div>
                     <div className={statsStyles.dailyList}>
                       {(() => {
-                        // Генерируем данные о продуктивности по дням недели
-                        const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
-                        // Переупорядочиваем дни, чтобы начинались с понедельника
-                        const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]];
+                        // Получаем реальные данные продуктивности
+                        const productivityStats = ProductivityUtils.getProductivityStats(tasks);
+                        const { weeklyData } = productivityStats;
 
-                        const dailyData = reorderedWeekdays.map(() => {
-                          const tasks = Math.floor(Math.random() * 10) + 5;
-                          // Генерируем случайное время для каждого дня
-                          const startHour = Math.floor(Math.random() * 8) + 9; // 9-16
-                          const startMinute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45
-                          const durationHours = Math.floor(Math.random() * 3) + 2; // 2-4 часа
-
-                          return {
-                            tasks,
-                            timeRange: {
-                              start: `${String(startHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
-                              end: `${String((startHour + durationHours) % 24).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`,
-                            },
-                          };
-                        });
-
-                        return reorderedWeekdays.map((day, index) => (
+                        return weeklyData.map((dayData) => (
                           <div key={nanoid()} className={statsStyles.dailyItem}>
-                            <div className={statsStyles.dailyDay}>{day}</div>
+                            <div className={statsStyles.dailyDay}>{dayData.day}</div>
                             <div className={statsStyles.dailyTimeRange}>
-                              {dailyData[index].timeRange.start} - {dailyData[index].timeRange.end}
+                              {dayData.timeRange.start} - {dayData.timeRange.end}
                             </div>
                           </div>
                         ));
