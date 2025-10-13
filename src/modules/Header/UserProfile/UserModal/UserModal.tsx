@@ -22,6 +22,8 @@ import {
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
 import { StreakUtils } from '../../../../utils/stats/streakUtils';
 import { ProductivityUtils } from '../../../../utils/stats/productivityUtils';
+import { CompletedTasksUtils } from '../../../../utils/stats/completedTasksUtils';
+import { ActivityUtils } from '../../../../utils/stats/activityUtils';
 import { generateUniqueColors } from '../../../../utils/uniqueColors';
 
 const LEVEL_EXAMPLES = [
@@ -541,45 +543,59 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                   </div>
 
                   <div className={statsStyles.completedTasksOverview}>
-                    <div className={statsStyles.completedTasksNumbers}>
-                      <div className={statsStyles.completedTasksNumber}>
-                        <div className={statsStyles.completedTasksValue}>1,234</div>
-                        <div className={statsStyles.completedTasksLabel}>{t('stats.allTime')}</div>
-                      </div>
-                      <div className={statsStyles.completedTasksNumber}>
-                        <div className={statsStyles.completedTasksValue}>156</div>
-                        <div className={statsStyles.completedTasksLabel}>
-                          {t('stats.thisMonth')}
+                    {(() => {
+                      const stats = CompletedTasksUtils.getCompletedTasksStats(tasks);
+
+                      return (
+                        <div className={statsStyles.completedTasksNumbers}>
+                          <div className={statsStyles.completedTasksNumber}>
+                            <div className={statsStyles.completedTasksValue}>
+                              {stats.allTime.toLocaleString()}
+                            </div>
+                            <div className={statsStyles.completedTasksLabel}>
+                              {t('stats.allTime')}
+                            </div>
+                          </div>
+                          <div className={statsStyles.completedTasksNumber}>
+                            <div className={statsStyles.completedTasksValue}>
+                              {stats.thisMonth.toLocaleString()}
+                            </div>
+                            <div className={statsStyles.completedTasksLabel}>
+                              {t('stats.thisMonth')}
+                            </div>
+                          </div>
+                          <div className={statsStyles.completedTasksNumber}>
+                            <div className={statsStyles.completedTasksValue}>
+                              {stats.today.toLocaleString()}
+                            </div>
+                            <div className={statsStyles.completedTasksLabel}>
+                              {t('stats.today')}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className={statsStyles.completedTasksNumber}>
-                        <div className={statsStyles.completedTasksValue}>12</div>
-                        <div className={statsStyles.completedTasksLabel}>{t('stats.today')}</div>
-                      </div>
-                    </div>
+                      );
+                    })()}
 
                     <div className={statsStyles.completedTasksChart}>
                       <div className={statsStyles.completedTasksChartTitle}>
                         <span>{t('stats.yearlyProgress')}</span>
-                        <span className={statsStyles.year}>2024</span>
+                        <span className={statsStyles.year}>{new Date().getFullYear()}</span>
                       </div>
                       <div className={statsStyles.chartBars}>
                         {(() => {
-                          // Генерируем тестовые данные
-                          const monthlyData = Array.from(
-                            { length: 12 },
-                            () => Math.floor(Math.random() * 150) + 10
+                          const currentYear = new Date().getFullYear();
+                          const monthlyData = CompletedTasksUtils.getMonthlyData(
+                            tasks,
+                            currentYear
                           );
-
-                          const maxValue = Math.max(...monthlyData);
+                          const maxValue = Math.max(...monthlyData, 1);
                           const MAX_HEIGHT = 180;
 
                           return monthlyData.map((value, index) => {
                             const heightPercentage = (value / maxValue) * 100;
                             const heightPx = Math.max((heightPercentage * MAX_HEIGHT) / 100, 20);
 
-                            // Используем правильный индекс для месяца
-                            const monthDate = new Date(2024, index);
+                            const monthDate = new Date(currentYear, index);
                             const monthLabel = t(`monthNamesShort.${monthDate.getMonth()}`);
 
                             return (
@@ -602,79 +618,68 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                         {t('stats.byCategory') + ' #'}
                       </div>
                       <div className={statsStyles.breakdownItems}>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Work</div>
-                          <div className={statsStyles.breakdownValue}>532</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Personal</div>
-                          <div className={statsStyles.breakdownValue}>328</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>Study</div>
-                          <div className={statsStyles.breakdownValue}>374</div>
-                        </div>
+                        {(() => {
+                          const categoryStats = CompletedTasksUtils.getCategoryStats(tasks);
+                          const sortedCategories = Array.from(categoryStats.entries())
+                            .sort(([, a], [, b]) => b - a)
+                            .slice(0, 3); // Показываем топ-3 категории
+
+                          return sortedCategories.map(([category, count]) => (
+                            <div key={category} className={statsStyles.breakdownItem}>
+                              <div className={statsStyles.breakdownLabel}>
+                                {category === 'other' ? t('stats.timeAnalysis.other') : category}
+                              </div>
+                              <div className={statsStyles.breakdownValue}>
+                                {count.toLocaleString()}
+                              </div>
+                            </div>
+                          ));
+                        })()}
                       </div>
                     </div>
 
                     <div className={statsStyles.breakdownSection}>
                       <div className={statsStyles.breakdownTitle}>{t('stats.byPriority')}</div>
                       <div className={statsStyles.breakdownItems}>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>
-                            <Badge
-                              label={'🎯 ' + t(`task.priorityType.high`)}
-                              num={getPriorityColorIndex('high')}
-                              title={t('task.priority')}
-                            />
-                          </div>
-                          <div className={statsStyles.breakdownValue}>245</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>
-                            <Badge
-                              label={'🎯 ' + t(`task.priorityType.medium`)}
-                              num={getPriorityColorIndex('medium')}
-                              title={t('task.priority')}
-                            />
-                          </div>
-                          <div className={statsStyles.breakdownValue}>567</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>
-                            <Badge
-                              label={'🎯 ' + t(`task.priorityType.low`)}
-                              num={getPriorityColorIndex('low')}
-                              title={t('task.priority')}
-                            />
-                          </div>
-                          <div className={statsStyles.breakdownValue}>422</div>
-                        </div>
-                        <div className={statsStyles.breakdownItem}>
-                          <div className={statsStyles.breakdownLabel}>
-                            <Badge
-                              label={'🎯 ' + t(`task.priorityType.none`)}
-                              title={t('task.priority')}
-                            />
-                          </div>
-                          <div className={statsStyles.breakdownValue}>722</div>
-                        </div>
+                        {(() => {
+                          const priorityStats = CompletedTasksUtils.getPriorityStats(tasks);
+                          const priorities = ['high', 'medium', 'low', 'none'];
+
+                          return priorities.map((priority) => {
+                            const count = priorityStats.get(priority) || 0;
+                            return (
+                              <div key={priority} className={statsStyles.breakdownItem}>
+                                <div className={statsStyles.breakdownLabel}>
+                                  <Badge
+                                    label={'🎯 ' + t(`task.priorityType.${priority}`)}
+                                    num={getPriorityColorIndex(priority as any)}
+                                    title={t('task.priority')}
+                                  />
+                                </div>
+                                <div className={statsStyles.breakdownValue}>
+                                  {count.toLocaleString()}
+                                </div>
+                              </div>
+                            );
+                          });
+                        })()}
                       </div>
                     </div>
 
                     <div className={statsStyles.timeSpentChart}>
                       <div className={statsStyles.timeSpentTitle}>
                         {t('stats.timeSpent')}
-                        <span className={statsStyles.year}> 2024</span>
+                        <span className={statsStyles.year}> {new Date().getFullYear()}</span>
                       </div>
                       <div className={statsStyles.timeSpentLine}>
                         {(() => {
-                          // Генерируем случайное количество часов (от 100 до 500)
-                          const totalHours = Math.floor(Math.random() * 400) + 100;
-                          // Генерируем случайное количество минут (0-59)
-                          const minutes = Math.floor(Math.random() * 60);
-                          // Вычисляем процент заполнения (максимум 500 часов)
-                          const fillPercent = (totalHours / 500) * 100;
+                          const totalMinutes = CompletedTasksUtils.getTotalTimeSpent(tasks);
+                          const totalHours = Math.floor(totalMinutes / 60);
+                          const minutes = Math.floor(totalMinutes % 60);
+
+                          // Вычисляем процент заполнения (максимум 1000 часов для визуализации)
+                          const maxHours = 1000;
+                          const fillPercent = Math.min((totalHours / maxHours) * 100, 100);
 
                           return (
                             <>
@@ -734,61 +739,42 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                   </div>
 
                   <div className={statsStyles.calendarGrid}>
-                    {(t('weekdaysShort', { returnObjects: true }) as string[]).map(
-                      (day: string) => (
+                    {(() => {
+                      // Переставляем дни недели так, чтобы понедельник был первым
+                      const weekdays = t('weekdaysShort', { returnObjects: true }) as string[];
+                      const reorderedWeekdays = [...weekdays.slice(1), weekdays[0]]; // Пн, Вт, Ср, Чт, Пт, Сб, Вс
+
+                      return reorderedWeekdays.map((day: string) => (
                         <div key={nanoid()} className={statsStyles.weekdayHeader}>
                           {day}
                         </div>
-                      )
-                    )}
+                      ));
+                    })()}
 
                     {(() => {
-                      const firstDay = new Date(
-                        currentMonth.getFullYear(),
-                        currentMonth.getMonth(),
-                        1
-                      );
-                      const lastDay = new Date(
-                        currentMonth.getFullYear(),
-                        currentMonth.getMonth() + 1,
-                        0
-                      );
+                      const activityData = ActivityUtils.getActivityData(tasks, currentMonth);
 
-                      // Получаем день недели для первого дня месяца (0 = воскресенье)
-                      const firstDayOfWeek = firstDay.getDay();
-                      // Общее количество дней в месяце
-                      const daysInMonth = lastDay.getDate();
-
-                      // Генерируем пустые ячейки для выравнивания календаря
-                      const emptyCells = Array(firstDayOfWeek).fill(null);
-
-                      // Генерируем данные для каждого дня
-                      const days = Array.from({ length: daysInMonth }, (_, index) => {
-                        const doneToday = Math.floor(Math.random() * 10);
-                        const avgPerDay = 5;
-                        const greenPercent = Math.min(100, (doneToday / avgPerDay) * 100);
-                        return {
-                          day: index + 1,
-                          count: doneToday,
-                          intensity: greenPercent,
-                        };
+                      // Сдвигаем данные на один день вперед для соответствия новому порядку дней недели
+                      const shiftedDays = activityData.days.map((day, index) => {
+                        const shiftedIndex = (index + 1) % activityData.days.length;
+                        return activityData.days[shiftedIndex];
                       });
 
                       return (
                         <>
-                          {emptyCells.map(() => (
+                          {activityData.emptyCells.map(() => (
                             <div
                               key={nanoid()}
                               className={`${statsStyles.calendarDay} ${statsStyles.emptyDay}`}
                             />
                           ))}
 
-                          {days.map((day) => (
+                          {shiftedDays.map((day) => (
                             <div
                               key={nanoid()}
                               className={statsStyles.calendarDay}
                               style={{
-                                backgroundColor: `hsl(120, 50%, ${90 - day.intensity * 0.4}%)`,
+                                backgroundColor: ActivityUtils.getIntensityColor(day.intensity),
                               }}
                               title={`${day.count} ${t('stats.tasksCompleted')}`}
                             >
