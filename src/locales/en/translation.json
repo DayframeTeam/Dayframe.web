@@ -188,7 +188,11 @@
       "title": "Task Streaks",
       "current": "Current streak",
       "best": "Best streak",
-      "days": "days"
+      "days": "days",
+      "lastCompleted": "Last completed",
+      "period": "Period",
+      "today": "Today",
+      "yesterday": "Yesterday"
     },
     "productivity": {
       "title": "Productivity",

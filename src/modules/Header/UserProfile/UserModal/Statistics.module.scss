@@ -466,6 +466,13 @@
   // transition: width 0.3s ease;
 }
 
+.streakDate {
+  font-size: var(--font-size-tertiary);
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
 @keyframes fireShine {
   0% {
     transform: translateX(-100%);

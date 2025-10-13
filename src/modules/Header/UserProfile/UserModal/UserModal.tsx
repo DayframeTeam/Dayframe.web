@@ -16,6 +16,8 @@ import { Modal } from '../../../../shared/Modal/Modal';
 import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
+import { StreakUtils } from '../../../../utils/streakUtils';
+import { selectAllTasks } from '../../../../entities/task/store/tasksSlice';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
@@ -34,6 +36,7 @@ type Props = Readonly<{
 export const UserModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user.user);
+  const tasks = useSelector(selectAllTasks);
   const [showStatistics, setShowStatistics] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
@@ -129,7 +132,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
         <div className={styles.content}>
           <div className={styles.levelInfo}>
             <div className={styles.levelRing}>
-              <LevelIndicator exp={user.exp} size="large" />
+              <LevelIndicator exp={user.exp} size='large' />
             </div>
             <div className={styles.expProgress}>
               <div className={styles.progressContainer}>
@@ -164,8 +167,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
           <div className={statsStyles.statisticsSection}>
             <div className={statsStyles.statisticsButtonContainer}>
               <Button
-                type="button"
-                variant="secondary"
+                type='button'
+                variant='secondary'
                 onClick={() => setShowStatistics(!showStatistics)}
                 className={statsStyles.statisticsButton}
               >
@@ -187,9 +190,15 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                   </div>
                   <div className={statsStyles.streakBars}>
                     {(() => {
-                      // Генерируем случайные значения для стриков
-                      const bestStreak = Math.floor(Math.random() * 30) + 15; // 15-45 дней
-                      const currentStreak = Math.floor(Math.random() * bestStreak); // 0-bestStreak дней
+                      // Получаем реальные данные стриков
+                      const streakStats = StreakUtils.getStreakStats(tasks);
+                      const {
+                        currentStreak,
+                        bestStreak,
+                        lastCompletedDate,
+                        bestStreakStart,
+                        bestStreakEnd,
+                      } = streakStats;
 
                       return (
                         <>
@@ -206,9 +215,17 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                               <div
                                 className={statsStyles.streakFill}
                                 ref={currentStreakFillRef}
-                                style={{ width: `${(currentStreak / bestStreak) * 100}%` }}
+                                style={{
+                                  width: `${bestStreak > 0 ? (currentStreak / bestStreak) * 100 : 0}%`,
+                                }}
                               />
                             </div>
+                            {lastCompletedDate && (
+                              <div className={statsStyles.streakDate}>
+                                {t('stats.streaks.lastCompleted')}:{' '}
+                                {StreakUtils.formatDateForDisplay(lastCompletedDate, t)}
+                              </div>
+                            )}
                           </div>
 
                           {/* Максимальный стрик */}
@@ -223,6 +240,13 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                             <div className={statsStyles.streakProgress}>
                               <div className={statsStyles.streakFill} style={{ width: '100%' }} />
                             </div>
+                            {bestStreakStart && bestStreakEnd && (
+                              <div className={statsStyles.streakDate}>
+                                {t('stats.streaks.period')}:{' '}
+                                {StreakUtils.formatDateForDisplay(bestStreakStart, t)} -{' '}
+                                {StreakUtils.formatDateForDisplay(bestStreakEnd, t)}
+                              </div>
+                            )}
                           </div>
                         </>
                       );
@@ -671,8 +695,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     </div>
                     <div className={statsStyles.monthNavigation}>
                       <Button
-                        type="button"
-                        variant="secondary"
+                        type='button'
+                        variant='secondary'
                         onClick={() => {
                           const prevMonth = new Date(currentMonth);
                           prevMonth.setMonth(prevMonth.getMonth() - 1);
@@ -686,8 +710,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                         {t(`monthNames.${currentMonth.getMonth()}`)} {currentMonth.getFullYear()}
                       </div>
                       <Button
-                        type="button"
-                        variant="secondary"
+                        type='button'
+                        variant='secondary'
                         onClick={() => {
                           const nextMonth = new Date(currentMonth);
                           nextMonth.setMonth(nextMonth.getMonth() + 1);
