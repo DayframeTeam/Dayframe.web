@@ -1,4 +1,4 @@
-import { Task } from '../types/dbTypes';
+import { Task } from '../../types/dbTypes';
 
 export class ProductivityUtils {
   // ---------- HELPERS ----------

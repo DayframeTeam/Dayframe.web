@@ -16,8 +16,8 @@ import { Modal } from '../../../../shared/Modal/Modal';
 import { Button } from '../../../../shared/UI/Button/Button';
 import { Badge } from '../../../../shared/UI/Badge/Badge';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
-import { StreakUtils } from '../../../../utils/streakUtils';
-import { ProductivityUtils } from '../../../../utils/productivityUtils';
+import { StreakUtils } from '../../../../utils/stats/streakUtils';
+import { ProductivityUtils } from '../../../../utils/stats/productivityUtils';
 import { selectAllTasks } from '../../../../entities/task/store/tasksSlice';
 
 const LEVEL_EXAMPLES = [
