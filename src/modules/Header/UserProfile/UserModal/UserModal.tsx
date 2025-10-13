@@ -752,7 +752,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                       const activityData = ActivityUtils.getActivityData(tasks, currentMonth);
 
                       // Сдвигаем данные на один день вперед для соответствия новому порядку дней недели
-                      const shiftedDays = activityData.days.map((day, index) => {
+                      const shiftedDays = activityData.days.map((_, index) => {
                         const shiftedIndex = (index + 1) % activityData.days.length;
                         return activityData.days[shiftedIndex];
                       });
