@@ -544,15 +544,22 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                             })}
                           </div>
                           <div className={statsStyles.timeBarLegend}>
-                            {dayData.categories.map((category) => (
-                              <div key={nanoid()} className={statsStyles.legendItem}>
-                                <div
-                                  className={statsStyles.legendColor}
-                                  style={{ backgroundColor: category.color }}
-                                />
-                                {category.label}
-                              </div>
-                            ))}
+                            {dayData.categories.map((category) => {
+                              const percentage = (category.minutes / dayData.total) * 100;
+
+                              return (
+                                <div key={nanoid()} className={statsStyles.legendItem}>
+                                  <div
+                                    className={statsStyles.legendColor}
+                                    style={{ backgroundColor: category.color }}
+                                  ></div>
+                                  <span style={{ transform: 'translateY(-0.7px)' }}>{category.label}</span>
+                                  <span style={{ color: category.color }}>
+                                    {Math.round(percentage)}%
+                                  </span>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       );
