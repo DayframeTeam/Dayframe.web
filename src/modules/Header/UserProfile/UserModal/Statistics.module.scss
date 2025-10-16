@@ -140,10 +140,26 @@
   transition: all 0.3s ease;
   position: absolute;
   bottom: 32px;
+  cursor: pointer;
 
   &:hover {
     background: var(--accent-muted);
   }
+}
+
+.chartTooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
 }
 
 .chartBarLabel {
@@ -312,6 +328,21 @@
   &:hover {
     transform: scale(1.1);
   }
+}
+
+.calendarTooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-primary);
+  font-size: var(--font-size-tertiary);
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
 }
 
 .dayNumber {

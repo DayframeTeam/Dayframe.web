@@ -49,6 +49,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
+  const [activeChartTooltip, setActiveChartTooltip] = useState<string | null>(null);
+  const [activeCalendarTooltip, setActiveCalendarTooltip] = useState<string | null>(null);
 
   // Создаем границы для навигации
   const minDate = new Date(2025, 0, 1); // Январь 2024
@@ -80,6 +82,30 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
       });
     }
   }, [isOpen, progressPercent, user?.exp]);
+
+  // Закрываем активные тултипы при клике вне их области
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        !target.closest(`.${statsStyles.chartBar}`) &&
+        !target.closest(`.${statsStyles.chartTooltip}`)
+      ) {
+        setActiveChartTooltip(null);
+      }
+      if (
+        !target.closest(`.${statsStyles.calendarDay}`) &&
+        !target.closest(`.${statsStyles.calendarTooltip}`)
+      ) {
+        setActiveCalendarTooltip(null);
+      }
+    };
+
+    if (activeChartTooltip || activeCalendarTooltip) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeChartTooltip, activeCalendarTooltip]);
 
   useEffect(() => {
     if (showStatistics) {
@@ -604,8 +630,19 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                                   className={statsStyles.chartBar}
                                   style={{ height: `${heightPx}px` }}
                                   title={`${monthLabel}: ${value} ${t('stats.completedTasks')}`}
+                                  onClick={() => {
+                                    const tooltipId = `chart-${index}`;
+                                    setActiveChartTooltip(
+                                      activeChartTooltip === tooltipId ? null : tooltipId
+                                    );
+                                  }}
                                 />
                                 <div className={statsStyles.chartBarLabel}>{monthLabel}</div>
+                                {activeChartTooltip === `chart-${index}` && (
+                                  <div className={statsStyles.chartTooltip}>
+                                    {monthLabel}: {value} {t('stats.completedTasks')}
+                                  </div>
+                                )}
                               </div>
                             );
                           });
@@ -777,8 +814,19 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                                 backgroundColor: ActivityUtils.getIntensityColor(day.intensity),
                               }}
                               title={`${day.count} ${t('stats.tasksCompleted')}`}
+                              onClick={() => {
+                                const tooltipId = `activity-${day.day}`;
+                                setActiveCalendarTooltip(
+                                  activeCalendarTooltip === tooltipId ? null : tooltipId
+                                );
+                              }}
                             >
                               <span className={statsStyles.dayNumber}>{day.day}</span>
+                              {activeCalendarTooltip === `activity-${day.day}` && (
+                                <div className={statsStyles.calendarTooltip}>
+                                  {day.count} {t('stats.tasksCompleted')}
+                                </div>
+                              )}
                             </div>
                           ))}
                         </>
