@@ -446,7 +446,10 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                     previousWeekStart.setDate(currentWeekStart.getDate() - 7);
 
                     const dailyData = reorderedWeekdays.map((_, dayIndex) => {
-                      const dataIndex = dayIndex + 1;
+                      // reorderedWeekdays: [Пн, Вт, Ср, Чт, Пт, Сб, Вс] (индексы 0-6)
+                      // previousWeekStart - это понедельник прошлой недели
+                      // Нужно сопоставить: Пн(0) -> Пн(0), Вт(1) -> Вт(1), ..., Вс(6) -> Вс(6)
+                      const dataIndex = dayIndex;
 
                       const currentDate = new Date(previousWeekStart);
                       currentDate.setDate(previousWeekStart.getDate() + dataIndex);
