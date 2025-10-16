@@ -196,38 +196,39 @@ class TaskSelectors {
       })
   );
 
-/**
- * Селектор для получения задач с понедельника прошлой недели по воскресенье текущей недели
- * @param state - состояние Redux
- * @returns массив задач за период от начала прошлой недели до конца текущей
- */
-static selectTasksFromPreviousWeekToCurrentSunday = createSelector([TaskSelectors.selectAllTasks], (tasks) => {
-  const now = new Date();
-  
-  // Находим понедельник текущей недели
-  const today = new Date(now);
-  const currentMonday = new Date(today);
-  const dayOfWeek = today.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
-  currentMonday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-  
-  // Понедельник прошлой недели
-  const previousMonday = new Date(currentMonday);
-  previousMonday.setDate(currentMonday.getDate() - 7);
-  
-  // Воскресенье текущей недели
-  const currentSunday = new Date(currentMonday);
-  currentSunday.setDate(currentMonday.getDate() + 6);
+  /**
+   * Селектор для получения задач с понедельника прошлой недели по воскресенье текущей недели
+   * @param state - состояние Redux
+   * @returns массив задач за период от начала прошлой недели до конца текущей
+   */
+  static selectTasksFromPreviousWeekToCurrentSunday = createSelector(
+    [TaskSelectors.selectAllTasks],
+    (tasks) => {
+      const now = new Date();
 
-  const startDateStr = previousMonday.toISOString().split('T')[0];
-  const endDateStr = currentSunday.toISOString().split('T')[0];
+      // Находим понедельник текущей недели
+      const today = new Date(now);
+      const currentMonday = new Date(today);
+      const dayOfWeek = today.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+      currentMonday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
 
-  console.log(`Период задач: ${startDateStr} - ${endDateStr}`); // Для отладки
+      // Понедельник прошлой недели
+      const previousMonday = new Date(currentMonday);
+      previousMonday.setDate(currentMonday.getDate() - 7);
 
-  return tasks.filter((task) => {
-    if (!task.task_date) return false;
-    return task.task_date >= startDateStr && task.task_date <= endDateStr;
-  });
-});
+      // Воскресенье текущей недели
+      const currentSunday = new Date(currentMonday);
+      currentSunday.setDate(currentMonday.getDate() + 6);
+
+      const startDateStr = previousMonday.toISOString().split('T')[0];
+      const endDateStr = currentSunday.toISOString().split('T')[0];
+
+      return tasks.filter((task) => {
+        if (!task.task_date) return false;
+        return task.task_date >= startDateStr && task.task_date <= endDateStr;
+      });
+    }
+  );
 
   /**
    * Селектор для получения только выполненных задач прошлой недели
