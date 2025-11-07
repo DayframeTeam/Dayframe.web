@@ -17,7 +17,6 @@ const url = '/tasks';
 
 export type TaskService = {
   fetchAndStoreAll: () => Promise<void>;
-  fetchTasksForPeriod: (startDate: string, endDate: string) => Promise<void>;
   createTask: (taskData: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
   updateTaskStatus: (taskId: number, isDone: boolean, completionDate: string) => Promise<void>;
@@ -63,65 +62,6 @@ export const taskService: TaskService = {
         store.dispatch(setTasks([]));
       } else {
         const appError = handleApiError(error, 'taskService.fetchAndStoreAll');
-        console.error(appError.message);
-        store.dispatch(setError(appError.message));
-        throw appError;
-      }
-    } finally {
-      store.dispatch(setLoading(false));
-    }
-  },
-
-  /**
-   * Fetches tasks for a specific date period and adds/updates them in Redux store
-   * @param startDate - Start date in YYYY-MM-DD format
-   * @param endDate - End date in YYYY-MM-DD format
-   */
-  async fetchTasksForPeriod(startDate: string, endDate: string): Promise<void> {
-    store.dispatch(setLoading(true));
-
-    try {
-      const response = await api.get<Task[]>(`${url}/period`, {
-        params: { startDate, endDate },
-      });
-
-      if (response.data) {
-        // Получаем текущие задачи из store
-        const currentTasks = store.getState().tasks.entities;
-
-        // Для каждой задачи проверяем, есть ли она уже в store
-        response.data.forEach((task) => {
-          const taskKey = TaskUtils.createTaskUniqueKey(task);
-          if (currentTasks[taskKey]) {
-            // Если задача уже есть - обновляем
-            store.dispatch(
-              updateOneTask({
-                id: taskKey,
-                changes: task,
-              })
-            );
-          } else {
-            // Если задачи нет - добавляем
-            store.dispatch(addTask(task));
-          }
-        });
-      }
-    } catch (error) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'response' in error &&
-        error.response &&
-        typeof error.response === 'object' &&
-        'data' in error.response &&
-        error.response.data &&
-        typeof error.response.data === 'object' &&
-        'error' in error.response.data &&
-        error.response.data.error === 'Задачи не найдены'
-      ) {
-        // Если задач нет, просто ничего не делаем (не очищаем store)
-      } else {
-        const appError = handleApiError(error, 'taskService.fetchTasksForPeriod');
         console.error(appError.message);
         store.dispatch(setError(appError.message));
         throw appError;

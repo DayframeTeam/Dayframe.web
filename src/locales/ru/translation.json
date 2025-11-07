@@ -168,7 +168,6 @@
     "change": "Сменить тему"
   },
   "stats": {
-    "loadingTasks": "Загрузка задач...",
     "hideStatistics": "Скрыть статистику",
     "viewStatistics": "Показать статистику",
     "completedTasks": "Выполненные задачи",

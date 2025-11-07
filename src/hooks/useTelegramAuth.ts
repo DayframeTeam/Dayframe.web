@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { authService } from '../entities/auth/authService';
 import { userService } from '../entities/user/userService';
 import { taskService } from '../entities/task/taskService';
@@ -10,7 +10,7 @@ export const useTelegramAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const initializeTelegram = async () => {
       try {
         setIsLoading(true);
@@ -20,18 +20,9 @@ export const useTelegramAuth = () => {
           await authService.authDevUser();
 
           // Потом параллельно загружаем все данные
-          // Загружаем задачи за текущий месяц вместо всех задач
-          const now = new Date();
-          const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
-            .toISOString()
-            .split('T')[0];
-          const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-            .toISOString()
-            .split('T')[0];
-
           await Promise.all([
             userService.fetchAndStoreCurrentUser(),
-            taskService.fetchTasksForPeriod(startDate, endDate),
+            taskService.fetchAndStoreAll(),
             templateTasksService.fetchAndStoreAll(),
           ]);
 
@@ -60,18 +51,9 @@ export const useTelegramAuth = () => {
         await authService.authUser(initData);
 
         // Потом параллельно загружаем все данные
-        // Загружаем задачи за текущий месяц вместо всех задач
-        const now = new Date();
-        const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
-          .toISOString()
-          .split('T')[0];
-        const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-          .toISOString()
-          .split('T')[0];
-
         await Promise.all([
           userService.fetchAndStoreCurrentUser(),
-          taskService.fetchTasksForPeriod(startDate, endDate),
+          taskService.fetchAndStoreAll(),
           templateTasksService.fetchAndStoreAll(),
         ]);
 

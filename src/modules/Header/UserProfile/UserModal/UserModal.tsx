@@ -19,7 +19,6 @@ import {
   selectAllTasks,
   selectCompletedTasksFromPreviousWeek,
 } from '../../../../entities/task/store/tasksSlice';
-import { taskService } from '../../../../entities/task/taskService';
 import { getPriorityColorIndex } from '../../../../utils/getPriorityColorIndex';
 import { StreakUtils } from '../../../../utils/stats/streakUtils';
 import { CompletedTasksUtils } from '../../../../utils/stats/completedTasksUtils';
@@ -52,8 +51,6 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
   });
   const [activeChartTooltip, setActiveChartTooltip] = useState<string | null>(null);
   const [activeCalendarTooltip, setActiveCalendarTooltip] = useState<string | null>(null);
-  const [isLoadingAllTasks, setIsLoadingAllTasks] = useState(false);
-  const [hasLoadedAllTasks, setHasLoadedAllTasks] = useState(false);
 
   // Создаем границы для навигации
   const minDate = new Date(2025, 0, 1); // Январь 2024
@@ -85,26 +82,6 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
       });
     }
   }, [isOpen, progressPercent, user?.exp]);
-
-  async function statisticsButtonHandler() {
-    setShowStatistics(!showStatistics);
-    if (!showStatistics) {
-      await loadAllTasks();
-    }
-  }
-
-  // Загружаем все задачи при открытии модального окна, если они еще не загружены
-  async function loadAllTasks() {
-    try {
-      setIsLoadingAllTasks(true);
-      await taskService.fetchAndStoreAll();
-      setHasLoadedAllTasks(true);
-    } catch (error) {
-      console.error('Error loading all tasks:', error);
-    } finally {
-      setIsLoadingAllTasks(false);
-    }
-  }
 
   // Закрываем активные тултипы при клике вне их области
   useEffect(() => {
@@ -225,7 +202,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
               <Button
                 type='button'
                 variant='secondary'
-                onClick={statisticsButtonHandler}
+                onClick={() => setShowStatistics(!showStatistics)}
                 className={statsStyles.statisticsButton}
               >
                 <span>{t(showStatistics ? 'stats.hideStatistics' : 'stats.viewStatistics')}</span>
@@ -236,31 +213,8 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                 </span>
               </Button>
             </div>
-            {isLoadingAllTasks && (
-              <div style={{ padding: '2rem', textAlign: 'center' }}>
-                <div
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    border: '4px solid #f3f3f3',
-                    borderTop: '4px solid var(--text-primary)',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite',
-                    margin: '0 auto',
-                  }}
-                />
-                <style>{`
-              @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-              }
-            `}</style>
-                <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
-                  {t('stats.loadingTasks')}
-                </p>
-              </div>
-            )}
-            {!isLoadingAllTasks && showStatistics && hasLoadedAllTasks && (
+
+            {showStatistics && (
               <div>
                 <div className={statsStyles.sectionWrapper}>
                   <div className={statsStyles.streakHeader}>
@@ -599,9 +553,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                                     className={statsStyles.legendColor}
                                     style={{ backgroundColor: category.color }}
                                   ></div>
-                                  <span style={{ transform: 'translateY(-0.7px)' }}>
-                                    {category.label}
-                                  </span>
+                                  <span style={{ transform: 'translateY(-0.7px)' }}>{category.label}</span>
                                   <span style={{ color: category.color }}>
                                     {Math.round(percentage)}%
                                   </span>
