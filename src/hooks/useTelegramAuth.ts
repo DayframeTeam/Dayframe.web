@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { authService } from '../entities/auth/authService';
 import { userService } from '../entities/user/userService';
 import { taskService } from '../entities/task/taskService';
@@ -9,8 +9,15 @@ const TG_BOT_LINK = 'https://t.me/Dayframe_bot';
 export const useTelegramAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const isInitialized = useRef(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // Защита от повторных вызовов (включая StrictMode и ре-рендеры)
+    if (isInitialized.current) {
+      return;
+    }
+    isInitialized.current = true;
+
     const initializeTelegram = async () => {
       try {
         setIsLoading(true);
