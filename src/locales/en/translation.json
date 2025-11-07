@@ -168,6 +168,7 @@
     "change": "Change theme"
   },
   "stats": {
+    "loadingTasks": "Loading tasks...",
     "hideStatistics": "Hide statistics",
     "viewStatistics": "View statistics",
     "completedTasks": "Completed tasks",

@@ -201,7 +201,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
               }
             `}</style>
             <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
-              {t('user.loadingTasks') || 'Загрузка всех задач...'}
+              {t('stats.loadingTasks')}
             </p>
           </div>
         )}

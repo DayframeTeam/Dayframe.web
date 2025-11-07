@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authService } from '../entities/auth/authService';
 import { userService } from '../entities/user/userService';
 import { taskService } from '../entities/task/taskService';
@@ -10,7 +10,7 @@ export const useTelegramAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const initializeTelegram = async () => {
       try {
         setIsLoading(true);
