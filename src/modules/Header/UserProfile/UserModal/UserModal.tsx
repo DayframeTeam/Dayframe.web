@@ -261,7 +261,7 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
                 </p>
               </div>
             )}
-            {!isLoadingAllTasks && showStatistics && (
+            {!isLoadingAllTasks && showStatistics && hasLoadedAllTasks && (
               <div>
                 <div className={statsStyles.sectionWrapper}>
                   <div className={statsStyles.streakHeader}>
