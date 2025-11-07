@@ -37,16 +37,35 @@ export const useTelegramAuth = () => {
           return;
         }
 
-        // Продакшн режим - обычная логика
-        const tg = window.Telegram?.WebApp;
+        // Продакшн режим - ждем загрузки Telegram WebApp скрипта
+        // Скрипт загружается асинхронно, нужно дождаться его готовности
+        let tg = window.Telegram?.WebApp;
+
+        // Если WebApp еще не загружен, ждем с повторными попытками
+        if (!tg) {
+          const maxAttempts = 50; // 5 секунд максимум (50 * 100ms)
+          let attempts = 0;
+
+          while (!tg && attempts < maxAttempts) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            tg = window.Telegram?.WebApp;
+            attempts++;
+          }
+        }
 
         if (!tg) {
+          console.error('Telegram WebApp не загружен после ожидания');
           setIsError(true);
           setIsLoading(false);
           return;
         }
 
+        // Уведомляем Telegram, что приложение готово
         tg.ready();
+
+        // Небольшая задержка для инициализации WebApp
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         const initData = tg.initData;
 
         if (!initData) {
@@ -66,6 +85,7 @@ export const useTelegramAuth = () => {
 
         setIsError(false);
       } catch (e) {
+        console.error('Ошибка инициализации:', e);
         setIsError(true);
         alert('Ошибка загрузки пользователя');
       } finally {
