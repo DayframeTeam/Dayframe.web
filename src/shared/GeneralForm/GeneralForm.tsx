@@ -41,7 +41,7 @@ export const GeneralForm = memo(
 
     const [localTask, setLocalTask] = useState<ExtendedTask>({
       ...task,
-      subtasks: task.subtasks.map((s) => ({
+      subtasks: (task.subtasks || []).map((s) => ({
         ...s,
       })),
     });
@@ -208,14 +208,16 @@ export const GeneralForm = memo(
       }
 
       // Сравниваем подзадачи
+      const originalSubtasks = original.subtasks || [];
+      const currentSubtasks = current.subtasks || [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const nonDeletedSubtasks = current.subtasks.filter((s: any) => !s.is_deleted);
-      if (original.subtasks.length !== nonDeletedSubtasks.length) {
+      const nonDeletedSubtasks = currentSubtasks.filter((s: any) => !s.is_deleted);
+      if (originalSubtasks.length !== nonDeletedSubtasks.length) {
         return true;
       }
 
       // Создаем массивы для сравнения с сортировкой по позиции
-      const originalSorted = [...original.subtasks].sort((a, b) => a.position - b.position);
+      const originalSorted = [...originalSubtasks].sort((a, b) => a.position - b.position);
       const currentSorted = [...nonDeletedSubtasks].sort((a, b) => a.position - b.position);
 
       // Сравниваем подзадачи после сортировки
