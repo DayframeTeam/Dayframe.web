@@ -25,7 +25,6 @@ import { StreakUtils } from '../../../../utils/stats/streakUtils';
 import { CompletedTasksUtils } from '../../../../utils/stats/completedTasksUtils';
 import { ActivityUtils } from '../../../../utils/stats/activityUtils';
 import { generateUniqueColors } from '../../../../utils/uniqueColors';
-import { Task } from '../../../../types/dbTypes';
 
 const LEVEL_EXAMPLES = [
   { level: 0, exp: 0 },
